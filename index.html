@@ -341,7 +341,7 @@ function setTab(t,el){
 // ── RSS ──
 async function fetchRSS(src){
   try{
-    const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(src.rss)}`,{signal:AbortSignal.timeout(9000)});
+    const r=await fetch(`/api/rss?url=${encodeURIComponent(src.rss)}`,{signal:AbortSignal.timeout(9000)});
     if(!r.ok)throw 0;
     const d=await r.json();
     const xml=new DOMParser().parseFromString(d.contents,'text/xml');
