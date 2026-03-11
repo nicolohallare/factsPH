@@ -206,18 +206,35 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .err{margin:6px 12px 4px;padding:8px 12px;background:rgba(176,48,48,.07);border:1px solid rgba(176,48,48,.2);border-radius:8px;font-size:11px;color:var(--red);display:none;align-items:center;gap:6px}
 .err.show{display:flex}
 
-/* ── SHARE BUTTON ── */
-.share-bar{display:flex;align-items:center;justify-content:flex-end;padding-top:8px;margin-top:2px}
-.share-btn{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid #1877f2;background:#1877f2;color:#fff;font-family:'IBM Plex Sans',sans-serif;letter-spacing:.03em;transition:all .15s;text-decoration:none}
-.share-btn:hover{background:#1560d4;border-color:#1560d4}
-.share-btn svg{width:13px;height:13px;fill:#fff;flex-shrink:0}
-.share-toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#1a1612;color:#f5f0e8;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:500;z-index:500;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap}
-.share-toast.show{opacity:1}
+/* ── SEARCH SHEET ── */
+.srch-bar{display:flex;gap:8px;margin-bottom:14px}
+.srch-input{flex:1;padding:11px 14px;border:1px solid var(--border2);border-radius:10px;font-size:15px;font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);outline:none}
+.srch-input:focus{border-color:var(--gold)}
+.srch-go{padding:11px 18px;background:var(--gold);color:#fffdf8;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
+.srch-go:disabled{opacity:.5;cursor:default}
+.srch-suggestions{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.srch-chip{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'IBM Plex Sans',sans-serif;transition:all .15s}
+.srch-chip:hover{border-color:var(--gold);color:var(--gold)}
+.srch-result{margin-top:4px}
+.srch-loading{text-align:center;padding:32px 0;color:var(--muted);font-size:13px;font-style:italic}
+.srch-loading .spin{display:inline-block;animation:spin .8s linear infinite;font-style:normal;margin-right:6px}
+/* result card */
+.srch-card{background:var(--s2);border-radius:10px;overflow:hidden;margin-bottom:10px}
+.srch-card-head{padding:12px 14px 10px;border-bottom:1px solid var(--border)}
+.srch-card-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.srch-card-text{font-size:14px;line-height:1.65;color:var(--muted2)}
+.srch-neutral .srch-card-lbl{color:var(--gold)}
+.srch-admin .srch-card-lbl{color:var(--admin)}
+.srch-dds .srch-card-lbl{color:var(--dds)}
+.srch-pink .srch-card-lbl{color:var(--pink)}
+.srch-neutral{background:var(--gold-dim);border:1px solid rgba(138,104,0,.2);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.srch-admin{background:var(--admin-dim);border:1px solid rgba(26,94,184,.2);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.srch-dds{background:var(--dds-dim);border:1px solid rgba(42,122,72,.2);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.srch-pink{background:var(--pink-dim);border:1px solid rgba(176,48,112,.2);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.srch-phrase{font-size:11px;font-style:italic;color:var(--muted);margin-top:4px}
 </style>
 </head>
 <body>
-<div class="share-toast" id="share-toast">Link copied!</div>
-
 <div class="app">
 
 <header>
@@ -274,9 +291,9 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 </div>
 
 <nav class="bnav">
-  <div class="ni on"><span class="ni-icon">📰</span>Brief</div>
+  <div class="ni on" id="nav-brief" onclick="showView('brief')"><span class="ni-icon">📰</span>Brief</div>
+  <div class="ni" id="nav-search" onclick="showView('search')"><span class="ni-icon">🔍</span>Search</div>
   <div class="ni" onclick="showSheet()"><span class="ni-icon">🗂</span>Sources</div>
-  <div class="ni"><span class="ni-icon">🔖</span>Saved</div>
   <div class="ni" onclick="showSheet()"><span class="ni-icon">ℹ️</span>About</div>
 </nav>
 
@@ -310,6 +327,27 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
     </div>
     <div class="sh-note">⚠️ These labels describe <strong>editorial tendencies</strong>, not absolute truth. Every outlet has biases shaped by ownership and history. Read across the spectrum.</div>
     <button class="close-sh" onclick="closeSheet()">Got it</button>
+  </div>
+</div>
+
+<!-- ── SEARCH PANEL ── -->
+<div id="search-panel" style="display:none;padding:0 12px 100px;">
+  <div style="padding:16px 0 10px;">
+    <div style="font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px;">Ask FactsPH</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px;font-style:italic;">Type any Philippine politics topic — get all 4 views.</div>
+    <div class="srch-bar">
+      <input class="srch-input" id="srch-input" type="text" placeholder="e.g. Duterte ICC arrest, Marcos budget…" onkeydown="if(event.key==='Enter')doSearch()">
+      <button class="srch-go" id="srch-go" onclick="doSearch()">Analyze</button>
+    </div>
+    <div class="srch-suggestions">
+      <button class="srch-chip" onclick="setSearch('Duterte ICC arrest')">⚖️ Duterte ICC</button>
+      <button class="srch-chip" onclick="setSearch('Sara Duterte impeachment')">Sara impeachment</button>
+      <button class="srch-chip" onclick="setSearch('West Philippine Sea China')">🌊 WPS</button>
+      <button class="srch-chip" onclick="setSearch('Marcos budget 2025')">🏛️ Marcos budget</button>
+      <button class="srch-chip" onclick="setSearch('2025 midterm elections')">🗳️ Midterms</button>
+      <button class="srch-chip" onclick="setSearch('PhilHealth defunding')">PhilHealth</button>
+    </div>
+    <div class="srch-result" id="srch-result"></div>
   </div>
 </div>
 
@@ -549,14 +587,6 @@ function renderStories(){
       </div>
     </div>
 
-    <!-- SHARE BAR -->
-    <div class="share-bar">
-      <a class="share-btn" id="share-btn-${i}" href="#" onclick="shareStory(event,${i})">
-        <svg viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.514c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-        Share on Facebook
-      </a>
-    </div>
-
   </div>
 </div>`;
   }).join('');
@@ -589,44 +619,118 @@ function toggleSrc(i){
   arr.style.transform=open?'rotate(180deg)':'';
 }
 
-// ── SHARE ──
-function shareStory(e,i){
-  e.preventDefault();
-  const story = getFiltered()[i];
-  if(!story) return;
+// ── SEARCH / ASK FACTPH ──
+function showView(v){
+  const brief = document.querySelector('.app > *:not(#search-panel)');
+  const panel = document.getElementById('search-panel');
+  const header = document.querySelector('header');
+  const toolbar = document.querySelector('.toolbar');
+  const secHead = document.querySelector('.sec-head');
+  const stories = document.getElementById('stories-wrap');
+  const errBanner = document.getElementById('err-banner');
 
-  // Share the original article URL — it already has proper OG tags
-  // Facebook shows the article preview card; the quote adds FactsPH neutral summary
-  const articleUrl = story.sources?.[0]?.link || 'https://factsph.vercel.app';
-  const neutral = story.neutralShort || story.headline || '';
-  const quote = `📰 FactsPH Neutral Summary:\n"${neutral}"\n\nSame story, 3 versions — factsph.vercel.app`;
+  document.getElementById('nav-brief').classList.toggle('on', v==='brief');
+  document.getElementById('nav-search').classList.toggle('on', v==='search');
 
-  const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}&quote=${encodeURIComponent(quote)}`;
-  window.open(fbUrl, '_blank', 'width=600,height=500');
-
-  // Copy neutral summary to clipboard
-  const clipText = `📰 FactsPH: "${neutral}"\n\nSame story, 3 versions — factsph.vercel.app`;
-  navigator.clipboard?.writeText(clipText)
-    .then(()=>showToast('Summary copied! Facebook share opened.'))
-    .catch(()=>showToast('Facebook share opened!'));
-}
-
-function showToast(msg){
-  const toast=document.getElementById('share-toast');
-  toast.textContent=msg;
-  toast.classList.add('show');
-  setTimeout(()=>toast.classList.remove('show'),2800);
-}
-
-// Update share button href once AI content is ready
-function refreshShareBtn(idx){
-  const btn = document.getElementById(`share-btn-${idx}`);
-  const story = allStories[idx];
-  if(btn && story){
-    // Update onclick to use fresh story data with AI phrases
-    btn.setAttribute('onclick', `shareStory(event,${idx})`);
+  if(v==='search'){
+    panel.style.display='block';
+    [header,toolbar,secHead,stories,errBanner].forEach(el=>el&&(el.style.display='none'));
+    document.getElementById('srch-input').focus();
+  } else {
+    panel.style.display='none';
+    [header,toolbar,secHead,stories,errBanner].forEach(el=>el&&(el.style.display=''));
   }
 }
+
+function setSearch(q){
+  document.getElementById('srch-input').value=q;
+  doSearch();
+}
+
+async function doSearch(){
+  const q = document.getElementById('srch-input').value.trim();
+  if(!q) return;
+  const btn = document.getElementById('srch-go');
+  const result = document.getElementById('srch-result');
+  btn.disabled = true;
+  btn.textContent = '…';
+  result.innerHTML = '<div class="srch-loading"><span class="spin">↻</span> Analyzing all 4 views…</div>';
+
+  const prompt = `You are analyzing a Philippine political topic from 4 perspectives. The topic is: "${q}"
+
+Generate exactly:
+1. NEUTRAL: A factual 3-4 sentence summary with no framing or opinion
+2. NEUTRAL_PHRASE: Max 8 words — the plain factual headline
+3. ADMIN: 2-3 sentences on how Bagong Pilipinas / Marcos administration outlets frame this
+4. ADMIN_PHRASE: Max 8 words capturing the admin angle
+5. DDS: 2-3 sentences on how pro-Duterte/DDS outlets frame this
+6. DDS_PHRASE: Max 8 words capturing the DDS angle
+7. PINK: 2-3 sentences on how Progressive/Pinklawan/civil society outlets frame this
+8. PINK_PHRASE: Max 8 words capturing the progressive angle
+
+Respond in EXACTLY this format with no extra text:
+NEUTRAL_PHRASE: [phrase]
+NEUTRAL: [paragraph]
+ADMIN_PHRASE: [phrase]
+ADMIN: [paragraph]
+DDS_PHRASE: [phrase]
+DDS: [paragraph]
+PINK_PHRASE: [phrase]
+PINK: [paragraph]`;
+
+  try {
+    const txt = await callClaude(prompt);
+    const get = (key, next) => txt.match(new RegExp(`${key}:\s*(.+?)(?=\n${next}:|$)`,'s'))?.[1]?.trim()||'';
+
+    const neutralPhrase = get('NEUTRAL_PHRASE','NEUTRAL');
+    const neutral       = get('NEUTRAL','ADMIN_PHRASE');
+    const adminPhrase   = get('ADMIN_PHRASE','ADMIN');
+    const admin         = get('ADMIN','DDS_PHRASE');
+    const ddsPhrase     = get('DDS_PHRASE','DDS');
+    const dds           = get('DDS','PINK_PHRASE');
+    const pinkPhrase    = get('PINK_PHRASE','PINK');
+    const pink          = get('PINK','$');
+
+    const esc2 = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    result.innerHTML = `
+      <div style="font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;line-height:1.4;color:var(--text);margin-bottom:14px;">${esc2(q)}</div>
+
+      <div class="srch-neutral">
+        <div class="srch-card-lbl">⚪ Neutral / Factual</div>
+        <div style="font-size:12px;font-style:italic;color:var(--gold);margin-bottom:6px;">${esc2(neutralPhrase)}</div>
+        <div class="srch-card-text">${esc2(neutral)}</div>
+      </div>
+
+      <div class="srch-admin">
+        <div class="srch-card-lbl">🔵 Bagong Pilipinas / Admin</div>
+        <div style="font-size:12px;font-style:italic;color:var(--admin);margin-bottom:6px;">"${esc2(adminPhrase)}"</div>
+        <div class="srch-card-text">${esc2(admin)}</div>
+      </div>
+
+      <div class="srch-dds">
+        <div class="srch-card-lbl">🟢 DDS / Pro-Duterte</div>
+        <div style="font-size:12px;font-style:italic;color:var(--dds);margin-bottom:6px;">"${esc2(ddsPhrase)}"</div>
+        <div class="srch-card-text">${esc2(dds)}</div>
+      </div>
+
+      <div class="srch-pink">
+        <div class="srch-card-lbl">🩷 Progressives / Pinklawan</div>
+        <div style="font-size:12px;font-style:italic;color:var(--pink);margin-bottom:6px;">"${esc2(pinkPhrase)}"</div>
+        <div class="srch-card-text">${esc2(pink)}</div>
+      </div>
+
+      <div style="text-align:center;margin-top:8px;font-size:11px;color:var(--muted);font-style:italic;">AI-generated analysis based on known editorial tendencies. Always read primary sources.</div>
+    `;
+  } catch(err) {
+    result.innerHTML = '<div class="srch-loading">⚠️ Could not generate analysis. Check your API credits.</div>';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Analyze';
+}
+
+// share removed
 
 // ── AI QUEUE ──
 let genQueue=[],genRunning=false;
