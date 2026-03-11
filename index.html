@@ -331,24 +331,26 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 </div>
 
 <!-- ── SEARCH PANEL ── -->
-<div id="search-panel" style="display:none;padding:0 12px 100px;">
-  <div style="padding:16px 0 10px;">
-    <div style="font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px;">Ask FactsPH</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:14px;font-style:italic;">Type any Philippine politics topic — get all 4 views.</div>
+<div id="search-panel" style="display:none;">
+  <!-- Sticky search header -->
+  <div id="srch-header" style="position:sticky;top:0;z-index:100;background:rgba(245,240,232,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 14px 10px;">
+    <div style="font-family:'Libre Baskerville',serif;font-size:19px;font-weight:700;color:var(--text);margin-bottom:2px;">Ask FactsPH</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;font-style:italic;">Type any topic — get all 4 views instantly.</div>
     <div class="srch-bar">
-      <input class="srch-input" id="srch-input" type="text" placeholder="e.g. Duterte ICC arrest, Marcos budget…" onkeydown="if(event.key==='Enter')doSearch()">
+      <input class="srch-input" id="srch-input" type="text" placeholder="e.g. Duterte ICC, Marcos budget…" onkeydown="if(event.key==='Enter')doSearch()">
       <button class="srch-go" id="srch-go" onclick="doSearch()">Analyze</button>
     </div>
     <div class="srch-suggestions">
       <button class="srch-chip" onclick="setSearch('Duterte ICC arrest')">⚖️ Duterte ICC</button>
-      <button class="srch-chip" onclick="setSearch('Sara Duterte impeachment')">Sara impeachment</button>
+      <button class="srch-chip" onclick="setSearch('Sara Duterte impeachment')">Sara VP</button>
       <button class="srch-chip" onclick="setSearch('West Philippine Sea China')">🌊 WPS</button>
-      <button class="srch-chip" onclick="setSearch('Marcos budget 2025')">🏛️ Marcos budget</button>
+      <button class="srch-chip" onclick="setSearch('Marcos budget 2025')">🏛️ Budget</button>
       <button class="srch-chip" onclick="setSearch('2025 midterm elections')">🗳️ Midterms</button>
       <button class="srch-chip" onclick="setSearch('PhilHealth defunding')">PhilHealth</button>
     </div>
-    <div class="srch-result" id="srch-result"></div>
   </div>
+  <!-- Results scroll naturally below the sticky header -->
+  <div class="srch-result" id="srch-result" style="padding:14px 14px 100px;"></div>
 </div>
 
 <script>
@@ -621,7 +623,6 @@ function toggleSrc(i){
 
 // ── SEARCH / ASK FACTPH ──
 function showView(v){
-  const brief = document.querySelector('.app > *:not(#search-panel)');
   const panel = document.getElementById('search-panel');
   const header = document.querySelector('header');
   const toolbar = document.querySelector('.toolbar');
@@ -635,10 +636,12 @@ function showView(v){
   if(v==='search'){
     panel.style.display='block';
     [header,toolbar,secHead,stories,errBanner].forEach(el=>el&&(el.style.display='none'));
-    document.getElementById('srch-input').focus();
+    window.scrollTo({top:0,behavior:'instant'});
+    setTimeout(()=>document.getElementById('srch-input').focus(), 50);
   } else {
     panel.style.display='none';
     [header,toolbar,secHead,stories,errBanner].forEach(el=>el&&(el.style.display=''));
+    window.scrollTo({top:0,behavior:'instant'});
   }
 }
 
@@ -728,6 +731,8 @@ PINK: [paragraph]`;
 
   btn.disabled = false;
   btn.textContent = 'Analyze';
+  // Scroll to top so results are visible from the start
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 // share removed
