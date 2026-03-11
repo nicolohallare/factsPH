@@ -590,17 +590,24 @@ function toggleSrc(i){
 }
 
 // ── SHARE ──
-const BASE = 'https://factsPH.vercel.app';
+const BASE = 'https://factsph.vercel.app';
 
-function buildShareUrl(story){
+function makeSlug(headline){
+  return headline.slice(0,60).toLowerCase().replace(/\s+/g,'-').replace(/[^\w-]/g,'');
+}
+
+function buildStoryUrl(story){
+  // /api/story serves an HTML page with story-specific OG tags
+  // Facebook scraper reads those; human visitors get redirected to the app
   const p = new URLSearchParams({
-    h:   (story.headline      ||'').slice(0,120),
-    n:   (story.neutralShort  ||'').slice(0,150),
-    dds: (story.ddsPhrase     ||'').slice(0,100),
-    pink:(story.pinkPhrase    ||'').slice(0,100),
-    t:   story.topic||''
+    h:    (story.headline     ||'').slice(0,120),
+    n:    (story.neutralShort ||'').slice(0,200),
+    dds:  (story.ddsPhrase    ||'').slice(0,100),
+    pink: (story.pinkPhrase   ||'').slice(0,100),
+    t:    story.topic||'',
+    slug: makeSlug(story.headline)
   });
-  return `${BASE}/api/og?${p.toString()}`;
+  return `${BASE}/api/story?${p.toString()}`;
 }
 
 function shareStory(e,i){
@@ -608,30 +615,35 @@ function shareStory(e,i){
   const story = getFiltered()[i];
   if(!story) return;
 
-  // Build the page URL with story headline as hash
-  const slug = encodeURIComponent(story.headline.slice(0,60).toLowerCase().replace(/\s+/g,'-').replace(/[^\w-]/g,''));
-  const pageUrl = `${BASE}/#${slug}`;
-  const ogImg   = buildShareUrl(story);
+  const storyUrl = buildStoryUrl(story);
 
-  // FB sharer — passes both the page URL and a quote
-  const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}&quote=${encodeURIComponent('Same story. Different spin. Read it on FactsPH: ' + story.headline)}`;
+  // FB sharer — u= must be the /api/story URL so FB scraper picks up OG tags
+  const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(storyUrl)}`;
 
-  // On mobile open FB sharer; also copy link to clipboard
-  window.open(fbUrl, '_blank', 'width=600,height=400');
+  window.open(fbUrl, '_blank', 'width=600,height=500');
 
-  // Also copy direct link to clipboard
-  navigator.clipboard?.writeText(pageUrl).then(()=>{
+  // Copy the story link to clipboard too
+  navigator.clipboard?.writeText(storyUrl).then(()=>{
     const toast=document.getElementById('share-toast');
     toast.textContent='Link copied + Facebook opened!';
     toast.classList.add('show');
     setTimeout(()=>toast.classList.remove('show'),2500);
+  }).catch(()=>{
+    const toast=document.getElementById('share-toast');
+    toast.textContent='Facebook share opened!';
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),2000);
   });
 }
 
 // Update share button href once AI content is ready
 function refreshShareBtn(idx){
   const btn = document.getElementById(`share-btn-${idx}`);
-  if(btn) btn.setAttribute('data-ready','1');
+  const story = allStories[idx];
+  if(btn && story){
+    // Update onclick to use fresh story data with AI phrases
+    btn.setAttribute('onclick', `shareStory(event,${idx})`);
+  }
 }
 
 // ── AI QUEUE ──
