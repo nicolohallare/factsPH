@@ -1,0 +1,36 @@
+{
+  "name": "FactsPH",
+  "short_name": "FactsPH",
+  "description": "Read the News, Without the Bias. Philippine political news with 4 perspectives.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f0e8",
+  "theme_color": "#8a6800",
+  "lang": "en-PH",
+  "icons": [
+    {
+      "src": "/assets/apple-touch-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "news",
+    "politics"
+  ],
+  "screenshots": [
+    {
+      "src": "/assets/og-square.png",
+      "sizes": "600x600",
+      "type": "image/png"
+    }
+  ]
+}

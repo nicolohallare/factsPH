@@ -9,6 +9,11 @@
 <meta name="description" content="Same story. Admin version. DDS version. Progressives version. Philippine political news stripped of bias — read across the spectrum.">
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
 <link rel="apple-touch-icon" sizes="192x192" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="FactsPH">
+<meta name="application-name" content="FactsPH">
 
 <!-- Open Graph / Facebook — square 1:1 for mobile -->
 <meta property="og:type" content="website">
@@ -235,6 +240,16 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 </style>
 </head>
 <body>
+<div id="install-banner" style="display:none;position:fixed;bottom:90px;left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:406px;background:#1a1612;color:#f5f0e8;border-radius:14px;padding:12px 16px;z-index:250;box-shadow:0 4px 20px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:space-between;gap:10px;">
+  <div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:2px;">Add FactsPH to Home Screen</div>
+    <div style="font-size:11px;opacity:.7;">Read the news without the bias, anytime.</div>
+  </div>
+  <div style="display:flex;gap:8px;flex-shrink:0;">
+    <button onclick="installApp()" style="background:#8a6800;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;">Install</button>
+    <button onclick="document.getElementById('install-banner').style.display='none'" style="background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:8px;padding:7px 10px;font-size:12px;cursor:pointer;">✕</button>
+  </div>
+</div>
 <div class="app">
 
 <header>
@@ -869,6 +884,28 @@ function fallback(){return[
 function showSheet(){document.getElementById('sheet').classList.add('open');}
 function closeSheet(){document.getElementById('sheet').classList.remove('open');}
 
+// ── INSTALL PROMPT ──
+let deferredInstall = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstall = e;
+  setTimeout(() => {
+    const b = document.getElementById('install-banner');
+    if(b) b.style.display = 'flex';
+  }, 3000);
+});
+function installApp(){
+  const b = document.getElementById('install-banner');
+  if(deferredInstall){
+    deferredInstall.prompt();
+    deferredInstall.userChoice.then(()=>{ deferredInstall=null; if(b)b.style.display='none'; });
+  } else {
+    alert('To install on iPhone: tap the Share button (⬆) → "Add to Home Screen"');
+    if(b) b.style.display='none';
+  }
+}
+window.addEventListener('appinstalled', ()=>{ const b=document.getElementById('install-banner'); if(b)b.style.display='none'; });
+
 loadNews();
 </script>
 
@@ -897,5 +934,14 @@ loadNews();
   <!-- Results scroll here, inside the overlay -->
   <div class="srch-result" id="srch-result" style="padding:14px 14px 100px;"></div>
 </div>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(r => console.log('SW registered'))
+      .catch(e => console.log('SW failed:', e));
+  });
+}
+</script>
 </body>
 </html>
