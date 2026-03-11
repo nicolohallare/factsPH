@@ -395,7 +395,7 @@ function fmt(s){
 
 // ── CLAUDE ──
 async function callClaude(prompt){
-  const r=await fetch('https://api.anthropic.com/v1/messages',{
+  const r=await fetch('/api/claude',{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})
   });
