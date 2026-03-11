@@ -343,8 +343,8 @@ async function fetchRSS(src){
   try{
     const r=await fetch(`/api/rss?url=${encodeURIComponent(src.rss)}`,{signal:AbortSignal.timeout(9000)});
     if(!r.ok)throw 0;
-    const d=await r.json();
-    const xml=new DOMParser().parseFromString(d.contents,'text/xml');
+    const text=await r.text();
+    const xml=new DOMParser().parseFromString(text,'text/xml');
     return Array.from(xml.querySelectorAll('item')).slice(0,6).map(item=>({
       title:(item.querySelector('title')?.textContent||'').trim(),
       link:(item.querySelector('link')?.textContent||'#').trim(),
