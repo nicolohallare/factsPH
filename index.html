@@ -7,23 +7,25 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>FactsPH</title>
 <meta name="description" content="Same story. Admin version. DDS version. Progressives version. Philippine political news stripped of bias — read across the spectrum.">
+<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="192x192" href="/assets/apple-touch-icon.png">
 
-<!-- Open Graph / Facebook -->
+<!-- Open Graph / Facebook — square 1:1 for mobile -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://factsPH.vercel.app/">
-<meta property="og:title" content="FactsPH — Read the News Without the Bias">
+<meta property="og:title" content="FactsPH — Read the News, Without the Bias">
 <meta property="og:description" content="Same story. 3 versions. Admin, DDS, and Progressives. Philippine political news powered by AI.">
-<meta property="og:image" content="https://facts-ph.vercel.app/assets/preview.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image" content="https://factsph.vercel.app/assets/og-square.png">
+<meta property="og:image:width" content="600">
+<meta property="og:image:height" content="600">
 <meta property="og:site_name" content="FactsPH">
 <meta property="og:locale" content="en_PH">
 
 <!-- Twitter / X Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="FactsPH — Read the News Without the Bias">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FactsPH — Read the News, Without the Bias">
 <meta name="twitter:description" content="Same story. Admin version. DDS version. Progressives version. You decide.">
-<meta name="twitter:image" content="https://facts-ph.vercel.app/assets/preview.png">
+<meta name="twitter:image" content="https://factsph.vercel.app/assets/og-square.png">
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -47,8 +49,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 /* ── HEADER ── */
 header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:100;border-bottom:1px solid var(--border)}
 .hdr-inner{display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:10px}
-.wordmark{font-family:'Libre Baskerville',serif;font-size:23px;font-weight:700;letter-spacing:-0.3px;color:var(--text);line-height:1}
+.wordmark{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;letter-spacing:-0.3px;color:var(--text);line-height:1}
 .wordmark em{font-style:italic;font-weight:400;color:var(--gold)}
+.tagline{font-size:11px;color:var(--muted);font-weight:400;letter-spacing:.02em;margin-top:3px;font-style:italic}
 .hdr-right{text-align:right}
 .ph-date{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .ph-time{font-size:11px;color:var(--muted2);font-weight:300;margin-top:2px}
@@ -62,11 +65,11 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 /* topic tabs */
 .tabs{display:flex;gap:6px;padding:0 18px 10px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex-shrink:0;padding:5px 12px;border-radius:4px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--muted);transition:all .15s;font-family:'IBM Plex Sans',sans-serif;letter-spacing:.03em}
+.tab{flex-shrink:0;padding:6px 14px;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--muted);transition:all .15s;font-family:'IBM Plex Sans',sans-serif;letter-spacing:.03em}
 .tab.active{background:var(--gold);color:#fffdf8;border-color:var(--gold);font-weight:600}
 
 /* ── TOOLBAR (just refresh) ── */
-.toolbar{display:flex;align-items:center;justify-content:flex-end;padding:8px 18px;border-bottom:1px solid var(--border);position:sticky;top:128px;z-index:99;background:rgba(245,240,232,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.toolbar{display:flex;align-items:center;justify-content:flex-end;padding:8px 18px;border-bottom:1px solid var(--border);position:sticky;top:140px;z-index:99;background:rgba(245,240,232,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .reload{background:none;border:1px solid var(--border2);color:var(--muted);padding:4px 12px;border-radius:4px;font-size:10px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;display:flex;align-items:center;gap:5px;transition:all .15s}
 .reload:hover{color:var(--gold);border-color:var(--gold)}
 .spin{display:inline-block;animation:spin .8s linear infinite}
@@ -102,17 +105,17 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .sage{font-size:10px;color:var(--muted);font-weight:300}
 
 /* headline */
-.shl{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;line-height:1.38;color:var(--text);margin-bottom:11px;letter-spacing:-.1px}
+.shl{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;line-height:1.38;color:var(--text);margin-bottom:11px;letter-spacing:-.1px}
 
 /* ── NEUTRAL SUMMARY BLOCK ── */
 .neutral-block{margin-bottom:11px}
-.neutral-label{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:5px;margin-bottom:5px}
+.neutral-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:5px;margin-bottom:5px}
 .npip{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:blink 2.5s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.neutral-short{font-size:13px;line-height:1.65;color:var(--muted2);font-weight:400}
-.neutral-long{font-size:13px;line-height:1.65;color:var(--muted2);font-weight:400;margin-top:6px;display:none}
+.neutral-short{font-size:15px;line-height:1.65;color:var(--muted2);font-weight:400}
+.neutral-long{font-size:15px;line-height:1.65;color:var(--muted2);font-weight:400;margin-top:6px;display:none}
 .neutral-long.open{display:block}
-.read-more{display:inline-flex;align-items:center;gap:3px;margin-top:5px;font-size:10px;font-weight:600;color:var(--gold);cursor:pointer;border:none;background:none;font-family:'IBM Plex Sans',sans-serif;padding:0;letter-spacing:.03em}
+.read-more{display:inline-flex;align-items:center;gap:3px;margin-top:5px;font-size:11px;font-weight:600;color:var(--gold);cursor:pointer;border:none;background:none;font-family:'IBM Plex Sans',sans-serif;padding:0;letter-spacing:.03em}
 .read-more .rm-arr{font-size:10px;transition:transform .2s;display:inline-block}
 .read-more.expanded .rm-arr{transform:rotate(180deg)}
 
@@ -124,18 +127,18 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .bias-row.dds-row{border-color:rgba(42,122,72,.3);background:rgba(42,122,72,.04)}
 .bias-row.pink-row{border-color:rgba(176,48,112,.3);background:rgba(176,48,112,.04)}
 
-.bias-head{display:flex;align-items:center;gap:8px;padding:8px 10px}
+.bias-head{display:flex;align-items:center;gap:8px;padding:9px 10px}
 .bias-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .dot-admin{background:var(--admin)}.dot-dds{background:var(--dds)}.dot-pink{background:var(--pink)}
-.bias-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;flex-shrink:0}
+.bias-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;flex-shrink:0}
 .lbl-admin{color:var(--admin)}.lbl-dds{color:var(--dds)}.lbl-pink{color:var(--pink)}
-.bias-phrase{font-size:11px;color:var(--muted2);font-weight:400;font-style:italic;flex:1;line-height:1.3}
-.bias-chevron{font-size:10px;color:var(--muted);flex-shrink:0;transition:transform .2s}
+.bias-phrase{font-size:12px;color:var(--muted2);font-weight:400;font-style:italic;flex:1;line-height:1.3}
+.bias-chevron{font-size:11px;color:var(--muted);flex-shrink:0;transition:transform .2s}
 .bias-row.open .bias-chevron{transform:rotate(180deg)}
 
 .bias-detail{max-height:0;overflow:hidden;transition:max-height .3s ease}
 .bias-row.open .bias-detail{max-height:300px}
-.bias-detail-inner{padding:0 10px 10px;font-size:12px;line-height:1.65;color:var(--muted2);font-weight:400;border-top:1px solid var(--border)}
+.bias-detail-inner{padding:0 10px 10px;font-size:13px;line-height:1.65;color:var(--muted2);font-weight:400;border-top:1px solid var(--border)}
 .bias-detail-inner p{padding-top:8px}
 
 /* loading state */
@@ -144,7 +147,7 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 /* ── SOURCES FOOTER ── */
 .src-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);cursor:pointer}
 .sbadges{display:flex;gap:4px;flex-wrap:wrap}
-.sbadge{font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;letter-spacing:.04em}
+.sbadge{font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;letter-spacing:.04em}
 .bd-dds{background:var(--dds-dim);color:var(--dds)}.bd-center{background:rgba(90,80,64,.1);color:var(--muted2)}
 .bd-pink{background:var(--pink-dim);color:var(--pink)}.bd-alt{background:rgba(96,64,160,.08);color:var(--purple)}
 .bd-admin{background:var(--admin-dim);color:var(--admin)}
@@ -219,7 +222,10 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 
 <header>
   <div class="hdr-inner">
-    <div class="wordmark">Facts<em>PH</em></div>
+    <div>
+      <div class="wordmark">Facts<em>PH</em></div>
+      <div class="tagline">Read the News, Without the Bias</div>
+    </div>
     <div class="hdr-right">
       <div class="ph-date" id="ph-date">—</div>
       <div class="ph-time" id="ph-time">—</div>
