@@ -206,6 +206,9 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .leg-desc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;font-style:italic}
 .sh-note{margin-top:12px;font-size:11px;line-height:1.6;color:var(--muted2);padding:10px 12px;background:var(--gold-dim);border-radius:8px;border-left:3px solid var(--gold)}
 .close-sh{margin-top:14px;width:100%;padding:13px;background:var(--gold);color:#fffdf8;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+.sh-about-logo{font-size:40px;text-align:center;margin:8px 0 14px}
+.sh-about-text{font-size:13px;line-height:1.7;color:var(--text);margin:0 0 10px}
+.sh-about-section{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:14px 0 4px}
 
 /* error */
 .err{margin:6px 12px 4px;padding:8px 12px;background:rgba(176,48,48,.07);border:1px solid rgba(176,48,48,.2);border-radius:8px;font-size:11px;color:var(--red);display:none;align-items:center;gap:6px}
@@ -308,40 +311,56 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 <nav class="bnav">
   <div class="ni on" id="nav-brief" onclick="showView('brief')"><span class="ni-icon">📰</span>Brief</div>
   <div class="ni" id="nav-search" onclick="showView('search')"><span class="ni-icon">🔍</span>Search</div>
-  <div class="ni" onclick="showSheet()"><span class="ni-icon">🗂</span>Sources</div>
-  <div class="ni" onclick="showSheet()"><span class="ni-icon">ℹ️</span>About</div>
+  <div class="ni" onclick="showSheet('sources')"><span class="ni-icon">🗂</span>Sources</div>
+  <div class="ni" onclick="showSheet('about')"><span class="ni-icon">ℹ️</span>About</div>
 </nav>
 
 <div class="sheet-ov" id="sheet" onclick="if(event.target===this)closeSheet()">
   <div class="sheet">
     <div class="sh-handle"></div>
-    <div class="sh-title">Source Guide</div>
-    <div class="leg-row">
-      <div class="leg-color" style="background:var(--admin)"></div>
-      <div><div class="leg-name">Admin / Bagong Pilipinas</div>
-      <div class="leg-outlets">PNA · Manila Bulletin</div>
-      <div class="leg-desc">Pro-Marcos administration framing. State newswire and admin-leaning outlets that emphasize government achievements and official positions.</div></div>
+    <div id="sheet-sources" class="sheet-pane">
+      <div class="sh-title">Source Guide</div>
+      <div class="leg-row">
+        <div class="leg-color" style="background:var(--admin)"></div>
+        <div><div class="leg-name">Admin / Bagong Pilipinas</div>
+        <div class="leg-outlets">PNA · Manila Bulletin</div>
+        <div class="leg-desc">Pro-Marcos administration framing. State newswire and admin-leaning outlets that emphasize government achievements and official positions.</div></div>
+      </div>
+      <div class="leg-row">
+        <div class="leg-color" style="background:var(--dds)"></div>
+        <div><div class="leg-name">DDS / Pro-Duterte</div>
+        <div class="leg-outlets">Manila Times · Manila Standard</div>
+        <div class="leg-desc">Frame Duterte positively. Critical of ICC and Marcos admin when it conflicts with Duterte interests. Supportive of Sara Duterte.</div></div>
+      </div>
+      <div class="leg-row">
+        <div class="leg-color" style="background:var(--muted)"></div>
+        <div><div class="leg-name">Mainstream / Centrist</div>
+        <div class="leg-outlets">GMA News · Inquirer · Philippine Star · ABS-CBN</div>
+        <div class="leg-desc">Legacy outlets. Report across the spectrum with varying editorial lean shaped by ownership and advertisers.</div></div>
+      </div>
+      <div class="leg-row">
+        <div class="leg-color" style="background:var(--pink)"></div>
+        <div><div class="leg-name">Progressives / Pink / Civil Society</div>
+        <div class="leg-outlets">Rappler · Vera Files · Kodao</div>
+        <div class="leg-desc">Critical of Duterte-era impunity. Pro-ICC, pro-accountability, human rights and liberal opposition aligned.</div></div>
+      </div>
+      <div class="sh-note">⚠️ These labels describe <strong>editorial tendencies</strong>, not absolute truth. Every outlet has biases shaped by ownership and history. Read across the spectrum.</div>
+      <button class="close-sh" onclick="closeSheet()">Got it</button>
     </div>
-    <div class="leg-row">
-      <div class="leg-color" style="background:var(--dds)"></div>
-      <div><div class="leg-name">DDS / Pro-Duterte</div>
-      <div class="leg-outlets">Manila Times · Manila Standard</div>
-      <div class="leg-desc">Frame Duterte positively. Critical of ICC and Marcos admin when it conflicts with Duterte interests. Supportive of Sara Duterte.</div></div>
+    <div id="sheet-about" class="sheet-pane" style="display:none">
+      <div class="sh-title">About FactsPH</div>
+      <div class="sh-about-logo">🇵🇭</div>
+      <p class="sh-about-text"><strong>FactsPH</strong> is a free, independent news reader built for Filipinos who want to understand the full picture of Philippine politics — not just one side of it.</p>
+      <p class="sh-about-text">We pull live headlines from across the political spectrum — from admin-aligned outlets to Duterte-leaning broadsheets to progressive digital media — and use AI to summarize each story from all perspectives.</p>
+      <div class="sh-about-section">How it works</div>
+      <p class="sh-about-text">📰 Live RSS feeds are fetched from 9+ Philippine news outlets every time you refresh. Stories covering the same topic are clustered together, then AI generates a neutral summary plus each outlet's distinct political framing.</p>
+      <div class="sh-about-section">Why it exists</div>
+      <p class="sh-about-text">Philippine media is deeply polarized. Reading only one outlet gives you only one version of reality. FactsPH shows you all versions side by side — so you can think for yourself.</p>
+      <div class="sh-about-section">Built with</div>
+      <p class="sh-about-text">Claude AI (Anthropic) · Open-source RSS feeds · Vercel · No ads, no trackers, no login required.</p>
+      <div class="sh-note" style="margin-top:16px">FactsPH is not affiliated with any political party, outlet, or government body. AI summaries may contain errors — always read the original source.</div>
+      <button class="close-sh" onclick="closeSheet()">Close</button>
     </div>
-    <div class="leg-row">
-      <div class="leg-color" style="background:var(--muted)"></div>
-      <div><div class="leg-name">Mainstream / Centrist</div>
-      <div class="leg-outlets">GMA News · Inquirer · Philippine Star</div>
-      <div class="leg-desc">Legacy outlets. Report across the spectrum with varying editorial lean shaped by ownership and advertisers.</div></div>
-    </div>
-    <div class="leg-row">
-      <div class="leg-color" style="background:var(--pink)"></div>
-      <div><div class="leg-name">Progressives / Pink / Civil Society</div>
-      <div class="leg-outlets">Rappler · Verafiles · Kodao</div>
-      <div class="leg-desc">Critical of Duterte-era impunity. Pro-ICC, pro-accountability, human rights and liberal opposition aligned.</div></div>
-    </div>
-    <div class="sh-note">⚠️ These labels describe <strong>editorial tendencies</strong>, not absolute truth. Every outlet has biases shaped by ownership and history. Read across the spectrum.</div>
-    <button class="close-sh" onclick="closeSheet()">Got it</button>
   </div>
 </div>
 
@@ -358,16 +377,42 @@ function tick(){
 tick();setInterval(tick,30000);
 
 // ── SOURCES ──
-const SOURCES=[
-  {name:'Manila Times',   lean:'dds',   type:'Broadsheet / DDS',          rss:'https://www.manilatimes.net/feed/'},
-  {name:'Manila Standard',lean:'dds',   type:'Broadsheet / DDS',          rss:'https://manilastandard.net/feed/'},
-  {name:'PNA',            lean:'admin', type:'State Newswire / Admin',     rss:'https://www.pna.gov.ph/rss/recent-stories'},
-  {name:'Manila Bulletin',lean:'admin', type:'Broadsheet / Admin-leaning', rss:'https://mb.com.ph/feed'},
-  {name:'GMA News',       lean:'center',type:'TV Network',                 rss:'https://www.gmanetwork.com/news/rss/nation/news.xml'},
-  {name:'Inquirer',       lean:'center',type:'Broadsheet',                 rss:'https://newsinfo.inquirer.net/feed'},
-  {name:'Philippine Star',lean:'center',type:'Broadsheet',                 rss:'https://www.philstar.com/rss/headlines'},
-  {name:'Rappler',        lean:'pink',  type:'Digital / Investigative',    rss:'https://www.rappler.com/feed/'},
+// Source lean lookup — used to tag articles fetched from Google News aggregator
+const SOURCE_LEAN={
+  'manila times':'dds','manila standard':'dds',
+  'philippine news agency':'admin','pna':'admin','manila bulletin':'admin','mb.com':'admin','ptv':'admin',
+  'gma network':'center','gma news':'center','inquirer':'center','philippine star':'center','philstar':'center',
+  'abs-cbn':'center','abscbn':'center','one news':'center','businessmirror':'center','sunstar':'center',
+  'rappler':'pink','vera files':'pink','pcij':'pink','daily tribune':'pink',
+};
+function guessLean(sourceName){
+  const s=(sourceName||'').toLowerCase();
+  for(const[k,v]of Object.entries(SOURCE_LEAN)){if(s.includes(k))return v;}
+  return'center';
+}
+// Direct RSS — tried first (some may be blocked by PH site firewalls on Vercel)
+const DIRECT_SOURCES=[
+  {name:'Manila Times',   lean:'dds',   type:'Broadsheet / DDS',       rss:'https://www.manilatimes.net/news/national/feed/'},
+  {name:'Manila Standard',lean:'dds',   type:'Broadsheet / DDS',       rss:'https://manilastandard.net/feed/'},
+  {name:'PNA',            lean:'admin', type:'State Newswire',          rss:'https://www.pna.gov.ph/rss/recent-stories'},
+  {name:'Manila Bulletin',lean:'admin', type:'Broadsheet / Admin',      rss:'https://mb.com.ph/feed'},
+  {name:'GMA News',       lean:'center',type:'TV Network',              rss:'https://www.gmanetwork.com/news/rss/nation/news.xml'},
+  {name:'Inquirer',       lean:'center',type:'Broadsheet',              rss:'https://newsinfo.inquirer.net/feed'},
+  {name:'Philippine Star',lean:'center',type:'Broadsheet',              rss:'https://www.philstar.com/rss/headlines'},
+  {name:'Rappler',        lean:'pink',  type:'Digital / Investigative', rss:'https://www.rappler.com/feed/'},
+  {name:'ABS-CBN News',  lean:'center',type:'TV Network',              rss:'https://news.abs-cbn.com/rss/news'},
 ];
+// Google News feeds — reliable fallback, pass through Google CDN so never blocked
+// Each result includes a <source> tag we parse to identify the outlet + assign lean
+const GNEWS_SOURCES=[
+  {topic:'all',      rss:'https://news.google.com/rss/search?q=philippines+politics+marcos+senate&hl=en-PH&gl=PH&ceid=PH:en'},
+  {topic:'icc',      rss:'https://news.google.com/rss/search?q=duterte+ICC+hague+philippines&hl=en-PH&gl=PH&ceid=PH:en'},
+  {topic:'sara',     rss:'https://news.google.com/rss/search?q=%22sara+duterte%22+impeach+philippines&hl=en-PH&gl=PH&ceid=PH:en'},
+  {topic:'wps',      rss:'https://news.google.com/rss/search?q=west+philippine+sea+china+coast+guard&hl=en-PH&gl=PH&ceid=PH:en'},
+  {topic:'elections',rss:'https://news.google.com/rss/search?q=philippines+midterm+elections+2025+senatorial&hl=en-PH&gl=PH&ceid=PH:en'},
+];
+// For Sources panel display
+const SOURCES=DIRECT_SOURCES;
 const LEAN_LBL={dds:'DDS',center:'Center',admin:'Admin',pink:'Progressive',alt:'Independent'};
 
 let allStories=[],currentTab='all';
@@ -380,19 +425,50 @@ function setTab(t,el){
 }
 
 // ── RSS ──
+async function fetchRSSUrl(url,src){
+  const r=await fetch(`/api/rss?url=${encodeURIComponent(url)}`,{signal:AbortSignal.timeout(9000)});
+  if(!r.ok)throw 0;
+  const text=await r.text();
+  const xml=new DOMParser().parseFromString(text,'text/xml');
+  const items=Array.from(xml.querySelectorAll('item'));
+  if(!items.length)throw 0;
+  return items.slice(0,8).map(item=>({
+    title:(item.querySelector('title')?.textContent||'').trim(),
+    link:(item.querySelector('link')?.textContent||'#').trim(),
+    date:(item.querySelector('pubDate')?.textContent||'').trim(),
+    source:src.name,lean:src.lean,type:src.type,
+    topic:guessTopic(item.querySelector('title')?.textContent||'')
+  })).filter(i=>i.title.length>15);
+}
 async function fetchRSS(src){
+  try{return await fetchRSSUrl(src.rss,src);}catch{}
+  return[];
+}
+// Parse Google News RSS — each item has a <source> element with the outlet name
+async function fetchGNews(gn){
   try{
-    const r=await fetch(`/api/rss?url=${encodeURIComponent(src.rss)}`,{signal:AbortSignal.timeout(9000)});
+    const r=await fetch(`/api/rss?url=${encodeURIComponent(gn.rss)}`,{signal:AbortSignal.timeout(10000)});
     if(!r.ok)throw 0;
     const text=await r.text();
     const xml=new DOMParser().parseFromString(text,'text/xml');
-    return Array.from(xml.querySelectorAll('item')).slice(0,6).map(item=>({
-      title:(item.querySelector('title')?.textContent||'').trim(),
-      link:(item.querySelector('link')?.textContent||'#').trim(),
-      date:(item.querySelector('pubDate')?.textContent||'').trim(),
-      source:src.name,lean:src.lean,type:src.type,
-      topic:guessTopic(item.querySelector('title')?.textContent||'')
-    })).filter(i=>i.title.length>15);
+    const items=Array.from(xml.querySelectorAll('item'));
+    if(!items.length)throw 0;
+    return items.slice(0,12).map(item=>{
+      const title=(item.querySelector('title')?.textContent||'').trim();
+      // Google News title format: "Headline - Source Name"
+      const dashIdx=title.lastIndexOf(' - ');
+      const cleanTitle=dashIdx>0?title.slice(0,dashIdx):title;
+      const srcEl=item.querySelector('source');
+      const srcName=srcEl?.textContent||title.slice(dashIdx+3)||'';
+      const lean=guessLean(srcName);
+      return{
+        title:cleanTitle,
+        link:(item.querySelector('link')?.textContent||'#').trim(),
+        date:(item.querySelector('pubDate')?.textContent||'').trim(),
+        source:srcName,lean,type:'Online',
+        topic:guessTopic(cleanTitle)
+      };
+    }).filter(i=>i.title.length>15&&i.source.length>1);
   }catch{return[];}
 }
 
@@ -410,23 +486,33 @@ const TOPIC_LABELS={icc:'⚖️ ICC / Duterte',marcos:'🏛️ Marcos Admin',sar
 const STOP=new Set(['the','a','an','in','of','on','at','to','for','is','are','was','were','and','but','or','with','by','as','from','that','this','has','have','its','be','been','will','not','no','after','before','says','said','over','into','their','also','more','new','amid']);
 function kw(t){return new Set(t.toLowerCase().replace(/[^\w\s]/g,'').split(/\s+/).filter(w=>w.length>3&&!STOP.has(w)));}
 function sim(a,b){const ka=kw(a.title),kb=kw(b.title);const i=[...ka].filter(k=>kb.has(k)).length,u=new Set([...ka,...kb]).size;return u?i/u:0;}
+const TOPIC_WEIGHT={icc:6,sara:5,wps:4,elections:3,marcos:2,general:1};
 function cluster(arts){
   const used=new Set(),out=[];
   for(let i=0;i<arts.length;i++){
     if(used.has(i))continue;
     const c=[arts[i]];used.add(i);
     for(let j=i+1;j<arts.length;j++){
-      if(!used.has(j)&&arts[i].topic===arts[j].topic&&sim(arts[i],arts[j])>0.14){c.push(arts[j]);used.add(j);}
+      // Cluster if: same topic AND (similar title OR same non-general topic)
+      if(!used.has(j)&&arts[i].topic===arts[j].topic&&
+        (sim(arts[i],arts[j])>0.12||(arts[i].topic!=='general'&&arts[j].topic!=='general')&&sim(arts[i],arts[j])>0.06)){
+        c.push(arts[j]);used.add(j);
+      }
     }
     out.push(c);
   }
   return out.sort((a,b)=>{
-    // Prioritise stories covered by more distinct leans (cross-spectrum coverage)
+    // 1. More distinct leans = more important (cross-spectrum coverage)
     const leanCount = c => new Set(c.map(x=>x.lean)).size;
     const ld = leanCount(b) - leanCount(a);
     if(ld !== 0) return ld;
-    return b.length - a.length; // fallback: more sources = more important
-  }).slice(0,12).map(c=>({
+    // 2. More total sources
+    const sd = b.length - a.length;
+    if(sd !== 0) return sd;
+    // 3. Topic weight (ICC > Sara > WPS > Elections > Marcos > General)
+    const tw = c => TOPIC_WEIGHT[c[0].topic]||1;
+    return tw(b) - tw(a);
+  }).slice(0,14).map(c=>({
     headline:c[0].title,topic:c[0].topic,time:fmt(c[0].date),sources:c,
     neutralShort:null,neutralLong:null,
     adminPhrase:null,adminSummary:null,adminSource:null,
@@ -859,12 +945,33 @@ async function loadNews(){
   genQueue=[];genRunning=false;
   document.getElementById('stories-wrap').innerHTML='<div class="skel"><div class="sk sm"></div><div class="sk h lg"></div><div class="sk lg"></div><div class="sk md"></div><div class="sk sm" style="margin-top:6px"></div><div class="sk md" style="margin-top:2px"></div></div><div class="skel"><div class="sk sm"></div><div class="sk h md"></div><div class="sk lg"></div><div class="sk md"></div></div><div class="skel"><div class="sk sm"></div><div class="sk h lg"></div><div class="sk lg"></div><div class="sk md"></div></div><div class="skel"><div class="sk sm"></div><div class="sk h md"></div><div class="sk lg"></div></div>';
 
-  const results=await Promise.allSettled(SOURCES.map(fetchRSS));
-  const articles=results.flatMap(r=>r.status==='fulfilled'?r.value:[]);
+  // 1. Try direct RSS from each outlet
+  const directResults=await Promise.allSettled(DIRECT_SOURCES.map(fetchRSS));
+  let articles=directResults.flatMap(r=>r.status==='fulfilled'?r.value:[]);
+  const directSrcs=new Set(articles.map(a=>a.source)).size;
+
+  // 2. Always also fetch Google News (reliable multi-outlet aggregator)
+  const gnResults=await Promise.allSettled(GNEWS_SOURCES.map(fetchGNews));
+  const gnArticles=gnResults.flatMap(r=>r.status==='fulfilled'?r.value:[]);
+
+  // Merge: deduplicate by title similarity, Google News fills gaps
+  const titleSet=new Set(articles.map(a=>a.title.slice(0,60).toLowerCase()));
+  for(const a of gnArticles){
+    const key=a.title.slice(0,60).toLowerCase();
+    if(!titleSet.has(key)){articles.push(a);titleSet.add(key);}
+  }
+
   if(!articles.length){
     document.getElementById('err-banner').classList.add('show');
+    document.getElementById('err-msg').textContent='All feeds unavailable. Showing sample stories.';
     allStories=fallback();
   }else{
+    const totalSrcs=new Set(articles.map(a=>a.source)).size;
+    const leans=new Set(articles.map(a=>a.lean)).size;
+    if(leans<2){
+      document.getElementById('err-banner').classList.add('show');
+      document.getElementById('err-msg').textContent=`Limited sources loaded (${totalSrcs} outlets, ${leans} perspective${leans!==1?'s':''}). Pull to refresh.`;
+    }
     allStories=cluster(articles);
   }
   renderStories();
@@ -954,14 +1061,23 @@ function fallback(){return[
   ]},
 ];}
 
-function showSheet(){document.getElementById('sheet').classList.add('open');}
+function showSheet(tab){
+  document.getElementById('sheet-sources').style.display=(tab==='about')?'none':'block';
+  document.getElementById('sheet-about').style.display=(tab==='about')?'block':'none';
+  document.getElementById('sheet').classList.add('open');
+}
 function closeSheet(){document.getElementById('sheet').classList.remove('open');}
 
 // ── INSTALL PROMPT ──
 let deferredInstall = null;
+// Don't show banner if already running as installed PWA or user dismissed
+const isInstalled = window.matchMedia('(display-mode: standalone)').matches
+  || window.navigator.standalone === true
+  || document.referrer.startsWith('android-app://');
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   deferredInstall = e;
+  if(isInstalled) return; // already installed, skip
   setTimeout(() => {
     const b = document.getElementById('install-banner');
     if(b) b.style.display = 'flex';
@@ -977,7 +1093,10 @@ function installApp(){
     if(b) b.style.display='none';
   }
 }
-window.addEventListener('appinstalled', ()=>{ const b=document.getElementById('install-banner'); if(b)b.style.display='none'; });
+window.addEventListener('appinstalled', ()=>{
+  const b=document.getElementById('install-banner');
+  if(b)b.style.display='none';
+});
 
 loadNews();
 </script>
