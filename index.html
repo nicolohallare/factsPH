@@ -416,16 +416,22 @@ function cluster(arts){
     if(used.has(i))continue;
     const c=[arts[i]];used.add(i);
     for(let j=i+1;j<arts.length;j++){
-      if(!used.has(j)&&arts[i].topic===arts[j].topic&&sim(arts[i],arts[j])>0.18){c.push(arts[j]);used.add(j);}
+      if(!used.has(j)&&arts[i].topic===arts[j].topic&&sim(arts[i],arts[j])>0.14){c.push(arts[j]);used.add(j);}
     }
     out.push(c);
   }
-  return out.sort((a,b)=>b.length-a.length).slice(0,12).map(c=>({
+  return out.sort((a,b)=>{
+    // Prioritise stories covered by more distinct leans (cross-spectrum coverage)
+    const leanCount = c => new Set(c.map(x=>x.lean)).size;
+    const ld = leanCount(b) - leanCount(a);
+    if(ld !== 0) return ld;
+    return b.length - a.length; // fallback: more sources = more important
+  }).slice(0,12).map(c=>({
     headline:c[0].title,topic:c[0].topic,time:fmt(c[0].date),sources:c,
     neutralShort:null,neutralLong:null,
-    adminPhrase:null,adminSummary:null,
-    ddsPhrase:null,ddsSummary:null,
-    pinkPhrase:null,pinkSummary:null
+    adminPhrase:null,adminSummary:null,adminSource:null,
+    ddsPhrase:null,ddsSummary:null,ddsSource:null,
+    pinkPhrase:null,pinkSummary:null,pinkSource:null
   }));
 }
 function fmt(s){
@@ -443,21 +449,52 @@ async function callClaude(prompt){
   return(await r.json()).content?.[0]?.text?.trim()||'';
 }
 
+// Helper: get best source article for a given lean
+function getBestSource(story, lean){
+  return story.sources.find(s=>s.lean===lean) || null;
+}
+
+// Helper: get all sources for a lean
+function getLeanSources(story, lean){
+  return story.sources.filter(s=>s.lean===lean);
+}
+
 async function genContent(story){
-  const lines=story.sources.map(s=>`[${LEAN_LBL[s.lean]||s.lean}] ${s.title}`).join('\n');
-  const p=`You are analyzing Philippine political news coverage. Given these headlines from outlets with different political leanings, generate exactly:
+  // Build source-grounded input — each lean gets its actual headlines
+  const allLines = story.sources.map(s=>`[${s.source} / ${LEAN_LBL[s.lean]||s.lean}] ${s.title}`).join('\n');
 
-1. NEUTRAL_SHORT: A single factual sentence (max 30 words) — no opinion, no framing
-2. NEUTRAL_LONG: A neutral 3–4 sentence factual summary expanding on the short version
-3. ADMIN_PHRASE: Max 9 words capturing how Bagong Pilipinas / Marcos administration outlets frame this story
-4. ADMIN_SUMMARY: 2–3 sentences describing how pro-administration outlets frame this story and why — include their reasoning and emotional tone
-5. DDS_PHRASE: Max 9 words capturing how pro-Duterte/DDS outlets frame this story
-6. DDS_SUMMARY: 2–3 sentences describing how DDS outlets frame this story and why — include their reasoning and emotional tone
-7. PINK_PHRASE: Max 9 words capturing how Progressive/civil society/Pinklawan outlets frame this story
-8. PINK_SUMMARY: 2–3 sentences describing how Progressive outlets frame this story and why — include their reasoning and emotional tone
+  const adminSrcs  = getLeanSources(story,'admin');
+  const ddsSrcs    = getLeanSources(story,'dds');
+  const pinkSrcs   = getLeanSources(story,'pink');
+  const centerSrcs = getLeanSources(story,'center');
 
-Headlines:
-${lines}
+  const adminLines  = adminSrcs.length  ? adminSrcs.map(s=>`${s.source}: "${s.title}"`).join('\n')  : 'No admin source covered this story.';
+  const ddsLines    = ddsSrcs.length    ? ddsSrcs.map(s=>`${s.source}: "${s.title}"`).join('\n')    : 'No DDS source covered this story.';
+  const pinkLines   = pinkSrcs.length   ? pinkSrcs.map(s=>`${s.source}: "${s.title}"`).join('\n')   : 'No progressive source covered this story.';
+  const centerLines = centerSrcs.length ? centerSrcs.map(s=>`${s.source}: "${s.title}"`).join('\n') : '';
+
+  const hasSide = (srcs) => srcs.length > 0;
+
+  const p=`You are a neutral Philippine political news analyst. Below are actual headlines published by different outlets about the same story. Each outlet has a known editorial lean.
+
+ALL HEADLINES COVERING THIS STORY:
+${allLines}
+
+Your task — generate exactly 8 fields:
+
+1. NEUTRAL_SHORT: One factual sentence (max 30 words) synthesizing what happened across all sources — no framing, no opinion.
+2. NEUTRAL_LONG: 3–4 sentence factual summary drawing on all headlines above. What are the confirmed facts?
+
+3. ADMIN_PHRASE: Max 9 words — the angle/spin in the admin/Bagong Pilipinas headlines below.
+4. ADMIN_SUMMARY: 2–3 sentences. Based ONLY on these admin outlet headlines: ${adminLines} — explain how they frame the story, what they emphasize or omit, and why.
+
+5. DDS_PHRASE: Max 9 words — the angle/spin in the DDS/pro-Duterte headlines below.
+6. DDS_SUMMARY: 2–3 sentences. Based ONLY on these DDS outlet headlines: ${ddsLines} — explain how they frame the story, what they emphasize or omit, and why.
+
+7. PINK_PHRASE: Max 9 words — the angle/spin in the progressive/Pinklawan headlines below.
+8. PINK_SUMMARY: 2–3 sentences. Based ONLY on these progressive outlet headlines: ${pinkLines} — explain how they frame the story, what they emphasize or omit, and why.
+
+If a side has no source, note that no outlet from that side covered this story and explain what that silence might mean.
 
 Respond in EXACTLY this format with no extra text:
 NEUTRAL_SHORT: [sentence]
@@ -468,6 +505,7 @@ DDS_PHRASE: [phrase]
 DDS_SUMMARY: [paragraph]
 PINK_PHRASE: [phrase]
 PINK_SUMMARY: [paragraph]`;
+
   try{
     const t=await callClaude(p);
     const get=(key,next)=>t.match(new RegExp(`${key}:\\s*(.+?)(?=\\n${next}:|$)`,'s'))?.[1]?.trim()||'';
@@ -476,13 +514,21 @@ PINK_SUMMARY: [paragraph]`;
       neutralLong:  get('NEUTRAL_LONG','ADMIN_PHRASE'),
       adminPhrase:  get('ADMIN_PHRASE','ADMIN_SUMMARY'),
       adminSummary: get('ADMIN_SUMMARY','DDS_PHRASE'),
+      adminSource:  adminSrcs[0] || null,
       ddsPhrase:    get('DDS_PHRASE','DDS_SUMMARY'),
       ddsSummary:   get('DDS_SUMMARY','PINK_PHRASE'),
+      ddsSource:    ddsSrcs[0] || null,
       pinkPhrase:   get('PINK_PHRASE','PINK_SUMMARY'),
-      pinkSummary:  get('PINK_SUMMARY','$')
+      pinkSummary:  get('PINK_SUMMARY','$'),
+      pinkSource:   pinkSrcs[0] || null,
     };
   }catch{
-    return{neutralShort:story.headline,neutralLong:'',adminPhrase:'—',adminSummary:'',ddsPhrase:'—',ddsSummary:'',pinkPhrase:'—',pinkSummary:''};
+    return{
+      neutralShort:story.headline,neutralLong:'',
+      adminPhrase:'—',adminSummary:'',adminSource:null,
+      ddsPhrase:'—',ddsSummary:'',ddsSource:null,
+      pinkPhrase:'—',pinkSummary:'',pinkSource:null
+    };
   }
 }
 
@@ -540,34 +586,58 @@ function renderStories(){
       <div class="bias-row admin-row" id="admin-row-${i}" onclick="toggleBias('admin',${i})">
         <div class="bias-head">
           <div class="bias-dot dot-admin"></div>
-          <span class="bias-lbl lbl-admin">Bagong Pilipinas</span>
-          <span class="bias-phrase ${phraseLoadClass}" id="admin-phrase-${i}">${esc(adminPhraseTxt)}</span>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span class="bias-lbl lbl-admin">Bagong Pilipinas</span>
+              ${isLoaded&&s.adminSource?`<span style="font-size:9px;color:var(--admin);opacity:.7;">${esc(s.adminSource.source)}</span>`:''}
+            </div>
+            <span class="bias-phrase ${phraseLoadClass}" id="admin-phrase-${i}">${esc(adminPhraseTxt)}</span>
+          </div>
           <span class="bias-chevron">▾</span>
         </div>
         <div class="bias-detail" id="admin-detail-${i}">
-          <div class="bias-detail-inner"><p id="admin-sum-${i}">${isLoaded&&s.adminSummary?esc(s.adminSummary):''}</p></div>
+          <div class="bias-detail-inner">
+            ${isLoaded&&s.adminSource?`<div style="font-size:10px;color:var(--admin);margin-bottom:6px;padding-top:8px;">📰 Based on: <a href="${esc(s.adminSource.link)}" target="_blank" style="color:var(--admin);text-decoration:underline;">${esc(s.adminSource.source)}</a> — "${esc(s.adminSource.title.slice(0,80))}"</div>`:''}
+            <p id="admin-sum-${i}">${isLoaded&&s.adminSummary?esc(s.adminSummary):''}</p>
+          </div>
         </div>
       </div>
       <div class="bias-row dds-row" id="dds-row-${i}" onclick="toggleBias('dds',${i})">
         <div class="bias-head">
           <div class="bias-dot dot-dds"></div>
-          <span class="bias-lbl lbl-dds">DDS</span>
-          <span class="bias-phrase ${phraseLoadClass}" id="dds-phrase-${i}">${esc(ddsPhraseTxt)}</span>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span class="bias-lbl lbl-dds">DDS</span>
+              ${isLoaded&&s.ddsSource?`<span style="font-size:9px;color:var(--dds);opacity:.7;">${esc(s.ddsSource.source)}</span>`:''}
+            </div>
+            <span class="bias-phrase ${phraseLoadClass}" id="dds-phrase-${i}">${esc(ddsPhraseTxt)}</span>
+          </div>
           <span class="bias-chevron">▾</span>
         </div>
         <div class="bias-detail" id="dds-detail-${i}">
-          <div class="bias-detail-inner"><p id="dds-sum-${i}">${isLoaded&&s.ddsSummary?esc(s.ddsSummary):''}</p></div>
+          <div class="bias-detail-inner">
+            ${isLoaded&&s.ddsSource?`<div style="font-size:10px;color:var(--dds);margin-bottom:6px;padding-top:8px;">📰 Based on: <a href="${esc(s.ddsSource.link)}" target="_blank" style="color:var(--dds);text-decoration:underline;">${esc(s.ddsSource.source)}</a> — "${esc(s.ddsSource.title.slice(0,80))}"</div>`:''}
+            <p id="dds-sum-${i}">${isLoaded&&s.ddsSummary?esc(s.ddsSummary):''}</p>
+          </div>
         </div>
       </div>
       <div class="bias-row pink-row" id="pink-row-${i}" onclick="toggleBias('pink',${i})">
         <div class="bias-head">
           <div class="bias-dot dot-pink"></div>
-          <span class="bias-lbl lbl-pink">Progressives</span>
-          <span class="bias-phrase ${phraseLoadClass}" id="pink-phrase-${i}">${esc(pinkPhraseTxt)}</span>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span class="bias-lbl lbl-pink">Progressives</span>
+              ${isLoaded&&s.pinkSource?`<span style="font-size:9px;color:var(--pink);opacity:.7;">${esc(s.pinkSource.source)}</span>`:''}
+            </div>
+            <span class="bias-phrase ${phraseLoadClass}" id="pink-phrase-${i}">${esc(pinkPhraseTxt)}</span>
+          </div>
           <span class="bias-chevron">▾</span>
         </div>
         <div class="bias-detail" id="pink-detail-${i}">
-          <div class="bias-detail-inner"><p id="pink-sum-${i}">${isLoaded&&s.pinkSummary?esc(s.pinkSummary):''}</p></div>
+          <div class="bias-detail-inner">
+            ${isLoaded&&s.pinkSource?`<div style="font-size:10px;color:var(--pink);margin-bottom:6px;padding-top:8px;">📰 Based on: <a href="${esc(s.pinkSource.link)}" target="_blank" style="color:var(--pink);text-decoration:underline;">${esc(s.pinkSource.source)}</a> — "${esc(s.pinkSource.title.slice(0,80))}"</div>`:''}
+            <p id="pink-sum-${i}">${isLoaded&&s.pinkSummary?esc(s.pinkSummary):''}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -739,10 +809,13 @@ async function runQueue(){
   story.neutralLong=r.neutralLong;
   story.adminPhrase=r.adminPhrase;
   story.adminSummary=r.adminSummary;
+  story.adminSource=r.adminSource;
   story.ddsPhrase=r.ddsPhrase;
   story.ddsSummary=r.ddsSummary;
+  story.ddsSource=r.ddsSource;
   story.pinkPhrase=r.pinkPhrase;
   story.pinkSummary=r.pinkSummary;
+  story.pinkSource=r.pinkSource;
 
   // Patch DOM
   const ns=document.getElementById(`ns-${idx}`);
