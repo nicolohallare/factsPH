@@ -209,6 +209,23 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .sh-about-logo{font-size:40px;text-align:center;margin:8px 0 14px}
 .sh-about-text{font-size:13px;line-height:1.7;color:var(--text);margin:0 0 10px}
 .sh-about-section{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:14px 0 4px}
+.sh-subtitle{font-size:11px;color:var(--muted2);margin:-6px 0 14px}
+.src-group{margin-bottom:14px}
+.src-group-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.src-group-bar{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.src-group-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text)}
+.src-group-desc{font-size:11px;color:var(--muted2);line-height:1.5;margin:0 0 8px 18px}
+.src-chips{display:flex;flex-wrap:wrap;gap:6px;margin-left:18px}
+.src-chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:4px 10px;border-radius:20px;background:var(--s2);border:1px solid var(--border2);color:var(--text);text-decoration:none}
+.src-chip.ok{border-color:var(--dds)}
+.src-chip.fail{opacity:.5}
+.src-chip-dot{width:7px;height:7px;border-radius:50%;background:#aaa;flex-shrink:0}
+.src-chip.ok .src-chip-dot{background:#4caf50}
+.src-chip.fail .src-chip-dot{background:#e53935}
+.src-chip.pending .src-chip-dot{background:#aaa}
+.gnews-row{margin-top:12px;padding:10px 12px;background:var(--gold-dim);border-radius:8px;border-left:3px solid var(--gold)}
+.gnews-row-title{font-size:11px;font-weight:700;color:var(--gold);margin-bottom:4px}
+.gnews-row-desc{font-size:11px;color:var(--muted2);line-height:1.5}
 
 /* error */
 .err{margin:6px 12px 4px;padding:8px 12px;background:rgba(176,48,48,.07);border:1px solid rgba(176,48,48,.2);border-radius:8px;font-size:11px;color:var(--red);display:none;align-items:center;gap:6px}
@@ -320,31 +337,9 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
     <div class="sh-handle"></div>
     <div id="sheet-sources" class="sheet-pane">
       <div class="sh-title">Source Guide</div>
-      <div class="leg-row">
-        <div class="leg-color" style="background:var(--admin)"></div>
-        <div><div class="leg-name">Admin / Bagong Pilipinas</div>
-        <div class="leg-outlets">PNA · Manila Bulletin</div>
-        <div class="leg-desc">Pro-Marcos administration framing. State newswire and admin-leaning outlets that emphasize government achievements and official positions.</div></div>
-      </div>
-      <div class="leg-row">
-        <div class="leg-color" style="background:var(--dds)"></div>
-        <div><div class="leg-name">DDS / Pro-Duterte</div>
-        <div class="leg-outlets">Manila Times · Manila Standard</div>
-        <div class="leg-desc">Frame Duterte positively. Critical of ICC and Marcos admin when it conflicts with Duterte interests. Supportive of Sara Duterte.</div></div>
-      </div>
-      <div class="leg-row">
-        <div class="leg-color" style="background:var(--muted)"></div>
-        <div><div class="leg-name">Mainstream / Centrist</div>
-        <div class="leg-outlets">GMA News · Inquirer · Philippine Star · ABS-CBN</div>
-        <div class="leg-desc">Legacy outlets. Report across the spectrum with varying editorial lean shaped by ownership and advertisers.</div></div>
-      </div>
-      <div class="leg-row">
-        <div class="leg-color" style="background:var(--pink)"></div>
-        <div><div class="leg-name">Progressives / Pink / Civil Society</div>
-        <div class="leg-outlets">Rappler · Vera Files · Kodao</div>
-        <div class="leg-desc">Critical of Duterte-era impunity. Pro-ICC, pro-accountability, human rights and liberal opposition aligned.</div></div>
-      </div>
-      <div class="sh-note">⚠️ These labels describe <strong>editorial tendencies</strong>, not absolute truth. Every outlet has biases shaped by ownership and history. Read across the spectrum.</div>
+      <div class="sh-subtitle">Live feeds from <span id="src-count">—</span> outlets · <span id="src-last-updated"></span></div>
+      <div id="src-groups"></div>
+      <div class="sh-note">⚠️ These labels describe <strong>editorial tendencies</strong>, not absolute truth. Every outlet has biases shaped by ownership and history. Read across the spectrum.<br><br>🟢 = loaded this session &nbsp; 🔴 = feed blocked or unavailable</div>
       <button class="close-sh" onclick="closeSheet()">Got it</button>
     </div>
     <div id="sheet-about" class="sheet-pane" style="display:none">
@@ -441,7 +436,11 @@ async function fetchRSSUrl(url,src){
   })).filter(i=>i.title.length>15);
 }
 async function fetchRSS(src){
-  try{return await fetchRSSUrl(src.rss,src);}catch{}
+  try{
+    const res = await fetchRSSUrl(src.rss,src);
+    if(res.length) { srcStatus[src.name]='ok'; return res; }
+  }catch{}
+  srcStatus[src.name]='fail';
   return[];
 }
 // Parse Google News RSS — each item has a <source> element with the outlet name
@@ -975,6 +974,7 @@ async function loadNews(){
     allStories=cluster(articles);
   }
   renderStories();
+  renderSourcesPanel();
   ico.className='';ico.textContent='↻';btn.style.pointerEvents='';
 }
 
@@ -1061,10 +1061,85 @@ function fallback(){return[
   ]},
 ];}
 
+// ── SOURCE STATUS TRACKING ──
+const srcStatus = {}; // name -> 'ok' | 'fail' | 'pending'
+
+const LEAN_GROUPS = [
+  {
+    lean: 'admin',
+    label: 'Admin / Bagong Pilipinas',
+    color: 'var(--admin)',
+    desc: 'Pro-Marcos administration framing. State newswire and admin-aligned outlets emphasizing government positions and achievements.'
+  },
+  {
+    lean: 'dds',
+    label: 'DDS / Pro-Duterte',
+    color: 'var(--dds)',
+    desc: 'Frame Duterte positively. Critical of the ICC and Marcos when it conflicts with Duterte interests. Strongly supportive of Sara Duterte.'
+  },
+  {
+    lean: 'center',
+    label: 'Mainstream / Centrist',
+    color: 'var(--muted)',
+    desc: 'Legacy broadsheets and TV networks. Report across the spectrum with editorial lean shaped by ownership, advertisers, and audience.'
+  },
+  {
+    lean: 'pink',
+    label: 'Progressives / Pink / Civil Society',
+    color: 'var(--pink)',
+    desc: 'Critical of Duterte-era impunity. Pro-ICC, pro-accountability, and aligned with liberal opposition and human rights groups.'
+  },
+];
+
+function renderSourcesPanel(){
+  const grpEl = document.getElementById('src-groups');
+  if(!grpEl) return;
+
+  // Collect all known sources: direct + any seen in loaded articles
+  const seenSources = new Set(allStories.flatMap(s => s.sources.map(x => x.source)));
+  const allKnown = [...DIRECT_SOURCES];
+  // Add any sources seen in articles that aren't in DIRECT_SOURCES
+  for(const name of seenSources){
+    if(!allKnown.find(s => s.name === name)){
+      allKnown.push({name, lean: guessLean(name), type:'Via Google News'});
+    }
+  }
+
+  const countEl = document.getElementById('src-count');
+  const lastEl = document.getElementById('src-last-updated');
+  if(countEl) countEl.textContent = allKnown.length;
+  if(lastEl) lastEl.textContent = 'updated ' + new Date().toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit'});
+
+  grpEl.innerHTML = LEAN_GROUPS.map(g => {
+    const members = allKnown.filter(s => s.lean === g.lean);
+    if(!members.length) return '';
+    const chips = members.map(s => {
+      const st = seenSources.has(s.name) ? 'ok' : (srcStatus[s.name] === 'fail' ? 'fail' : 'pending');
+      const dot = `<span class="src-chip-dot"></span>`;
+      return `<span class="src-chip ${st}" title="${s.type||''}">${dot}${s.name}</span>`;
+    }).join('');
+    return `<div class="src-group">
+      <div class="src-group-hd">
+        <span class="src-group-bar" style="background:${g.color}"></span>
+        <span class="src-group-label">${g.label}</span>
+      </div>
+      <div class="src-group-desc">${g.desc}</div>
+      <div class="src-chips">${chips}</div>
+    </div>`;
+  }).join('');
+
+  // Google News section
+  grpEl.innerHTML += `<div class="gnews-row">
+    <div class="gnews-row-title">🔄 Google News Aggregator (always-on fallback)</div>
+    <div class="gnews-row-desc">When direct feeds are blocked, FactsPH fetches topic-specific Google News feeds covering PH Politics, ICC/Duterte, Sara Duterte, West Philippine Sea, and Midterms. Articles from Inquirer, Rappler, GMA, Manila Times, Philippine Star, ABS-CBN and more appear here automatically.</div>
+  </div>`;
+}
+
 function showSheet(tab){
   document.getElementById('sheet-sources').style.display=(tab==='about')?'none':'block';
   document.getElementById('sheet-about').style.display=(tab==='about')?'block':'none';
   document.getElementById('sheet').classList.add('open');
+  if(tab!=='about') renderSourcesPanel();
 }
 function closeSheet(){document.getElementById('sheet').classList.remove('open');}
 
