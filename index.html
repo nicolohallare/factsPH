@@ -209,6 +209,8 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .sh-about-logo{font-size:40px;text-align:center;margin:8px 0 14px}
 .sh-about-text{font-size:13px;line-height:1.7;color:var(--text);margin:0 0 10px}
 .sh-about-section{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:14px 0 4px}
+.kofi-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:#FF5E5B;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;font-family:'IBM Plex Sans',sans-serif;margin-top:4px}
+.kofi-btn:active{opacity:.85}
 .sh-subtitle{font-size:11px;color:var(--muted2);margin:-6px 0 14px}
 .src-group{margin-bottom:14px}
 .src-group-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
@@ -346,13 +348,24 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
       <div class="sh-title">About FactsPH</div>
       <div class="sh-about-logo">🇵🇭</div>
       <p class="sh-about-text"><strong>FactsPH</strong> is a free, independent news reader built for Filipinos who want to understand the full picture of Philippine politics — not just one side of it.</p>
-      <p class="sh-about-text">We pull live headlines from across the political spectrum — from admin-aligned outlets to Duterte-leaning broadsheets to progressive digital media — and use AI to summarize each story from all perspectives.</p>
+      <p class="sh-about-text">We pull live headlines from across the political spectrum and use AI to show you how each side frames the same story — so you can read the news, without the bias.</p>
       <div class="sh-about-section">How it works</div>
-      <p class="sh-about-text">📰 Live RSS feeds are fetched from 9+ Philippine news outlets every time you refresh. Stories covering the same topic are clustered together, then AI generates a neutral summary plus each outlet's distinct political framing.</p>
+      <p class="sh-about-text">📰 Live RSS feeds are fetched from 9+ outlets every refresh. Stories are clustered by topic, then AI generates a neutral summary plus Admin, DDS, and Progressive framings — grounded in actual headlines.</p>
       <div class="sh-about-section">Why it exists</div>
       <p class="sh-about-text">Philippine media is deeply polarized. Reading only one outlet gives you only one version of reality. FactsPH shows you all versions side by side — so you can think for yourself.</p>
+
+      <div class="sh-about-section">Support FactsPH</div>
+      <p class="sh-about-text">FactsPH is free, has no ads, and is built by one person. If it's been useful to you — especially with elections coming — consider buying a coffee. It keeps the servers running and the feeds flowing. ☕</p>
+      <a href="https://ko-fi.com/factsph" target="_blank" rel="noopener" class="kofi-btn">
+        <span>☕</span> Support on Ko-fi
+      </a>
+      <p class="sh-about-text" style="font-size:11px;color:var(--muted2);margin-top:8px;text-align:center">Every contribution helps. No account needed.</p>
+
+      <div class="sh-about-section">Get in touch</div>
+      <p class="sh-about-text">For partnerships, research collaborations, or media inquiries: <a href="mailto:hello@factsph.app" style="color:var(--gold)">hello@factsph.app</a></p>
+
       <div class="sh-about-section">Built with</div>
-      <p class="sh-about-text">Claude AI (Anthropic) · Open-source RSS feeds · Vercel · No ads, no trackers, no login required.</p>
+      <p class="sh-about-text">Claude AI (Anthropic) · Open-source RSS feeds · Vercel · No ads · No trackers · No login required.</p>
       <div class="sh-note" style="margin-top:16px">FactsPH is not affiliated with any political party, outlet, or government body. AI summaries may contain errors — always read the original source.</div>
       <button class="close-sh" onclick="closeSheet()">Close</button>
     </div>
@@ -529,7 +542,7 @@ function fmt(s){
 async function callClaude(prompt){
   const r=await fetch('/api/claude',{
     method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})
+    body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:900,messages:[{role:'user',content:prompt}]})
   });
   return(await r.json()).content?.[0]?.text?.trim()||'';
 }
@@ -881,15 +894,32 @@ PINK: [paragraph]`;
 // share removed
 
 // ── AI QUEUE ──
-let genQueue=[],genRunning=false;
-function queueGen(story,idx){genQueue.push({story,idx});if(!genRunning)runQueue();}
-async function runQueue(){
-  if(!genQueue.length){genRunning=false;return;}
-  genRunning=true;
-  const {story,idx}=genQueue.shift();
-  if(story.neutralShort){runQueue();return;}
+const CONCURRENT = 3; // parallel Claude calls
+let genQueue=[], activeGen=0;
 
-  const r=await genContent(story);
+function queueGen(story,idx){
+  genQueue.push({story,idx});
+  // Fill up to CONCURRENT slots
+  while(activeGen < CONCURRENT && genQueue.length) runNext();
+}
+
+async function runNext(){
+  if(!genQueue.length) return;
+  const {story,idx} = genQueue.shift();
+  if(story.neutralShort){ while(activeGen<CONCURRENT&&genQueue.length)runNext(); return; }
+  activeGen++;
+  try{
+    const r = await genContent(story);
+    applyGenResult(story, idx, r);
+  } catch(e){ console.warn('genContent failed',e); }
+  activeGen--;
+  if(genQueue.length) runNext();
+}
+
+// Kept for compatibility
+function runQueue(){ while(activeGen<CONCURRENT&&genQueue.length)runNext(); }
+
+function applyGenResult(story, idx, r){
   story.neutralShort=r.neutralShort;
   story.neutralLong=r.neutralLong;
   story.adminPhrase=r.adminPhrase;
@@ -902,7 +932,6 @@ async function runQueue(){
   story.pinkSummary=r.pinkSummary;
   story.pinkSource=r.pinkSource;
 
-  // Patch DOM
   const ns=document.getElementById(`ns-${idx}`);
   const adminPh=document.getElementById(`admin-phrase-${idx}`);
   const ddsPh=document.getElementById(`dds-phrase-${idx}`);
@@ -914,7 +943,6 @@ async function runQueue(){
 
   if(ns){ns.innerHTML=esc(r.neutralShort);}
 
-  // Inject "Read more" button + long text if not already there
   if(nb&&r.neutralLong&&!document.getElementById(`nl-${idx}`)){
     const longDiv=document.createElement('div');
     longDiv.className='neutral-long';longDiv.id=`nl-${idx}`;longDiv.textContent=r.neutralLong;
@@ -932,7 +960,6 @@ async function runQueue(){
   if(pinkSum){pinkSum.textContent=r.pinkSummary||'';}
 
   refreshShareBtn(idx);
-  runQueue();
 }
 
 // ── LOAD ──
