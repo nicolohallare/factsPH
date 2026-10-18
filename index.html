@@ -300,7 +300,7 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
     <button class="tab" onclick="setTab('marcos',this)">🏛️ Marcos</button>
     <button class="tab" onclick="setTab('sara',this)">Sara VP</button>
     <button class="tab" onclick="setTab('wps',this)">🌊 WPS</button>
-    <button class="tab" onclick="setTab('elections',this)">🗳️ Midterms</button>
+    <button class="tab" onclick="setTab('elections',this)">🗳️ 2028</button>
   </div>
 </header>
 
@@ -329,6 +329,7 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 
 <nav class="bnav">
   <div class="ni on" id="nav-brief" onclick="showView('brief')"><span class="ni-icon">📰</span>Brief</div>
+  <div class="ni" id="nav-elections" onclick="showView('elections')"><span class="ni-icon">🗳️</span>2028</div>
   <div class="ni" id="nav-search" onclick="showView('search')"><span class="ni-icon">🔍</span>Search</div>
   <div class="ni" onclick="showSheet('sources')"><span class="ni-icon">🗂</span>Sources</div>
   <div class="ni" onclick="showSheet('about')"><span class="ni-icon">ℹ️</span>About</div>
@@ -413,11 +414,11 @@ const DIRECT_SOURCES=[
 // Google News feeds — reliable fallback, pass through Google CDN so never blocked
 // Each result includes a <source> tag we parse to identify the outlet + assign lean
 const GNEWS_SOURCES=[
-  {topic:'all',      rss:'https://news.google.com/rss/search?q=philippines+politics+marcos+senate&hl=en-PH&gl=PH&ceid=PH:en'},
-  {topic:'icc',      rss:'https://news.google.com/rss/search?q=duterte+ICC+hague+philippines&hl=en-PH&gl=PH&ceid=PH:en'},
-  {topic:'sara',     rss:'https://news.google.com/rss/search?q=%22sara+duterte%22+impeach+philippines&hl=en-PH&gl=PH&ceid=PH:en'},
-  {topic:'wps',      rss:'https://news.google.com/rss/search?q=west+philippine+sea+china+coast+guard&hl=en-PH&gl=PH&ceid=PH:en'},
-  {topic:'elections',rss:'https://news.google.com/rss/search?q=philippines+midterm+elections+2025+senatorial&hl=en-PH&gl=PH&ceid=PH:en'},
+  {topic:'all',      rss:'https://news.google.com/rss/search?q=philippines+politics+marcos+senate+when:7d&hl=en-PH&gl=PH&ceid=PH:en'},
+  {topic:'icc',      rss:'https://news.google.com/rss/search?q=duterte+ICC+hague+philippines+when:7d&hl=en-PH&gl=PH&ceid=PH:en'},
+  {topic:'sara',     rss:'https://news.google.com/rss/search?q=%22sara+duterte%22+impeach+philippines+when:7d&hl=en-PH&gl=PH&ceid=PH:en'},
+  {topic:'wps',      rss:'https://news.google.com/rss/search?q=west+philippine+sea+china+coast+guard+when:7d&hl=en-PH&gl=PH&ceid=PH:en'},
+  {topic:'elections',rss:'https://news.google.com/rss/search?q=philippines+2028+elections+presidential+survey+when:7d&hl=en-PH&gl=PH&ceid=PH:en'},
 ];
 // For Sources panel display
 const SOURCES=DIRECT_SOURCES;
@@ -485,21 +486,31 @@ async function fetchGNews(gn){
 }
 
 function guessTopic(t){
+  // 2028 race stories mention Sara/Marcos too, so catch them first
+  if(/2028|presidentiable|presidential (bid|race|survey|preference)|pulse asia|octa research|wr numero|tangere/i.test(t))return'elections';
   if(/icc|hague|crimes against humanity|war on drug|drug war|duterte.*arrest|arrest.*duterte/i.test(t))return'icc';
   if(/marcos|bongbong|bbm|malaca|palace/i.test(t))return'marcos';
   if(/sara.duterte|vp.sara|vice.president.*sara|impeach.*sara|sara.*impeach/i.test(t))return'sara';
   if(/west philippine|scarborough|south china sea|coast guard.*china|china.*coast guard|pcg/i.test(t))return'wps';
-  if(/election|senatorial|midterm|comelec|campaign/i.test(t))return'elections';
+  if(/election|senatorial|midterm|comelec|campaign|2028|presidentiable|presidential bid|pulse asia|octa research|survey/i.test(t))return'elections';
   return'general';
 }
-const TOPIC_LABELS={icc:'⚖️ ICC / Duterte',marcos:'🏛️ Marcos Admin',sara:'Sara Duterte',wps:'🌊 WPS',elections:'🗳️ Midterms',general:'🇵🇭 Politics'};
+const TOPIC_LABELS={icc:'⚖️ ICC / Duterte',marcos:'🏛️ Marcos Admin',sara:'Sara Duterte',wps:'🌊 WPS',elections:'🗳️ 2028 Elections',general:'🇵🇭 Politics'};
 
 // ── CLUSTER ──
 const STOP=new Set(['the','a','an','in','of','on','at','to','for','is','are','was','were','and','but','or','with','by','as','from','that','this','has','have','its','be','been','will','not','no','after','before','says','said','over','into','their','also','more','new','amid']);
 function kw(t){return new Set(t.toLowerCase().replace(/[^\w\s]/g,'').split(/\s+/).filter(w=>w.length>3&&!STOP.has(w)));}
 function sim(a,b){const ka=kw(a.title),kb=kw(b.title);const i=[...ka].filter(k=>kb.has(k)).length,u=new Set([...ka,...kb]).size;return u?i/u:0;}
 const TOPIC_WEIGHT={icc:6,sara:5,wps:4,elections:3,marcos:2,general:1};
+// Parse an RSS pubDate to a timestamp; unparseable dates become 0 (sorted last, never dropped)
+function ts(s){const t=Date.parse(s);return isNaN(t)?0:t;}
 function cluster(arts){
+  // Newest first, so each cluster's lead headline is its latest article
+  arts=[...arts].sort((a,b)=>ts(b.date)-ts(a.date));
+  // Drop week-old items; widen to 14 days if that leaves too little to show
+  const DAY=86400000,now=Date.now();
+  const fresh=d=>arts.filter(a=>!ts(a.date)||now-ts(a.date)<=d*DAY);
+  arts=fresh(7).length>=12?fresh(7):fresh(14).length>=6?fresh(14):arts;
   const used=new Set(),out=[];
   for(let i=0;i<arts.length;i++){
     if(used.has(i))continue;
@@ -513,15 +524,18 @@ function cluster(arts){
     }
     out.push(c);
   }
+  const newest = c => Math.max(...c.map(x=>ts(x.date)));
   return out.sort((a,b)=>{
-    // 1. More distinct leans = more important (cross-spectrum coverage)
+    // 1. Most recent story first (by its newest article)
+    const nd = newest(b) - newest(a);
+    if(nd !== 0) return nd;
+    // 2. Ties: wider cross-spectrum coverage first
     const leanCount = c => new Set(c.map(x=>x.lean)).size;
     const ld = leanCount(b) - leanCount(a);
     if(ld !== 0) return ld;
-    // 2. More total sources
+    // 3. Then more total sources, then topic weight
     const sd = b.length - a.length;
     if(sd !== 0) return sd;
-    // 3. Topic weight (ICC > Sara > WPS > Elections > Marcos > General)
     const tw = c => TOPIC_WEIGHT[c[0].topic]||1;
     return tw(b) - tw(a);
   }).slice(0,14).map(c=>({
@@ -533,6 +547,7 @@ function cluster(arts){
   }));
 }
 function fmt(s){
+  if(!ts(s))return'';
   try{const d=new Date(s),m=Math.floor((Date.now()-d)/60000);
   if(m<60)return m+'m ago';if(m<1440)return Math.floor(m/60)+'h ago';
   return d.toLocaleDateString('en-PH',{month:'short',day:'numeric'});}catch{return'Today';}
@@ -789,6 +804,8 @@ function showView(v){
   const panel = document.getElementById('search-panel');
   document.getElementById('nav-brief').classList.toggle('on', v==='brief');
   document.getElementById('nav-search').classList.toggle('on', v==='search');
+  document.getElementById('nav-elections').classList.toggle('on', v==='elections');
+  if(window.FactsElections){ v==='elections' ? FactsElections.open() : FactsElections.close(); }
   if(v==='search'){
     panel.style.display='block';
     // Scroll the overlay itself to top, not the page
@@ -1158,7 +1175,7 @@ function renderSourcesPanel(){
   // Google News section
   grpEl.innerHTML += `<div class="gnews-row">
     <div class="gnews-row-title">🔄 Google News Aggregator (always-on fallback)</div>
-    <div class="gnews-row-desc">When direct feeds are blocked, FactsPH fetches topic-specific Google News feeds covering PH Politics, ICC/Duterte, Sara Duterte, West Philippine Sea, and Midterms. Articles from Inquirer, Rappler, GMA, Manila Times, Philippine Star, ABS-CBN and more appear here automatically.</div>
+    <div class="gnews-row-desc">When direct feeds are blocked, FactsPH fetches topic-specific Google News feeds covering PH Politics, ICC/Duterte, Sara Duterte, West Philippine Sea, and the 2028 elections. Articles from Inquirer, Rappler, GMA, Manila Times, Philippine Star, ABS-CBN and more appear here automatically.</div>
   </div>`;
 }
 
@@ -1231,13 +1248,14 @@ loadNews();
       <button class="srch-chip" onclick="setSearch('Sara Duterte impeachment')">Sara VP</button>
       <button class="srch-chip" onclick="setSearch('West Philippine Sea China')">🌊 WPS</button>
       <button class="srch-chip" onclick="setSearch('Marcos budget 2025')">🏛️ Budget</button>
-      <button class="srch-chip" onclick="setSearch('2025 midterm elections')">🗳️ Midterms</button>
+      <button class="srch-chip" onclick="setSearch('2028 presidential race')">🗳️ 2028</button>
       <button class="srch-chip" onclick="setSearch('PhilHealth defunding')">PhilHealth</button>
     </div>
   </div>
   <!-- Results scroll here, inside the overlay -->
   <div class="srch-result" id="srch-result" style="padding:14px 14px 100px;"></div>
 </div>
+<script src="/elections.js"></script>
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {

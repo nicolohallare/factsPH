@@ -1,5 +1,5 @@
 // Cache version — bump this to force all clients to update
-const CACHE = 'factsPH-v20260313';
+const CACHE = 'factsPH-v20261018';
 
 const STATIC = [
   '/manifest.json',
@@ -42,8 +42,8 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Network-first for HTML — always loads latest code
-  if (url.pathname === '/' || url.pathname.endsWith('.html')) {
+  // Network-first for our own HTML and JS (incl. elections.js) — always loads latest code and poll data
+  if (url.origin === location.origin && (url.pathname === '/' || /\.(html|js)$/.test(url.pathname))) {
     e.respondWith(
       fetch(e.request)
         .then(res => {
