@@ -281,6 +281,11 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .srch-sources{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:12px}
 .srch-foot{text-align:center;margin-top:10px;font-size:calc(13px*var(--ts,1));color:var(--muted);font-style:italic}
 .srch-result .listen-btn{margin-bottom:12px}
+.listen-all-wrap{padding:4px 12px 10px}
+.listen-all{width:100%;min-height:52px;border-radius:12px;border:1px solid var(--gold);background:var(--gold-dim);color:var(--gold);font-family:'IBM Plex Sans',sans-serif;font-size:calc(16px*var(--ts,1));font-weight:700;cursor:pointer}
+.listen-all.on{background:var(--gold);color:#fffdf8}
+.sc.reading{outline:3px solid var(--gold);outline-offset:2px}
+.sc{scroll-margin-top:200px}
 </style>
 </head>
 <body>
@@ -347,6 +352,9 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
   <div class="sec-lbl" id="sec-lbl">Loading…</div>
   <div class="sec-line"></div>
 </div>
+
+<div class="listen-all-wrap"><button class="listen-all" id="listen-all" onclick="listenAll()" hidden>🔊 Listen to today's news</button></div>
+<script>if('speechSynthesis' in window)document.getElementById('listen-all').hidden=false;</script>
 
 <div class="stories" id="stories-wrap">
   <div class="skel"><div class="sk sm"></div><div class="sk h lg"></div><div class="sk lg"></div><div class="sk md"></div><div class="sk sm" style="margin-top:6px"></div><div class="sk md" style="margin-top:2px"></div></div>
@@ -417,44 +425,95 @@ function setTextSize(v){
   document.addEventListener('DOMContentLoaded',()=>setTextSize(v));if(document.readyState!=='loading')setTextSize(v);})();
 
 // ── READ ALOUD ──
-let speaking=null;
+// One player for everything: a list of steps, each read sentence by sentence
+// (short utterances avoid the browser cutting off long speech).
+const HAS_TTS='speechSynthesis' in window;
+const Reader={id:null,token:0};
+// Make text sound right aloud: expand abbreviations (so "Sen." isn't read as a sentence end)
+// and drop social-media labels like "READ:" or "LIVESTREAM ALERT:" at the start of a headline.
+const SPOKEN=[[/\bSens?\.\s/g,'Senator '],[/\bReps?\.\s/g,'Representative '],[/\bGov\.\s/g,'Governor '],[/\bAtty\.\s/g,'Attorney '],
+  [/\bGen\.\s/g,'General '],[/\bSec\.\s/g,'Secretary '],[/\bPres\.\s/g,'President '],[/\bDr\.\s/g,'Doctor '],[/\bMr\.\s/g,'Mister '],
+  [/\bMs\.\s/g,'Ms '],[/\bMrs\.\s/g,'Missus '],[/\bJr\.(?=[\s,])/g,'Junior'],[/\bSr\.(?=[\s,])/g,'Senior'],[/\bNo\.\s(?=\d)/g,'number '],
+  [/\bvs?\.\s/gi,'versus '],[/\bSt\.\s/g,'Saint '],[/\bP(\d[\d.,]*)\s?(B|M|bn|billion|million)?\b/g,(m,n,u)=>n+' '+({B:'billion',bn:'billion',M:'million'}[u]||u||'')+' pesos']];
+function forSpeech(t){
+  t=String(t||'').replace(/\s+/g,' ').trim().replace(/^(?:[A-Z]{2,}(?: [A-Z]{2,})*|\[[A-Z ]+\])\s*:\s*/,'').replace(/^\[[A-Z ]+\]\s*/,'');
+  SPOKEN.forEach(([re,to])=>t=t.replace(re,to));
+  return t.replace(/\s+/g,' ').trim();
+}
+function sentences(t){
+  t=forSpeech(t);
+  if(!t) return [];
+  // split only where a sentence mark is followed by a space and a new sentence (keeps "6.3" and "U.S." whole)
+  return t.split(/(?<=[.!?]["'”’)\]]*)\s+(?=["“‘(\[]?[A-Z0-9])/).map(x=>x.trim()).filter(x=>x.length>1);
+}
+function pickVoice(){
+  const v=HAS_TTS?speechSynthesis.getVoices():[];
+  return v.find(x=>/en[-_]PH/i.test(x.lang))||v.find(x=>/^en[-_](GB|US|AU)/i.test(x.lang))||null;
+}
 function stopSpeaking(){
-  if('speechSynthesis' in window) speechSynthesis.cancel();
-  document.querySelectorAll('.listen-btn.on').forEach(b=>{b.classList.remove('on');b.textContent='🔊 Listen';});
-  speaking=null;
+  Reader.id=null; Reader.token++;
+  if(HAS_TTS) speechSynthesis.cancel();
+  document.querySelectorAll('.listen-btn.on,.listen-all.on').forEach(b=>{b.classList.remove('on');b.textContent=b.dataset.label;});
+  document.querySelectorAll('.sc.reading').forEach(c=>c.classList.remove('reading'));
 }
-function speak(id,btn,parts){
-  if(!('speechSynthesis' in window))return;
-  if(speaking===id){stopSpeaking();return;}
+// steps: [{text: () => string, card?: element, status?: string}] — text is read when its turn comes,
+// so summaries that finish loading mid-way are included.
+function play(id,btn,steps){
+  if(!HAS_TTS) return;
+  if(Reader.id===id){stopSpeaking();return;}
   stopSpeaking();
-  const voices=speechSynthesis.getVoices();
-  const voice=voices.find(v=>/en[-_]PH/i.test(v.lang))||voices.find(v=>/^en[-_](GB|US|AU)/i.test(v.lang))||null;
-  const chunks=parts.filter(Boolean).map(t=>t.replace(/\s+/g,' ').trim()).filter(t=>t.length>1);
-  chunks.forEach((t,k)=>{
-    const u=new SpeechSynthesisUtterance(t);
-    u.rate=0.92; if(voice){u.voice=voice;u.lang=voice.lang;}else u.lang='en-PH';
-    if(k===chunks.length-1) u.onend=()=>{if(speaking===id)stopSpeaking();};
-    speechSynthesis.speak(u);
-  });
-  speaking=id; btn.classList.add('on'); btn.textContent='■ Stop';
+  Reader.id=id; const token=++Reader.token; const voice=pickVoice();
+  btn.dataset.label=btn.dataset.label||btn.textContent; btn.classList.add('on'); btn.textContent='■ Stop';
+  const step=k=>{
+    if(Reader.token!==token) return;
+    document.querySelectorAll('.sc.reading').forEach(c=>c.classList.remove('reading'));
+    if(k>=steps.length){stopSpeaking();return;}
+    const st=steps[k];
+    if(st.card){st.card.classList.add('reading');st.card.scrollIntoView({behavior:'smooth',block:'start'});}
+    if(st.status) btn.textContent='■ Stop · '+st.status;
+    const lines=sentences(st.text());
+    const say=j=>{
+      if(Reader.token!==token) return;
+      if(j>=lines.length){step(k+1);return;}
+      const u=new SpeechSynthesisUtterance(lines[j]);
+      u.rate=0.92; if(voice){u.voice=voice;u.lang=voice.lang;}else u.lang='en-PH';
+      u.onend=()=>say(j+1); u.onerror=()=>say(j+1);
+      speechSynthesis.speak(u);
+    };
+    say(0);
+  };
+  step(0);
 }
+const txt=el=>el?el.textContent.trim():'';
+const ready=t=>t&&!/^loading/i.test(t)?t:'';
 function listenStory(i){
-  const g=id=>document.getElementById(id)?.textContent.trim()||'';
+  const g=id=>ready(txt(document.getElementById(id)));
   const card=document.getElementById('sc-'+i);
-  const parts=[card?.querySelector('.shl')?.textContent, g('ns-'+i), g('nl-'+i)];
+  const steps=[{text:()=>txt(card?.querySelector('.shl'))+'. '+g('ns-'+i)+' '+g('nl-'+i)}];
   [['admin','Administration-leaning outlets'],['dds','Pro-Duterte outlets'],['pink','Progressive outlets']].forEach(([k,lbl])=>{
-    const ph=g(k+'-phrase-'+i), sm=g(k+'-sum-'+i);
-    if(ph&&!/loading/i.test(ph)) parts.push(lbl+': '+ph+'.', sm);
+    steps.push({text:()=>{const ph=g(k+'-phrase-'+i);return ph?`${lbl}: ${ph}. ${g(k+'-sum-'+i)}`:'';}});
   });
-  speak('story-'+i,document.getElementById('ls-'+i),parts);
+  play('story-'+i,document.getElementById('ls-'+i),steps);
+}
+// "Listen to today's news": every story on screen, newest first — headline plus the neutral summary
+function listenAll(){
+  const cards=[...document.querySelectorAll('#stories-wrap .sc')];
+  if(!cards.length) return;
+  const h=+new Date().toLocaleString('en-US',{hour:'numeric',hour12:false,timeZone:'Asia/Manila'});
+  const greet=h<12?'Good morning':h<18?'Good afternoon':'Good evening';
+  const topic=currentTab!=='all'?` on ${(TOPIC_LABELS[currentTab]||'').replace(/[^\w\s/]/g,'').trim()}`:'';
+  const steps=[{text:()=>`${greet}. Here are the latest ${cards.length} stories${topic} on FactsPH, newest first.`}];
+  cards.forEach((c,k)=>steps.push({card:c,status:`story ${k+1} of ${cards.length}`,
+    text:()=>`Story ${k+1}. ${forSpeech(txt(c.querySelector('.shl')))}. ${ready(txt(c.querySelector('.neutral-short')))}`}));
+  steps.push({text:()=>"That's the news for now. Tap any story to read more."});
+  play('all',document.getElementById('listen-all'),steps);
 }
 function listenSearch(btn){
   const r=document.getElementById('srch-result');
-  const parts=[r.querySelector('.srch-title')?.textContent];
-  r.querySelectorAll('.srch-neutral,.srch-admin,.srch-dds,.srch-pink').forEach(c=>{
-    parts.push(c.querySelector('.srch-card-lbl')?.textContent.replace(/[^\w\s/-]/g,'').trim()+'.',c.querySelector('.srch-phrase-top')?.textContent,c.querySelector('.srch-card-text')?.textContent);
-  });
-  speak('search',btn,parts);
+  const steps=[{text:()=>txt(r.querySelector('.srch-title'))+'.'}];
+  r.querySelectorAll('.srch-neutral,.srch-admin,.srch-dds,.srch-pink').forEach(c=>steps.push({text:()=>
+    txt(c.querySelector('.srch-card-lbl')).replace(/[^\w\s/-]/g,'').trim()+'. '+txt(c.querySelector('.srch-phrase-top'))+'. '+txt(c.querySelector('.srch-card-text'))}));
+  play('search',btn,steps);
 }
 if('speechSynthesis' in window) speechSynthesis.getVoices();
 
@@ -501,6 +560,19 @@ const GNEWS_SOURCES=[
   {topic:'wps',      rss:'https://news.google.com/rss/search?q=west+philippine+sea+china+coast+guard+when:7d&hl=en-PH&gl=PH&ceid=PH:en'},
   {topic:'elections',rss:'https://news.google.com/rss/search?q=philippines+2028+elections+presidential+survey+when:7d&hl=en-PH&gl=PH&ceid=PH:en'},
 ];
+// Tidy headlines copied from social posts: "READ: … | via Reporter/GMA News Visit www…"
+function cleanTitle(t){
+  t=String(t||'').replace(/\s+/g,' ').trim()
+    .replace(/https?:\/\/\S+|www\.\S+/gi,'')                 // links
+    .replace(/\s*\|\s*(via|Visit|Read|Watch|Follow)\b.*$/i,'') // "| via …" tails
+    .replace(/\s+Visit\s*$/i,'')
+    .replace(/^(READ|WATCH|LOOK|LISTEN|NEWS UPDATE|BREAKING|JUST IN|LIVESTREAM ALERT|LIVE|ICYMI|FACT CHECK)\s*:\s*/i,'')
+    .replace(/\s+/g,' ').trim();
+  if(t.length>150){t=t.slice(0,150).replace(/\s+\S*$/,'')+'…';}
+  return t;
+}
+// Reference sites that Google News sometimes mixes in — not news reports
+const NOT_NEWS=/britannica|wikipedia|wikiwand|encyclopedia|youtube/i;
 // For Sources panel display
 const SOURCES=DIRECT_SOURCES;
 const LEAN_LBL={dds:'DDS',center:'Center',admin:'Admin',pink:'Progressive',alt:'Independent'};
@@ -522,8 +594,10 @@ async function fetchRSSUrl(url,src){
   const xml=new DOMParser().parseFromString(text,'text/xml');
   const items=Array.from(xml.querySelectorAll('item'));
   if(!items.length)throw 0;
-  return items.slice(0,8).map(item=>({
-    title:(item.querySelector('title')?.textContent||'').trim(),
+  // Newest first before trimming (feeds aren't always in date order)
+  const byDate=(a,b)=>ts(b.querySelector('pubDate')?.textContent||'')-ts(a.querySelector('pubDate')?.textContent||'');
+  return items.sort(byDate).slice(0,10).map(item=>({
+    title:cleanTitle(item.querySelector('title')?.textContent||''),
     link:(item.querySelector('link')?.textContent||'#').trim(),
     date:(item.querySelector('pubDate')?.textContent||'').trim(),
     source:src.name,lean:src.lean,type:src.type,
@@ -547,22 +621,24 @@ async function fetchGNews(gn){
     const xml=new DOMParser().parseFromString(text,'text/xml');
     const items=Array.from(xml.querySelectorAll('item'));
     if(!items.length)throw 0;
-    return items.slice(0,12).map(item=>{
+    // Google News returns results by relevance, not date: sort newest first, then keep the top 20
+    const byDate=(a,b)=>ts(b.querySelector('pubDate')?.textContent||'')-ts(a.querySelector('pubDate')?.textContent||'');
+    return items.sort(byDate).slice(0,20).map(item=>{
       const title=(item.querySelector('title')?.textContent||'').trim();
       // Google News title format: "Headline - Source Name"
       const dashIdx=title.lastIndexOf(' - ');
-      const cleanTitle=dashIdx>0?title.slice(0,dashIdx):title;
+      const headline=cleanTitle(dashIdx>0?title.slice(0,dashIdx):title);
       const srcEl=item.querySelector('source');
       const srcName=srcEl?.textContent||title.slice(dashIdx+3)||'';
       const lean=guessLean(srcName);
       return{
-        title:cleanTitle,
+        title:headline,
         link:(item.querySelector('link')?.textContent||'#').trim(),
         date:(item.querySelector('pubDate')?.textContent||'').trim(),
         source:srcName,lean,type:'Online',
-        topic:guessTopic(cleanTitle)
+        topic:guessTopic(headline)
       };
-    }).filter(i=>i.title.length>15&&i.source.length>1);
+    }).filter(i=>i.title.length>15&&i.source.length>1&&!NOT_NEWS.test(i.source));
   }catch{return[];}
 }
 
