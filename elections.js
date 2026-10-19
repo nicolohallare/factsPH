@@ -270,62 +270,62 @@ const EL = (() => {
   #el-panel .el-wrap{max-width:430px;margin:0 auto;padding:0 0 120px}
   .el-head{position:sticky;top:0;z-index:5;background:rgba(245,240,232,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 16px 0;padding-top:max(14px,env(safe-area-inset-top))}
   .el-top{display:flex;align-items:flex-start;justify-content:space-between}
-  .el-title{font-family:'Libre Baskerville',serif;font-size:21px;font-weight:700;letter-spacing:-.2px}
+  .el-title{font-family:'Libre Baskerville',serif;font-size:calc(22px*var(--ts,1));font-weight:700;letter-spacing:-.2px}
   .el-title em{font-style:italic;font-weight:400;color:var(--gold)}
-  .el-sub{font-size:11px;color:var(--muted);font-style:italic;margin-top:2px}
-  .el-x{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);padding:0 4px;line-height:1}
+  .el-sub{font-size:calc(13px*var(--ts,1));color:var(--muted);font-style:italic;margin-top:2px}
+  .el-x{background:none;border:none;font-size:calc(23px*var(--ts,1));cursor:pointer;color:var(--muted);padding:0 4px;line-height:1}
   .el-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:12px 0 10px}
   .el-tabs::-webkit-scrollbar{display:none}
-  .el-tab{flex-shrink:0;padding:6px 12px;border-radius:4px;font-size:12px;font-weight:500;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'IBM Plex Sans',sans-serif;cursor:pointer}
+  .el-tab{flex-shrink:0;min-height:40px;padding:6px 14px;border-radius:4px;font-size:calc(14px*var(--ts,1));font-weight:500;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'IBM Plex Sans',sans-serif;cursor:pointer}
   .el-tab.on{background:var(--gold);border-color:var(--gold);color:#fffdf8;font-weight:600}
   .el-body{padding:14px 12px 0}
   .el-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-  .el-lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-  .el-h{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;line-height:1.35;margin-bottom:6px}
-  .el-p{font-size:13px;line-height:1.65;color:var(--muted2)}
+  .el-lbl{font-size:calc(12px*var(--ts,1));font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .el-h{font-family:'Libre Baskerville',serif;font-size:calc(18px*var(--ts,1));font-weight:700;line-height:1.35;margin-bottom:6px}
+  .el-p{font-size:calc(15px*var(--ts,1));line-height:1.65;color:var(--muted2)}
   .el-p+.el-p{margin-top:8px}
   .el-p a,.el-src a{color:var(--gold);text-decoration:none}
-  .el-note{font-size:11px;line-height:1.6;color:var(--muted2);padding:10px 12px;background:var(--gold-dim);border-radius:8px;border-left:3px solid var(--gold);margin-bottom:10px}
+  .el-note{font-size:calc(13px*var(--ts,1));line-height:1.6;color:var(--muted2);padding:10px 12px;background:var(--gold-dim);border-radius:8px;border-left:3px solid var(--gold);margin-bottom:10px}
   .el-row{padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer}
   .el-row:last-child{border-bottom:none}
   .el-rtop{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px}
-  .el-name{font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .el-name{font-size:calc(16px*var(--ts,1));font-weight:600;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
   .el-sw{width:9px;height:9px;border-radius:50%;flex-shrink:0;display:inline-block}
-  .el-num{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;white-space:nowrap}
+  .el-num{font-family:'Libre Baskerville',serif;font-size:calc(22px*var(--ts,1));font-weight:700;white-space:nowrap}
   .el-bar{height:7px;background:var(--s3);border-radius:4px;position:relative;overflow:visible}
   .el-fill{height:100%;border-radius:4px}
   .el-rng{position:absolute;top:-3px;height:13px;border-left:1.5px solid var(--muted);border-right:1.5px solid var(--muted);opacity:.55}
-  .el-meta{font-size:11px;color:var(--muted);margin-top:6px;display:flex;justify-content:space-between;gap:8px}
-  .el-st{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:3px}
+  .el-meta{font-size:calc(13px*var(--ts,1));color:var(--muted);margin-top:6px;display:flex;justify-content:space-between;gap:8px}
+  .el-st{font-size:calc(12px*var(--ts,1));font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:3px}
   .st-dec{background:var(--gold-dim);color:var(--gold)}
   .st-out{background:rgba(176,48,48,.08);color:var(--red)}
   .st-und{background:var(--s2);color:var(--muted)}
   .el-parts{display:none;margin-top:10px;padding:10px;background:var(--s2);border-radius:8px}
   .el-row.open .el-parts{display:block}
-  .el-part{display:grid;grid-template-columns:1fr 46px 52px;gap:6px;font-size:11px;padding:4px 0;color:var(--muted2);align-items:center}
+  .el-part{display:grid;grid-template-columns:1fr 46px 52px;gap:6px;font-size:calc(13px*var(--ts,1));padding:4px 0;color:var(--muted2);align-items:center}
   .el-part b{font-weight:600;color:var(--text)}
   .el-wbar{height:4px;background:var(--gold);border-radius:2px;opacity:.6}
   .el-stat{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
   .el-stat div{background:var(--s2);border-radius:8px;padding:10px}
-  .el-stat b{display:block;font-family:'Libre Baskerville',serif;font-size:18px}
-  .el-stat span{font-size:10px;color:var(--muted);letter-spacing:.04em}
+  .el-stat b{display:block;font-family:'Libre Baskerville',serif;font-size:calc(20px*var(--ts,1))}
+  .el-stat span{font-size:calc(12px*var(--ts,1));color:var(--muted);letter-spacing:.04em}
   .el-poll{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:13px 14px;margin-bottom:10px}
   .el-poll.out{opacity:.72}
   .el-ptop{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-  .el-pname{font-weight:700;font-size:14px}
-  .el-pdate{font-size:11px;color:var(--muted)}
-  .el-disc{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:10px;color:var(--muted2);margin:6px 0 10px}
+  .el-pname{font-weight:700;font-size:calc(16px*var(--ts,1))}
+  .el-pdate{font-size:calc(13px*var(--ts,1));color:var(--muted)}
+  .el-disc{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:calc(12px*var(--ts,1));color:var(--muted2);margin:6px 0 10px}
   .el-disc .miss{color:var(--red)}
-  .el-mini{display:grid;grid-template-columns:96px 1fr 40px;gap:6px;align-items:center;font-size:11px;margin-bottom:4px}
+  .el-mini{display:grid;grid-template-columns:96px 1fr 40px;gap:6px;align-items:center;font-size:calc(13px*var(--ts,1));margin-bottom:4px}
   .el-mini .el-bar{height:6px}
-  .el-flag{font-size:11px;color:var(--muted2);margin-top:6px;padding-left:10px;border-left:2px solid var(--border2);line-height:1.5}
-  .el-inc{font-size:10px;font-weight:600;letter-spacing:.05em;margin-top:8px}
+  .el-flag{font-size:calc(13px*var(--ts,1));color:var(--muted2);margin-top:6px;padding-left:10px;border-left:2px solid var(--border2);line-height:1.5}
+  .el-inc{font-size:calc(12px*var(--ts,1));font-weight:600;letter-spacing:.05em;margin-top:8px}
   .el-inc.y{color:var(--green)}.el-inc.n{color:var(--red)}
-  .el-src{font-size:11px;margin-top:6px}
+  .el-src{font-size:calc(13px*var(--ts,1));margin-top:6px}
   .el-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-  .el-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:4px 9px;border-radius:20px;border:1px solid var(--border2);background:var(--s1);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;color:var(--text)}
+  .el-chip{display:inline-flex;align-items:center;gap:5px;font-size:calc(13px*var(--ts,1));padding:4px 9px;border-radius:20px;border:1px solid var(--border2);background:var(--s1);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;color:var(--text)}
   .el-chip.off{opacity:.35}
-  .el-h2h{margin:10px 0 4px;height:26px;display:flex;border-radius:6px;overflow:hidden;font-size:11px;font-weight:700;color:#fff}
+  .el-h2h{margin:10px 0 4px;height:26px;display:flex;border-radius:6px;overflow:hidden;font-size:calc(13px*var(--ts,1));font-weight:700;color:#fff}
   .el-h2h div{display:flex;align-items:center;padding:0 8px;white-space:nowrap}
   .el-h2h .u{background:var(--s3);color:var(--muted2);justify-content:center}
   .el-tl{position:relative;padding-left:16px}
@@ -333,18 +333,18 @@ const EL = (() => {
   .el-tli{position:relative;padding:0 0 12px}
   .el-tli:before{content:'';position:absolute;left:-15px;top:4px;width:9px;height:9px;border-radius:50%;background:var(--gold)}
   .el-tli.f:before{background:var(--s1);border:1.5px solid var(--gold);width:6px;height:6px}
-  .el-tli small{display:block;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-  .el-tli span{font-size:13px;line-height:1.5}
-  .el-tli a{color:var(--gold);text-decoration:none;font-size:11px}
+  .el-tli small{display:block;font-size:calc(12px*var(--ts,1));font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .el-tli span{font-size:calc(15px*var(--ts,1));line-height:1.5}
+  .el-tli a{color:var(--gold);text-decoration:none;font-size:calc(13px*var(--ts,1))}
   .el-strip{position:relative;height:30px;margin:4px 0 2px}
   .el-strip .ax{position:absolute;left:0;right:0;top:14px;height:1px;background:var(--border2)}
   .el-strip .dot{position:absolute;top:8px;width:13px;height:13px;margin-left:-6.5px;border-radius:50%;border:2px solid var(--s1)}
   .el-strip .avg{position:absolute;top:3px;height:23px;width:2px;margin-left:-1px;background:var(--text)}
-  .el-hs{display:grid;grid-template-columns:1fr 50px 50px 50px;gap:4px;font-size:11px;padding:6px 0;border-bottom:1px solid var(--border)}
-  .el-hs.h{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .el-hs{display:grid;grid-template-columns:1fr 50px 50px 50px;gap:4px;font-size:calc(13px*var(--ts,1));padding:6px 0;border-bottom:1px solid var(--border)}
+  .el-hs.h{font-size:calc(12px*var(--ts,1));font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
   .el-hs span:not(:first-child){text-align:right}
-  .el-formula{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:var(--s2);padding:8px 10px;border-radius:6px;margin:8px 0;color:var(--text);overflow-x:auto}
-  svg.el-chart text{font-family:'IBM Plex Sans',sans-serif;font-size:9px;fill:var(--muted)}
+  .el-formula{font-family:ui-monospace,Menlo,monospace;font-size:calc(13px*var(--ts,1));background:var(--s2);padding:8px 10px;border-radius:6px;margin:8px 0;color:var(--text);overflow-x:auto}
+  svg.el-chart text{font-family:'IBM Plex Sans',sans-serif;font-size:calc(12px*var(--ts,1));fill:var(--muted)}
   `;
   const style = document.createElement('style'); style.textContent = css; document.head.appendChild(style);
 
@@ -379,7 +379,7 @@ const EL = (() => {
     const rows = r.map((a, i) => {
       const c = C(a.key), [sl, sc] = STATUS[c.status];
       const parts = a.parts.sort((x, y) => y.share - x.share).map(({ p, v, share }) =>
-        `<div class="el-part"><span><b>${esc(p.pollster)}</b> · ${range(p)}</span><span style="text-align:right">${pct(v)}</span><span><div class="el-wbar" style="width:${Math.max(4, share * 100)}%"></div><div style="font-size:9px;color:var(--muted)">${Math.round(share * 100)}% wt</div></span></div>`).join('');
+        `<div class="el-part"><span><b>${esc(p.pollster)}</b> · ${range(p)}</span><span style="text-align:right">${pct(v)}</span><span><div class="el-wbar" style="width:${Math.max(4, share * 100)}%"></div><div style="font-size:calc(12px*var(--ts,1));color:var(--muted)">${Math.round(share * 100)}% wt</div></span></div>`).join('');
       return `<div class="el-row" onclick="this.classList.toggle('open')">
         <div class="el-rtop"><div class="el-name"><span class="el-sw" style="background:${c.color}"></span>${esc(c.name)} <span class="el-st ${sc}">${sl}</span></div>
         <div class="el-num">${pct(a.avg)}</div></div>
@@ -424,7 +424,7 @@ const EL = (() => {
         const rows = s.rows.map(hh => {
           const se = 100 * Math.sqrt(((hh.va + hh.vb) / 100 - ((hh.va - hh.vb) / 100) ** 2) / hh.n);
           const clear = Math.abs(hh.va - hh.vb) > 1.96 * se;
-          return `<div class="el-hs"><span><b>${esc(hh.pollster)}</b> · ${range(hh)}${hh.sponsor ? `<br><span style="color:var(--red);font-size:10px">Commissioned: ${esc(hh.sponsor)}</span>` : ''}<br><span class="el-src">${links(hh.src)}</span></span>
+          return `<div class="el-hs"><span><b>${esc(hh.pollster)}</b> · ${range(hh)}${hh.sponsor ? `<br><span style="color:var(--red);font-size:calc(12px*var(--ts,1))">Commissioned: ${esc(hh.sponsor)}</span>` : ''}<br><span class="el-src">${links(hh.src)}</span></span>
             <span>${hh.va}</span><span>${hh.vb}</span><span style="color:${clear ? 'var(--text)' : 'var(--red)'}">${hh.va === hh.vb ? 'tie' : pts(hh.va - hh.vb)}${clear ? '' : '*'}</span></div>`;
         }).join('');
         return `<div class="el-card">
@@ -513,7 +513,7 @@ const EL = (() => {
     const strips = keys.map(k => {
       const a = EL.average(k); if (!a) return '';
       const dots = a.parts.map(({ p, v }) => `<div class="dot" style="left:${v / 60 * 100}%;background:${PC[p.pollster] || 'var(--muted)'}" title="${esc(p.pollster)} ${v}%"></div>`).join('');
-      return `<div style="margin-bottom:12px"><div class="el-rtop" style="margin-bottom:0"><span class="el-name"><span class="el-sw" style="background:${C(k).color}"></span>${esc(C(k).name)}</span><span style="font-size:11px;color:var(--muted)">spread ${(a.max - a.min).toFixed(1)} pts</span></div>
+      return `<div style="margin-bottom:12px"><div class="el-rtop" style="margin-bottom:0"><span class="el-name"><span class="el-sw" style="background:${C(k).color}"></span>${esc(C(k).name)}</span><span style="font-size:calc(13px*var(--ts,1));color:var(--muted)">spread ${(a.max - a.min).toFixed(1)} pts</span></div>
         <div class="el-strip"><div class="ax"></div><div class="avg" style="left:${a.avg / 60 * 100}%"></div>${dots}</div>
         <div class="el-meta" style="margin-top:0"><span>0%</span><span>avg ${pct(a.avg)}</span><span>60%</span></div></div>`;
     }).join('');

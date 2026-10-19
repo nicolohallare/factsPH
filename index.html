@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#f5f0e8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>FactsPH</title>
@@ -36,7 +36,7 @@
 :root{
   --bg:#f5f0e8;--s1:#fffdf8;--s2:#f0ebe0;--s3:#e8e2d8;
   --border:#ddd8cc;--border2:#ccc6b8;
-  --text:#1a1612;--muted:#7a7060;--muted2:#4a4030;
+  --text:#1a1612;--muted:#5e5446;--muted2:#4a4030;
   --gold:#8a6800;--gold-dim:rgba(138,104,0,0.10);
   --red:#b03030;
   --green:#2a7a48;--green-dim:rgba(42,122,72,0.10);
@@ -45,6 +45,7 @@
   --admin:#1a5eb8;--admin-dim:rgba(26,94,184,0.10);
   --pink:#b03070;--pink-dim:rgba(176,48,112,0.10);
   --blue:#2050a0;
+  --ts:1; /* text size: 1 normal, 1.2 large, 1.4 extra large */
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;min-height:100vh;overscroll-behavior:none}
@@ -56,26 +57,26 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .hdr-inner{display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:10px}
 .wordmark{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;letter-spacing:-0.3px;color:var(--text);line-height:1}
 .wordmark em{font-style:italic;font-weight:400;color:var(--gold)}
-.tagline{font-size:11px;color:var(--muted);font-weight:400;letter-spacing:.02em;margin-top:3px;font-style:italic}
+.tagline{font-size:13px;color:var(--muted);font-weight:400;letter-spacing:.02em;margin-top:3px;font-style:italic}
 .hdr-right{text-align:right}
-.ph-date{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.ph-time{font-size:11px;color:var(--muted2);font-weight:300;margin-top:2px}
+.ph-date{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ph-time{font-size:13px;color:var(--muted2);font-weight:400;margin-top:2px}
 
 /* spectrum */
 .spec-wrap{padding:0 18px 10px}
-.spec-labels{display:flex;justify-content:space-between;font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
+.spec-labels{display:flex;justify-content:space-between;font-size:calc(12px*var(--ts,1));font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
 .l-dds{color:var(--dds)}.l-mid{color:var(--muted)}.l-pink{color:var(--pink)}.l-admin{color:var(--admin)}
 .spec-bar{height:3px;border-radius:2px;background:linear-gradient(to right,var(--admin),var(--dds) 33%,var(--muted) 60%,var(--pink))}
 
 /* topic tabs */
 .tabs{display:flex;gap:6px;padding:0 18px 10px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex-shrink:0;padding:6px 14px;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--muted);transition:all .15s;font-family:'IBM Plex Sans',sans-serif;letter-spacing:.03em}
+.tab{flex-shrink:0;padding:6px 14px;border-radius:4px;font-size:calc(14px*min(var(--ts,1),1.15));font-weight:500;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--muted);transition:all .15s;font-family:'IBM Plex Sans',sans-serif;letter-spacing:.03em}
 .tab.active{background:var(--gold);color:#fffdf8;border-color:var(--gold);font-weight:600}
 
 /* ── TOOLBAR (just refresh) ── */
-.toolbar{display:flex;align-items:center;justify-content:flex-end;padding:8px 18px;border-bottom:1px solid var(--border);position:sticky;top:140px;z-index:99;background:rgba(245,240,232,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
-.reload{background:none;border:1px solid var(--border2);color:var(--muted);padding:4px 12px;border-radius:4px;font-size:10px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;display:flex;align-items:center;gap:5px;transition:all .15s}
+.toolbar{display:flex;align-items:center;justify-content:flex-end;padding:8px 18px;border-bottom:1px solid var(--border);position:relative;z-index:1;background:rgba(245,240,232,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.reload{background:none;border:1px solid var(--border2);color:var(--muted);padding:4px 12px;border-radius:4px;font-size:calc(12px*var(--ts,1));font-weight:500;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;display:flex;align-items:center;gap:5px;transition:all .15s}
 .reload:hover{color:var(--gold);border-color:var(--gold)}
 .spin{display:inline-block;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -83,7 +84,7 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 /* section label */
 .sec-head{padding:12px 18px 5px;display:flex;align-items:center;gap:8px}
 .sec-line{flex:1;height:1px;background:var(--border)}
-.sec-lbl{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sec-lbl{font-size:calc(12px*var(--ts,1));font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 
 /* ── STORY CARD ── */
 .stories{padding:0 12px;display:flex;flex-direction:column;gap:10px}
@@ -102,26 +103,26 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 
 /* topic + time row */
 .st{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.ttag{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:var(--gold-dim);color:var(--gold)}
+.ttag{font-size:calc(12px*var(--ts,1));font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:var(--gold-dim);color:var(--gold)}
 .ttag.icc{background:rgba(176,48,48,.08);color:var(--red)}
 .ttag.marcos{background:rgba(32,80,160,.08);color:var(--blue)}
 .ttag.sara{background:rgba(96,64,160,.08);color:var(--purple)}
 .ttag.wps{background:var(--green-dim);color:var(--green)}
-.sage{font-size:10px;color:var(--muted);font-weight:300}
+.sage{font-size:calc(12px*var(--ts,1));color:var(--muted);font-weight:400}
 
 /* headline */
-.shl{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;line-height:1.38;color:var(--text);margin-bottom:11px;letter-spacing:-.1px}
+.shl{font-family:'Libre Baskerville',serif;font-size:calc(20px*var(--ts,1));font-weight:700;line-height:1.38;color:var(--text);margin-bottom:11px;letter-spacing:-.1px}
 
 /* ── NEUTRAL SUMMARY BLOCK ── */
 .neutral-block{margin-bottom:11px}
-.neutral-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:5px;margin-bottom:5px}
+.neutral-label{font-size:calc(12px*var(--ts,1));font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:5px;margin-bottom:5px}
 .npip{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:blink 2.5s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.neutral-short{font-size:15px;line-height:1.65;color:var(--muted2);font-weight:400}
-.neutral-long{font-size:15px;line-height:1.65;color:var(--muted2);font-weight:400;margin-top:6px;display:none}
+.neutral-short{font-size:calc(17px*var(--ts,1));line-height:1.65;color:var(--muted2);font-weight:400}
+.neutral-long{font-size:calc(17px*var(--ts,1));line-height:1.65;color:var(--muted2);font-weight:400;margin-top:6px;display:none}
 .neutral-long.open{display:block}
-.read-more{display:inline-flex;align-items:center;gap:3px;margin-top:5px;font-size:11px;font-weight:600;color:var(--gold);cursor:pointer;border:none;background:none;font-family:'IBM Plex Sans',sans-serif;padding:0;letter-spacing:.03em}
-.read-more .rm-arr{font-size:10px;transition:transform .2s;display:inline-block}
+.read-more{display:inline-flex;align-items:center;gap:3px;margin-top:5px;font-size:calc(13px*var(--ts,1));font-weight:600;color:var(--gold);cursor:pointer;border:none;background:none;font-family:'IBM Plex Sans',sans-serif;padding:0;letter-spacing:.03em}
+.read-more .rm-arr{font-size:calc(12px*var(--ts,1));transition:transform .2s;display:inline-block}
 .read-more.expanded .rm-arr{transform:rotate(180deg)}
 
 /* ── BIAS ROWS ── */
@@ -135,15 +136,15 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .bias-head{display:flex;align-items:center;gap:8px;padding:9px 10px}
 .bias-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .dot-admin{background:var(--admin)}.dot-dds{background:var(--dds)}.dot-pink{background:var(--pink)}
-.bias-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;flex-shrink:0}
+.bias-lbl{font-size:calc(12px*var(--ts,1));font-weight:700;letter-spacing:.08em;text-transform:uppercase;flex-shrink:0}
 .lbl-admin{color:var(--admin)}.lbl-dds{color:var(--dds)}.lbl-pink{color:var(--pink)}
-.bias-phrase{font-size:12px;color:var(--muted2);font-weight:400;font-style:italic;flex:1;line-height:1.3}
-.bias-chevron{font-size:11px;color:var(--muted);flex-shrink:0;transition:transform .2s}
+.bias-phrase{font-size:calc(14px*var(--ts,1));color:var(--muted2);font-weight:400;font-style:italic;flex:1;line-height:1.3}
+.bias-chevron{font-size:calc(13px*var(--ts,1));color:var(--muted);flex-shrink:0;transition:transform .2s}
 .bias-row.open .bias-chevron{transform:rotate(180deg)}
 
 .bias-detail{max-height:0;overflow:hidden;transition:max-height .3s ease}
 .bias-row.open .bias-detail{max-height:300px}
-.bias-detail-inner{padding:0 10px 10px;font-size:13px;line-height:1.65;color:var(--muted2);font-weight:400;border-top:1px solid var(--border)}
+.bias-detail-inner{padding:0 10px 10px;font-size:calc(15px*var(--ts,1));line-height:1.65;color:var(--muted2);font-weight:400;border-top:1px solid var(--border)}
 .bias-detail-inner p{padding-top:8px}
 
 /* loading state */
@@ -152,27 +153,27 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 /* ── SOURCES FOOTER ── */
 .src-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);cursor:pointer}
 .sbadges{display:flex;gap:4px;flex-wrap:wrap}
-.sbadge{font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;letter-spacing:.04em}
+.sbadge{font-size:calc(12px*var(--ts,1));font-weight:600;padding:2px 6px;border-radius:3px;letter-spacing:.04em}
 .bd-dds{background:var(--dds-dim);color:var(--dds)}.bd-center{background:rgba(90,80,64,.1);color:var(--muted2)}
 .bd-pink{background:var(--pink-dim);color:var(--pink)}.bd-alt{background:rgba(96,64,160,.08);color:var(--purple)}
 .bd-admin{background:var(--admin-dim);color:var(--admin)}
-.src-toggle{font-size:10px;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:3px;flex-shrink:0}
-.src-arr{font-size:11px;transition:transform .2s;display:inline-block}
+.src-toggle{font-size:calc(12px*var(--ts,1));color:var(--muted);font-weight:500;display:flex;align-items:center;gap:3px;flex-shrink:0}
+.src-arr{font-size:calc(13px*var(--ts,1));transition:transform .2s;display:inline-block}
 
 /* ── SOURCES PANEL ── */
 .src-panel{max-height:0;overflow:hidden;transition:max-height .32s ease}
 .src-panel.open{max-height:500px}
 .src-inner{padding:10px 0 2px;border-top:1px solid var(--border);margin-top:10px}
-.src-ttl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.src-ttl{font-size:calc(12px*var(--ts,1));font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
 .src-row{display:flex;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .15s}
 .src-row:last-child{border-bottom:none}.src-row:active{opacity:.7}
 .src-bar{width:3px;border-radius:2px;flex-shrink:0;margin-right:10px;align-self:stretch;min-height:28px}
 .lb-dds{background:var(--dds)}.lb-center{background:#b0a898}.lb-pink{background:var(--pink)}.lb-alt{background:var(--purple)}.lb-admin{background:var(--admin)}
 .src-info{flex:1;min-width:0}
-.src-name{font-size:11px;font-weight:600;color:var(--text)}
-.src-type{font-size:9px;color:var(--muted);margin-top:1px}
-.src-hl{font-size:11px;color:var(--muted2);font-weight:400;margin-top:3px;line-height:1.4}
-.src-ext{color:var(--muted);font-size:12px;margin-left:8px;align-self:center;flex-shrink:0}
+.src-name{font-size:calc(13px*var(--ts,1));font-weight:600;color:var(--text)}
+.src-type{font-size:calc(12px*var(--ts,1));color:var(--muted);margin-top:1px}
+.src-hl{font-size:calc(13px*var(--ts,1));color:var(--muted2);font-weight:400;margin-top:3px;line-height:1.4}
+.src-ext{color:var(--muted);font-size:calc(14px*var(--ts,1));margin-left:8px;align-self:center;flex-shrink:0}
 
 /* ── SKELETON ── */
 .skel{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:14px;animation:pulse 1.4s ease infinite;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
@@ -183,13 +184,13 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 /* ── EMPTY ── */
 .empty{text-align:center;padding:50px 24px;color:var(--muted)}
 .empty-icon{font-size:36px;margin-bottom:12px}
-.empty-title{font-family:'Libre Baskerville',serif;font-size:18px;color:var(--text);margin-bottom:6px}
-.empty-sub{font-size:12px;line-height:1.6}
+.empty-title{font-family:'Libre Baskerville',serif;font-size:calc(20px*var(--ts,1));color:var(--text);margin-bottom:6px}
+.empty-sub{font-size:calc(14px*var(--ts,1));line-height:1.6}
 
 /* ── BOTTOM NAV ── */
 .bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(245,240,232,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:6px 0 28px;z-index:200}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px;cursor:pointer;opacity:.35;transition:opacity .15s;font-size:9px;font-weight:600;color:var(--text);letter-spacing:.06em;text-transform:uppercase}
-.ni.on{opacity:1;color:var(--gold)}.ni-icon{font-size:19px}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px;cursor:pointer;opacity:1;color:var(--muted);transition:opacity .15s;font-size:calc(12px*min(var(--ts,1),1.15));font-weight:600;color:var(--text);letter-spacing:.06em;text-transform:uppercase}
+.ni.on{opacity:1;color:var(--gold)}.ni.on .ni-icon{transform:scale(1.08)}.ni-icon{font-size:calc(21px*var(--ts,1))}
 
 /* ── SHEET ── */
 .sheet-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s}
@@ -197,28 +198,28 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .sheet{width:100%;max-width:430px;margin:0 auto;background:var(--s1);border-radius:20px 20px 0 0;border-top:1px solid var(--border2);padding:20px 20px 48px;transform:translateY(100%);transition:transform .28s ease;max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .sheet-ov.open .sheet{transform:translateY(0)}
 .sh-handle{width:32px;height:3px;background:var(--border2);border-radius:2px;margin:0 auto 16px}
-.sh-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;margin-bottom:12px;color:var(--text)}
+.sh-title{font-family:'Libre Baskerville',serif;font-size:calc(22px*var(--ts,1));font-weight:700;margin-bottom:12px;color:var(--text)}
 .leg-row{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
 .leg-row:last-of-type{border-bottom:none}
 .leg-color{width:4px;border-radius:2px;flex-shrink:0;align-self:stretch;min-height:36px}
-.leg-name{font-size:13px;font-weight:600;color:var(--text)}
-.leg-outlets{font-size:11px;color:var(--muted2);font-weight:400;margin-top:2px;line-height:1.5}
-.leg-desc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;font-style:italic}
-.sh-note{margin-top:12px;font-size:11px;line-height:1.6;color:var(--muted2);padding:10px 12px;background:var(--gold-dim);border-radius:8px;border-left:3px solid var(--gold)}
-.close-sh{margin-top:14px;width:100%;padding:13px;background:var(--gold);color:#fffdf8;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+.leg-name{font-size:calc(15px*var(--ts,1));font-weight:600;color:var(--text)}
+.leg-outlets{font-size:calc(13px*var(--ts,1));color:var(--muted2);font-weight:400;margin-top:2px;line-height:1.5}
+.leg-desc{font-size:calc(13px*var(--ts,1));color:var(--muted);margin-top:4px;line-height:1.5;font-style:italic}
+.sh-note{margin-top:12px;font-size:calc(13px*var(--ts,1));line-height:1.6;color:var(--muted2);padding:10px 12px;background:var(--gold-dim);border-radius:8px;border-left:3px solid var(--gold)}
+.close-sh{margin-top:14px;width:100%;padding:13px;background:var(--gold);color:#fffdf8;border:none;border-radius:10px;font-size:calc(15px*var(--ts,1));font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
 .sh-about-logo{font-size:40px;text-align:center;margin:8px 0 14px}
-.sh-about-text{font-size:13px;line-height:1.7;color:var(--text);margin:0 0 10px}
-.sh-about-section{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:14px 0 4px}
-.kofi-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:#FF5E5B;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;font-family:'IBM Plex Sans',sans-serif;margin-top:4px}
+.sh-about-text{font-size:calc(15px*var(--ts,1));line-height:1.7;color:var(--text);margin:0 0 10px}
+.sh-about-section{font-size:calc(13px*var(--ts,1));font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:14px 0 4px}
+.kofi-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:#FF5E5B;color:#fff;border:none;border-radius:10px;font-size:calc(16px*var(--ts,1));font-weight:700;cursor:pointer;text-decoration:none;font-family:'IBM Plex Sans',sans-serif;margin-top:4px}
 .kofi-btn:active{opacity:.85}
-.sh-subtitle{font-size:11px;color:var(--muted2);margin:-6px 0 14px}
+.sh-subtitle{font-size:calc(13px*var(--ts,1));color:var(--muted2);margin:-6px 0 14px}
 .src-group{margin-bottom:14px}
 .src-group-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .src-group-bar{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.src-group-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text)}
-.src-group-desc{font-size:11px;color:var(--muted2);line-height:1.5;margin:0 0 8px 18px}
+.src-group-label{font-size:calc(13px*var(--ts,1));font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text)}
+.src-group-desc{font-size:calc(13px*var(--ts,1));color:var(--muted2);line-height:1.5;margin:0 0 8px 18px}
 .src-chips{display:flex;flex-wrap:wrap;gap:6px;margin-left:18px}
-.src-chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:4px 10px;border-radius:20px;background:var(--s2);border:1px solid var(--border2);color:var(--text);text-decoration:none}
+.src-chip{display:inline-flex;align-items:center;gap:5px;font-size:calc(14px*var(--ts,1));padding:4px 10px;border-radius:20px;background:var(--s2);border:1px solid var(--border2);color:var(--text);text-decoration:none}
 .src-chip.ok{border-color:var(--dds)}
 .src-chip.fail{opacity:.5}
 .src-chip-dot{width:7px;height:7px;border-radius:50%;background:#aaa;flex-shrink:0}
@@ -226,30 +227,30 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .src-chip.fail .src-chip-dot{background:#e53935}
 .src-chip.pending .src-chip-dot{background:#aaa}
 .gnews-row{margin-top:12px;padding:10px 12px;background:var(--gold-dim);border-radius:8px;border-left:3px solid var(--gold)}
-.gnews-row-title{font-size:11px;font-weight:700;color:var(--gold);margin-bottom:4px}
-.gnews-row-desc{font-size:11px;color:var(--muted2);line-height:1.5}
+.gnews-row-title{font-size:calc(13px*var(--ts,1));font-weight:700;color:var(--gold);margin-bottom:4px}
+.gnews-row-desc{font-size:calc(13px*var(--ts,1));color:var(--muted2);line-height:1.5}
 
 /* error */
-.err{margin:6px 12px 4px;padding:8px 12px;background:rgba(176,48,48,.07);border:1px solid rgba(176,48,48,.2);border-radius:8px;font-size:11px;color:var(--red);display:none;align-items:center;gap:6px}
+.err{margin:6px 12px 4px;padding:8px 12px;background:rgba(176,48,48,.07);border:1px solid rgba(176,48,48,.2);border-radius:8px;font-size:calc(13px*var(--ts,1));color:var(--red);display:none;align-items:center;gap:6px}
 .err.show{display:flex}
 
 /* ── SEARCH SHEET ── */
 .srch-bar{display:flex;gap:8px;margin-bottom:14px}
-.srch-input{flex:1;padding:11px 14px;border:1px solid var(--border2);border-radius:10px;font-size:15px;font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);outline:none}
+.srch-input{flex:1;min-width:0;padding:11px 14px;border:1px solid var(--border2);border-radius:10px;font-size:calc(17px*var(--ts,1));font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);outline:none}
 .srch-input:focus{border-color:var(--gold)}
-.srch-go{padding:11px 18px;background:var(--gold);color:#fffdf8;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
+.srch-go{flex-shrink:0;padding:11px 18px;background:var(--gold);color:#fffdf8;border:none;border-radius:10px;font-size:calc(16px*var(--ts,1));font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
 .srch-go:disabled{opacity:.5;cursor:default}
 .srch-suggestions{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
-.srch-chip{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'IBM Plex Sans',sans-serif;transition:all .15s}
+.srch-chip{padding:5px 12px;border-radius:20px;font-size:calc(14px*var(--ts,1));font-weight:500;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'IBM Plex Sans',sans-serif;transition:all .15s}
 .srch-chip:hover{border-color:var(--gold);color:var(--gold)}
 .srch-result{margin-top:4px}
-.srch-loading{text-align:center;padding:32px 0;color:var(--muted);font-size:13px;font-style:italic}
+.srch-loading{text-align:center;padding:32px 0;color:var(--muted);font-size:calc(15px*var(--ts,1));font-style:italic}
 .srch-loading .spin{display:inline-block;animation:spin .8s linear infinite;font-style:normal;margin-right:6px}
 /* result card */
 .srch-card{background:var(--s2);border-radius:10px;overflow:hidden;margin-bottom:10px}
 .srch-card-head{padding:12px 14px 10px;border-bottom:1px solid var(--border)}
-.srch-card-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
-.srch-card-text{font-size:14px;line-height:1.65;color:var(--muted2)}
+.srch-card-lbl{font-size:calc(12px*var(--ts,1));font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.srch-card-text{font-size:calc(16px*var(--ts,1));line-height:1.65;color:var(--muted2)}
 .srch-neutral .srch-card-lbl{color:var(--gold)}
 .srch-admin .srch-card-lbl{color:var(--admin)}
 .srch-dds .srch-card-lbl{color:var(--dds)}
@@ -258,18 +259,39 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .srch-admin{background:var(--admin-dim);border:1px solid rgba(26,94,184,.2);border-radius:10px;padding:12px 14px;margin-bottom:8px}
 .srch-dds{background:var(--dds-dim);border:1px solid rgba(42,122,72,.2);border-radius:10px;padding:12px 14px;margin-bottom:8px}
 .srch-pink{background:var(--pink-dim);border:1px solid rgba(176,48,112,.2);border-radius:10px;padding:12px 14px;margin-bottom:8px}
-.srch-phrase{font-size:11px;font-style:italic;color:var(--muted);margin-top:4px}
+.srch-phrase{font-size:calc(13px*var(--ts,1));font-style:italic;color:var(--muted);margin-top:4px}
+
+/* ── READABILITY ── */
+.tab{min-height:40px}
+.reload{min-height:40px;padding:6px 14px}
+.read-more{min-height:36px}
+.bias-head{min-height:48px}
+.spec-labels{font-size:12px!important}
+.ts-ctl{display:flex;align-items:center;gap:6px;margin-right:auto}
+.ts-lbl{font-size:calc(13px*var(--ts,1));color:var(--muted2);font-weight:500}
+.ts-seg{display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden}
+.ts-btn{background:transparent;border:none;border-left:1px solid var(--border2);color:var(--muted2);font-family:'Libre Baskerville',serif;font-weight:700;cursor:pointer;min-width:44px;min-height:40px;padding:0 8px;line-height:1}
+.ts-btn:first-child{border-left:none}
+.ts-btn.on{background:var(--gold);color:#fffdf8}
+.card-actions{display:flex;align-items:center;gap:14px;margin-top:6px;flex-wrap:wrap}
+.listen-btn{display:inline-flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--border2);color:var(--text);border-radius:20px;padding:6px 14px;min-height:40px;font-size:calc(14px*var(--ts,1));font-weight:600;font-family:'IBM Plex Sans',sans-serif;cursor:pointer}
+.listen-btn.on{background:var(--gold);border-color:var(--gold);color:#fffdf8}
+.srch-title{font-family:'Libre Baskerville',serif;font-size:calc(20px*var(--ts,1));font-weight:700;line-height:1.4;color:var(--text);margin-bottom:10px}
+.srch-phrase-top{font-size:calc(15px*var(--ts,1));font-style:italic;margin-bottom:6px;line-height:1.4}
+.srch-sources{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:12px}
+.srch-foot{text-align:center;margin-top:10px;font-size:calc(13px*var(--ts,1));color:var(--muted);font-style:italic}
+.srch-result .listen-btn{margin-bottom:12px}
 </style>
 </head>
 <body>
 <div id="install-banner" style="display:none;position:fixed;bottom:90px;left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:406px;background:#1a1612;color:#f5f0e8;border-radius:14px;padding:12px 16px;z-index:250;box-shadow:0 4px 20px rgba(0,0,0,0.3);align-items:center;justify-content:space-between;gap:10px;">
   <div>
-    <div style="font-size:13px;font-weight:600;margin-bottom:2px;">Add FactsPH to Home Screen</div>
-    <div style="font-size:11px;opacity:.7;">Read the news without the bias, anytime.</div>
+    <div style="font-size:calc(15px*var(--ts,1));font-weight:600;margin-bottom:2px;">Add FactsPH to Home Screen</div>
+    <div style="font-size:calc(13px*var(--ts,1));opacity:.7;">Read the news without the bias, anytime.</div>
   </div>
   <div style="display:flex;gap:8px;flex-shrink:0;">
-    <button onclick="installApp()" style="background:#8a6800;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;">Install</button>
-    <button onclick="dismissInstall()" style="background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:8px;padding:7px 10px;font-size:12px;cursor:pointer;">✕</button>
+    <button onclick="installApp()" style="background:#8a6800;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:calc(14px*var(--ts,1));font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;">Install</button>
+    <button onclick="dismissInstall()" style="background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:8px;padding:7px 10px;font-size:calc(14px*var(--ts,1));cursor:pointer;">✕</button>
   </div>
 </div>
 <div class="app">
@@ -305,6 +327,14 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 </header>
 
 <div class="toolbar">
+  <div class="ts-ctl" role="group" aria-label="Text size">
+    <span class="ts-lbl">Text size</span>
+    <div class="ts-seg">
+      <button class="ts-btn" data-ts="1" onclick="setTextSize(1)" aria-label="Normal text" style="font-size:14px">A</button>
+      <button class="ts-btn" data-ts="1.2" onclick="setTextSize(1.2)" aria-label="Large text" style="font-size:18px">A</button>
+      <button class="ts-btn" data-ts="1.4" onclick="setTextSize(1.4)" aria-label="Extra large text" style="font-size:22px">A</button>
+    </div>
+  </div>
   <button class="reload" id="reload-btn" onclick="loadNews()">
     <span id="reload-icon">↻</span> Refresh
   </button>
@@ -360,7 +390,7 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
       <a href="https://ko-fi.com/factsph" target="_blank" rel="noopener" class="kofi-btn">
         <span>☕</span> Support on Ko-fi
       </a>
-      <p class="sh-about-text" style="font-size:11px;color:var(--muted2);margin-top:8px;text-align:center">Every contribution helps. No account needed.</p>
+      <p class="sh-about-text" style="font-size:calc(13px*var(--ts,1));color:var(--muted2);margin-top:8px;text-align:center">Every contribution helps. No account needed.</p>
 
       <div class="sh-about-section">Get in touch</div>
       <p class="sh-about-text">For partnerships, research collaborations, or media inquiries: <a href="mailto:hello@factsph.app" style="color:var(--gold)">hello@factsph.app</a></p>
@@ -377,6 +407,57 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 
 
 <script>
+// ── TEXT SIZE ──
+function setTextSize(v){
+  document.documentElement.style.setProperty('--ts',v);
+  document.querySelectorAll('.ts-btn').forEach(b=>{const on=+b.dataset.ts===+v;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);});
+  try{localStorage.setItem('factsph-ts',String(v));}catch{}
+}
+(function(){let v=1;try{v=parseFloat(localStorage.getItem('factsph-ts'))||1;}catch{}
+  document.addEventListener('DOMContentLoaded',()=>setTextSize(v));if(document.readyState!=='loading')setTextSize(v);})();
+
+// ── READ ALOUD ──
+let speaking=null;
+function stopSpeaking(){
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  document.querySelectorAll('.listen-btn.on').forEach(b=>{b.classList.remove('on');b.textContent='🔊 Listen';});
+  speaking=null;
+}
+function speak(id,btn,parts){
+  if(!('speechSynthesis' in window))return;
+  if(speaking===id){stopSpeaking();return;}
+  stopSpeaking();
+  const voices=speechSynthesis.getVoices();
+  const voice=voices.find(v=>/en[-_]PH/i.test(v.lang))||voices.find(v=>/^en[-_](GB|US|AU)/i.test(v.lang))||null;
+  const chunks=parts.filter(Boolean).map(t=>t.replace(/\s+/g,' ').trim()).filter(t=>t.length>1);
+  chunks.forEach((t,k)=>{
+    const u=new SpeechSynthesisUtterance(t);
+    u.rate=0.92; if(voice){u.voice=voice;u.lang=voice.lang;}else u.lang='en-PH';
+    if(k===chunks.length-1) u.onend=()=>{if(speaking===id)stopSpeaking();};
+    speechSynthesis.speak(u);
+  });
+  speaking=id; btn.classList.add('on'); btn.textContent='■ Stop';
+}
+function listenStory(i){
+  const g=id=>document.getElementById(id)?.textContent.trim()||'';
+  const card=document.getElementById('sc-'+i);
+  const parts=[card?.querySelector('.shl')?.textContent, g('ns-'+i), g('nl-'+i)];
+  [['admin','Administration-leaning outlets'],['dds','Pro-Duterte outlets'],['pink','Progressive outlets']].forEach(([k,lbl])=>{
+    const ph=g(k+'-phrase-'+i), sm=g(k+'-sum-'+i);
+    if(ph&&!/loading/i.test(ph)) parts.push(lbl+': '+ph+'.', sm);
+  });
+  speak('story-'+i,document.getElementById('ls-'+i),parts);
+}
+function listenSearch(btn){
+  const r=document.getElementById('srch-result');
+  const parts=[r.querySelector('.srch-title')?.textContent];
+  r.querySelectorAll('.srch-neutral,.srch-admin,.srch-dds,.srch-pink').forEach(c=>{
+    parts.push(c.querySelector('.srch-card-lbl')?.textContent.replace(/[^\w\s/-]/g,'').trim()+'.',c.querySelector('.srch-phrase-top')?.textContent,c.querySelector('.srch-card-text')?.textContent);
+  });
+  speak('search',btn,parts);
+}
+if('speechSynthesis' in window) speechSynthesis.getVoices();
+
 // ── CLOCK ──
 function tick(){
   const n=new Date();
@@ -554,10 +635,18 @@ function fmt(s){
 }
 
 // ── CLAUDE ──
-async function callClaude(prompt){
+const TODAY=()=>new Date().toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric',timeZone:'Asia/Manila'});
+const PLAIN_STYLE=`WRITING STYLE — readers include older Filipinos and people who don't follow politics closely:
+- Short sentences (about 20 words or fewer). Common, everyday words.
+- The first time an acronym or term appears, explain it in a few words, e.g. "ICC (International Criminal Court)", "WPS (West Philippine Sea)", "DDS (Duterte supporters)".
+- Say who is who: give a person's role the first time you name them (e.g. "Senator", "Vice President").
+- No jargon, no sarcasm, no loaded adjectives. Do not take sides.
+- Never add facts that are not in the headlines given to you.`;
+// tier 'fast' = Claude Haiku 5.5 (Brief summaries), 'smart' = Claude Sonnet 5.5 (Search). Chosen in api/claude.js.
+async function callClaude(prompt,tier='fast',max_tokens=900){
   const r=await fetch('/api/claude',{
     method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:900,messages:[{role:'user',content:prompt}]})
+    body:JSON.stringify({tier,max_tokens,messages:[{role:'user',content:prompt}]})
   });
   return(await r.json()).content?.[0]?.text?.trim()||'';
 }
@@ -588,7 +677,7 @@ async function genContent(story){
 
   const hasSide = (srcs) => srcs.length > 0;
 
-  const p=`You are a neutral Philippine political news analyst. Below are actual headlines published by different outlets about the same story. Each outlet has a known editorial lean.
+  const p=`You are a neutral Philippine political news analyst. Today is ${TODAY()}. Below are actual headlines published by different outlets about the same story. Each outlet has a known editorial lean.
 
 ALL HEADLINES COVERING THIS STORY:
 ${allLines}
@@ -608,6 +697,8 @@ Your task — generate exactly 8 fields:
 8. PINK_SUMMARY: 2–3 sentences. Based ONLY on these progressive outlet headlines: ${pinkLines} — explain how they frame the story, what they emphasize or omit, and why.
 
 If a side has no source, note that no outlet from that side covered this story and explain what that silence might mean.
+
+${PLAIN_STYLE}
 
 Respond in EXACTLY this format with no extra text:
 NEUTRAL_SHORT: [sentence]
@@ -653,6 +744,7 @@ function getFiltered(){
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 function renderStories(){
+  stopSpeaking();
   const wrap=document.getElementById('stories-wrap');
   const list=getFiltered();
   document.getElementById('sec-lbl').textContent=`${list.length} stor${list.length!==1?'ies':'y'}${currentTab!=='all'?' · '+(TOPIC_LABELS[currentTab]||currentTab):''}`;
@@ -666,7 +758,7 @@ function renderStories(){
     const tc=s.topic==='icc'?'icc':s.topic==='marcos'?'marcos':s.topic==='sara'?'sara':s.topic==='wps'?'wps':'';
     const leans=[...new Set(s.sources.map(x=>x.lean))];
     const cbar=leans.map(l=>`<div class="cv cv-${l}"></div>`).join('');
-    const badges=s.sources.slice(0,4).map(x=>`<span class="sbadge bd-${x.lean}">${esc(x.source.split(' ')[0])}</span>`).join('')+(s.sources.length>4?`<span class="sbadge bd-center">+${s.sources.length-4}</span>`:'');
+    const badges=s.sources.slice(0,4).map(x=>`<span class="sbadge bd-${x.lean}">${esc(x.source.length>20?x.source.slice(0,19)+'…':x.source)}</span>`).join('')+(s.sources.length>4?`<span class="sbadge bd-center">+${s.sources.length-4}</span>`:'');
     const srcRows=s.sources.map(x=>`<div class="src-row" onclick="window.open('${esc(x.link)}','_blank')"><div class="src-bar lb-${x.lean}"></div><div class="src-info"><div class="src-name">${esc(x.source)}</div><div class="src-type">${esc(x.type)} · ${LEAN_LBL[x.lean]||x.lean}</div><div class="src-hl">${esc(x.title.slice(0,72))}${x.title.length>72?'…':''}</div></div><span class="src-ext">↗</span></div>`).join('');
 
     const isLoaded=!!s.neutralShort;
@@ -690,8 +782,11 @@ function renderStories(){
     <div class="neutral-block">
       <div class="neutral-label"><div class="npip"></div>Neutral Summary</div>
       <div class="neutral-short" id="ns-${i}">${isLoaded?esc(s.neutralShort):'<span style="opacity:.35;font-style:italic">Loading…</span>'}</div>
-      ${isLoaded&&s.neutralLong?`<div class="neutral-long" id="nl-${i}">${esc(s.neutralLong)}</div>
-      <button class="read-more" id="rm-${i}" onclick="toggleNeutral(${i})">Read more <span class="rm-arr">▾</span></button>`:''}
+      ${isLoaded&&s.neutralLong?`<div class="neutral-long" id="nl-${i}">${esc(s.neutralLong)}</div>`:''}
+      <div class="card-actions">
+        ${isLoaded&&s.neutralLong?`<button class="read-more" id="rm-${i}" onclick="toggleNeutral(${i})">Read more <span class="rm-arr">▾</span></button>`:''}
+        <button class="listen-btn" id="ls-${i}" data-listen="${i}" onclick="listenStory(${i})" ${'speechSynthesis' in window?'':'hidden'}>🔊 Listen</button>
+      </div>
     </div>
 
     <!-- BIAS ROWS -->
@@ -702,7 +797,7 @@ function renderStories(){
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:6px;">
               <span class="bias-lbl lbl-admin">Bagong Pilipinas</span>
-              ${isLoaded&&s.adminSource?`<span style="font-size:9px;color:var(--admin);opacity:.7;">${esc(s.adminSource.source)}</span>`:''}
+              ${isLoaded&&s.adminSource?`<span style="font-size:calc(12px*var(--ts,1));color:var(--admin);opacity:.7;">${esc(s.adminSource.source)}</span>`:''}
             </div>
             <span class="bias-phrase ${phraseLoadClass}" id="admin-phrase-${i}">${esc(adminPhraseTxt)}</span>
           </div>
@@ -710,7 +805,7 @@ function renderStories(){
         </div>
         <div class="bias-detail" id="admin-detail-${i}">
           <div class="bias-detail-inner">
-            ${isLoaded&&s.adminSource?`<div style="font-size:10px;color:var(--admin);margin-bottom:6px;padding-top:8px;">📰 Based on: <a href="${esc(s.adminSource.link)}" target="_blank" style="color:var(--admin);text-decoration:underline;">${esc(s.adminSource.source)}</a> — "${esc(s.adminSource.title.slice(0,80))}"</div>`:''}
+            ${isLoaded&&s.adminSource?`<div style="font-size:calc(12px*var(--ts,1));color:var(--admin);margin-bottom:6px;padding-top:8px;">📰 Based on: <a href="${esc(s.adminSource.link)}" target="_blank" style="color:var(--admin);text-decoration:underline;">${esc(s.adminSource.source)}</a> — "${esc(s.adminSource.title.slice(0,80))}"</div>`:''}
             <p id="admin-sum-${i}">${isLoaded&&s.adminSummary?esc(s.adminSummary):''}</p>
           </div>
         </div>
@@ -721,7 +816,7 @@ function renderStories(){
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:6px;">
               <span class="bias-lbl lbl-dds">DDS</span>
-              ${isLoaded&&s.ddsSource?`<span style="font-size:9px;color:var(--dds);opacity:.7;">${esc(s.ddsSource.source)}</span>`:''}
+              ${isLoaded&&s.ddsSource?`<span style="font-size:calc(12px*var(--ts,1));color:var(--dds);opacity:.7;">${esc(s.ddsSource.source)}</span>`:''}
             </div>
             <span class="bias-phrase ${phraseLoadClass}" id="dds-phrase-${i}">${esc(ddsPhraseTxt)}</span>
           </div>
@@ -729,7 +824,7 @@ function renderStories(){
         </div>
         <div class="bias-detail" id="dds-detail-${i}">
           <div class="bias-detail-inner">
-            ${isLoaded&&s.ddsSource?`<div style="font-size:10px;color:var(--dds);margin-bottom:6px;padding-top:8px;">📰 Based on: <a href="${esc(s.ddsSource.link)}" target="_blank" style="color:var(--dds);text-decoration:underline;">${esc(s.ddsSource.source)}</a> — "${esc(s.ddsSource.title.slice(0,80))}"</div>`:''}
+            ${isLoaded&&s.ddsSource?`<div style="font-size:calc(12px*var(--ts,1));color:var(--dds);margin-bottom:6px;padding-top:8px;">📰 Based on: <a href="${esc(s.ddsSource.link)}" target="_blank" style="color:var(--dds);text-decoration:underline;">${esc(s.ddsSource.source)}</a> — "${esc(s.ddsSource.title.slice(0,80))}"</div>`:''}
             <p id="dds-sum-${i}">${isLoaded&&s.ddsSummary?esc(s.ddsSummary):''}</p>
           </div>
         </div>
@@ -740,7 +835,7 @@ function renderStories(){
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:6px;">
               <span class="bias-lbl lbl-pink">Progressives</span>
-              ${isLoaded&&s.pinkSource?`<span style="font-size:9px;color:var(--pink);opacity:.7;">${esc(s.pinkSource.source)}</span>`:''}
+              ${isLoaded&&s.pinkSource?`<span style="font-size:calc(12px*var(--ts,1));color:var(--pink);opacity:.7;">${esc(s.pinkSource.source)}</span>`:''}
             </div>
             <span class="bias-phrase ${phraseLoadClass}" id="pink-phrase-${i}">${esc(pinkPhraseTxt)}</span>
           </div>
@@ -748,7 +843,7 @@ function renderStories(){
         </div>
         <div class="bias-detail" id="pink-detail-${i}">
           <div class="bias-detail-inner">
-            ${isLoaded&&s.pinkSource?`<div style="font-size:10px;color:var(--pink);margin-bottom:6px;padding-top:8px;">📰 Based on: <a href="${esc(s.pinkSource.link)}" target="_blank" style="color:var(--pink);text-decoration:underline;">${esc(s.pinkSource.source)}</a> — "${esc(s.pinkSource.title.slice(0,80))}"</div>`:''}
+            ${isLoaded&&s.pinkSource?`<div style="font-size:calc(12px*var(--ts,1));color:var(--pink);margin-bottom:6px;padding-top:8px;">📰 Based on: <a href="${esc(s.pinkSource.link)}" target="_blank" style="color:var(--pink);text-decoration:underline;">${esc(s.pinkSource.source)}</a> — "${esc(s.pinkSource.title.slice(0,80))}"</div>`:''}
             <p id="pink-sum-${i}">${isLoaded&&s.pinkSummary?esc(s.pinkSummary):''}</p>
           </div>
         </div>
@@ -801,6 +896,7 @@ function toggleSrc(i){
 
 // ── SEARCH / ASK FACTPH ──
 function showView(v){
+  stopSpeaking();
   const panel = document.getElementById('search-panel');
   document.getElementById('nav-brief').classList.toggle('on', v==='brief');
   document.getElementById('nav-search').classList.toggle('on', v==='search');
@@ -828,19 +924,57 @@ async function doSearch(){
   const result = document.getElementById('srch-result');
   btn.disabled = true;
   btn.textContent = '…';
-  result.innerHTML = '<div class="srch-loading"><span class="spin">↻</span> Analyzing all 4 views…</div>';
+  result.innerHTML = '<div class="srch-loading"><span class="spin">↻</span> Finding the latest news…</div>';
+  const done = () => {
+    btn.disabled = false; btn.textContent = 'Analyze';
+    const panel = document.getElementById('search-panel');
+    const header = panel.querySelector('div');
+    panel.scrollTo({top: header ? header.offsetHeight : 0, behavior:'smooth'});
+  };
 
-  const prompt = `You are analyzing a Philippine political topic from 4 perspectives. The topic is: "${q}"
+  // 1. Ground the analysis in real headlines from the past 30 days
+  const gq = encodeURIComponent(q + ' philippines') + '+when:30d';
+  let arts = await fetchGNews({topic:'search', rss:`https://news.google.com/rss/search?q=${gq}&hl=en-PH&gl=PH&ceid=PH:en`});
+  const seen = new Set();
+  arts = arts.filter(a => { const k = a.title.slice(0,60).toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; })
+             .sort((a,b) => ts(b.date) - ts(a.date)).slice(0, 15);
+
+  if(!arts.length){
+    result.innerHTML = `<div class="empty"><div class="empty-icon">🔎</div><div class="empty-title">No recent news found</div><div class="empty-sub">No Philippine news articles from the past 30 days matched "${esc(q)}". Try fewer or different words.</div></div>`;
+    return done();
+  }
+  result.innerHTML = `<div class="srch-loading"><span class="spin">↻</span> Reading ${arts.length} articles…</div>`;
+
+  const byLean = lean => arts.filter(a => a.lean === lean).map(a => `- ${a.source}: "${a.title}"`).join('\n') || '(none)';
+  const prompt = `You are a neutral Philippine political news analyst. Today is ${TODAY()}.
+A reader asked about: "${q}"
+
+Below are real headlines from the past 30 days, grouped by each outlet's editorial lean. Base EVERYTHING on these headlines only. Do not use outside knowledge to add facts.
+
+ADMIN / Bagong Pilipinas outlets:
+${byLean('admin')}
+
+DDS / pro-Duterte outlets:
+${byLean('dds')}
+
+PROGRESSIVE outlets:
+${byLean('pink')}
+
+CENTER / mainstream outlets:
+${byLean('center')}
+
+OTHER outlets:
+${byLean('alt')}
 
 Generate exactly:
-1. NEUTRAL: A factual 3-4 sentence summary with no framing or opinion
-2. NEUTRAL_PHRASE: Max 8 words — the plain factual headline
-3. ADMIN: 2-3 sentences on how Bagong Pilipinas / Marcos administration outlets frame this
-4. ADMIN_PHRASE: Max 8 words capturing the admin angle
-5. DDS: 2-3 sentences on how pro-Duterte/DDS outlets frame this
-6. DDS_PHRASE: Max 8 words capturing the DDS angle
-7. PINK: 2-3 sentences on how Progressive/Pinklawan/civil society outlets frame this
-8. PINK_PHRASE: Max 8 words capturing the progressive angle
+1. NEUTRAL_PHRASE: Max 8 words — a plain factual headline for the topic
+2. NEUTRAL: 3–4 sentences on the confirmed facts across all the headlines
+3. ADMIN_PHRASE / ADMIN: max 8 words, then 2–3 sentences on how the admin outlets above frame it
+4. DDS_PHRASE / DDS: the same for the DDS outlets above
+5. PINK_PHRASE / PINK: the same for the progressive outlets above
+If a side has "(none)", write that no outlet from that side covered this in the past 30 days, and do not guess what they would say.
+
+${PLAIN_STYLE}
 
 Respond in EXACTLY this format with no extra text:
 NEUTRAL_PHRASE: [phrase]
@@ -853,59 +987,37 @@ PINK_PHRASE: [phrase]
 PINK: [paragraph]`;
 
   try {
-    const txt = await callClaude(prompt);
-    const get = (key, next) => txt.match(new RegExp(`${key}:\s*(.+?)(?=\n${next}:|$)`,'s'))?.[1]?.trim()||'';
-
-    const neutralPhrase = get('NEUTRAL_PHRASE','NEUTRAL');
-    const neutral       = get('NEUTRAL','ADMIN_PHRASE');
-    const adminPhrase   = get('ADMIN_PHRASE','ADMIN');
-    const admin         = get('ADMIN','DDS_PHRASE');
-    const ddsPhrase     = get('DDS_PHRASE','DDS');
-    const dds           = get('DDS','PINK_PHRASE');
-    const pinkPhrase    = get('PINK_PHRASE','PINK');
-    const pink          = get('PINK','$');
-
-    const esc2 = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const txt = await callClaude(prompt, 'smart', 1200);
+    if(!txt) throw 0;
+    // Split the reply into "KEY: value" fields (a value may span lines)
+    const F = {};
+    txt.split(/\n(?=[A-Z_]{3,}:)/).forEach(seg => { const m = seg.match(/^\s*([A-Z_]{3,}):\s*([\s\S]*)$/); if (m) F[m[1]] = m[2].trim(); });
+    const neutralPhrase = F.NEUTRAL_PHRASE||'', neutral = F.NEUTRAL||'';
+    const adminPhrase = F.ADMIN_PHRASE||'', admin = F.ADMIN||'';
+    const ddsPhrase = F.DDS_PHRASE||'', dds = F.DDS||'';
+    const pinkPhrase = F.PINK_PHRASE||'', pink = F.PINK||'';
+    if (!neutral) throw 0;
+    const card = (cls, lbl, color, phrase, body, quote) => `
+      <div class="${cls}">
+        <div class="srch-card-lbl">${lbl}</div>
+        ${phrase ? `<div class="srch-phrase-top" style="color:${color}">${quote ? '"' + esc(phrase) + '"' : esc(phrase)}</div>` : ''}
+        <div class="srch-card-text">${esc(body)}</div>
+      </div>`;
+    const srcRows = arts.map(x => `<div class="src-row" onclick="window.open('${esc(x.link)}','_blank')"><div class="src-bar lb-${x.lean}"></div><div class="src-info"><div class="src-name">${esc(x.source)} <span class="src-type">· ${LEAN_LBL[x.lean]||x.lean} · ${esc(fmt(x.date))}</span></div><div class="src-hl">${esc(x.title)}</div></div><span class="src-ext">↗</span></div>`).join('');
 
     result.innerHTML = `
-      <div style="font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;line-height:1.4;color:var(--text);margin-bottom:14px;">${esc2(q)}</div>
-
-      <div class="srch-neutral">
-        <div class="srch-card-lbl">⚪ Neutral / Factual</div>
-        <div style="font-size:12px;font-style:italic;color:var(--gold);margin-bottom:6px;">${esc2(neutralPhrase)}</div>
-        <div class="srch-card-text">${esc2(neutral)}</div>
-      </div>
-
-      <div class="srch-admin">
-        <div class="srch-card-lbl">🔵 Bagong Pilipinas / Admin</div>
-        <div style="font-size:12px;font-style:italic;color:var(--admin);margin-bottom:6px;">"${esc2(adminPhrase)}"</div>
-        <div class="srch-card-text">${esc2(admin)}</div>
-      </div>
-
-      <div class="srch-dds">
-        <div class="srch-card-lbl">🟢 DDS / Pro-Duterte</div>
-        <div style="font-size:12px;font-style:italic;color:var(--dds);margin-bottom:6px;">"${esc2(ddsPhrase)}"</div>
-        <div class="srch-card-text">${esc2(dds)}</div>
-      </div>
-
-      <div class="srch-pink">
-        <div class="srch-card-lbl">🩷 Progressives / Pinklawan</div>
-        <div style="font-size:12px;font-style:italic;color:var(--pink);margin-bottom:6px;">"${esc2(pinkPhrase)}"</div>
-        <div class="srch-card-text">${esc2(pink)}</div>
-      </div>
-
-      <div style="text-align:center;margin-top:8px;font-size:11px;color:var(--muted);font-style:italic;">AI-generated analysis based on known editorial tendencies. Always read primary sources.</div>
-    `;
+      <div class="srch-title">${esc(q)}</div>
+      <button class="listen-btn" data-listen="srch" onclick="listenSearch(this)">🔊 Listen</button>
+      ${card('srch-neutral','⚪ Neutral / Factual','var(--gold)',neutralPhrase,neutral,false)}
+      ${card('srch-admin','🔵 Bagong Pilipinas / Admin','var(--admin)',adminPhrase,admin,true)}
+      ${card('srch-dds','🟢 DDS / Pro-Duterte','var(--dds)',ddsPhrase,dds,true)}
+      ${card('srch-pink','🩷 Progressives','var(--pink)',pinkPhrase,pink,true)}
+      <div class="srch-sources"><div class="src-ttl">Based on these ${arts.length} articles · tap to read</div>${srcRows}</div>
+      <div class="srch-foot">AI summary of the headlines listed above. Always read the original articles.</div>`;
   } catch(err) {
-    result.innerHTML = '<div class="srch-loading">⚠️ Could not generate analysis. Check your API credits.</div>';
+    result.innerHTML = '<div class="srch-loading">⚠️ Could not generate the analysis right now. Please try again in a minute.</div>';
   }
-
-  btn.disabled = false;
-  btn.textContent = 'Analyze';
-  // Scroll the overlay to show results from the top
-  const panel = document.getElementById('search-panel');
-  const header = panel.querySelector('div');
-  panel.scrollTo({top: header ? header.offsetHeight : 0, behavior:'smooth'});
+  done();
 }
 
 // share removed
@@ -966,7 +1078,9 @@ function applyGenResult(story, idx, r){
     const btn=document.createElement('button');
     btn.className='read-more';btn.id=`rm-${idx}`;btn.onclick=()=>toggleNeutral(idx);
     btn.innerHTML='Read more <span class="rm-arr">▾</span>';
-    nb.appendChild(longDiv);nb.appendChild(btn);
+    const actions=nb.querySelector('.card-actions');
+    if(actions){nb.insertBefore(longDiv,actions);actions.prepend(btn);}
+    else{nb.appendChild(longDiv);nb.appendChild(btn);}
   }
 
   if(adminPh){adminPh.textContent=r.adminPhrase||'—';adminPh.classList.remove('loading');}
@@ -976,7 +1090,6 @@ function applyGenResult(story, idx, r){
   if(ddsSum){ddsSum.textContent=r.ddsSummary||'';}
   if(pinkSum){pinkSum.textContent=r.pinkSummary||'';}
 
-  refreshShareBtn(idx);
 }
 
 // ── LOAD ──
@@ -1235,10 +1348,10 @@ loadNews();
   <!-- Fixed search header inside the overlay -->
   <div style="background:rgba(245,240,232,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 14px 10px;padding-top:max(14px,env(safe-area-inset-top));">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-      <div style="font-family:'Libre Baskerville',serif;font-size:19px;font-weight:700;color:var(--text);">Ask FactsPH</div>
-      <button onclick="showView('brief')" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);padding:2px 6px;">✕</button>
+      <div style="font-family:'Libre Baskerville',serif;font-size:calc(21px*var(--ts,1));font-weight:700;color:var(--text);">Ask FactsPH</div>
+      <button onclick="showView('brief')" style="background:none;border:none;font-size:calc(23px*var(--ts,1));cursor:pointer;color:var(--muted);padding:2px 6px;">✕</button>
     </div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;font-style:italic;">Type any topic — get all 4 views instantly.</div>
+    <div style="font-size:calc(14px*var(--ts,1));color:var(--muted);margin-bottom:10px;font-style:italic;">Type any topic — get all 4 views instantly.</div>
     <div class="srch-bar">
       <input class="srch-input" id="srch-input" type="text" placeholder="e.g. Duterte ICC, Marcos budget…" onkeydown="if(event.key==='Enter')doSearch()">
       <button class="srch-go" id="srch-go" onclick="doSearch()">Analyze</button>
