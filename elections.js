@@ -8,7 +8,7 @@
    link in `src`; anything odd goes in `flags`.
    ============================================================ */
 
-const EL_AS_OF = '2026-10-18'; // date the data below was last checked
+const EL_AS_OF = '2026-10-19'; // date the data below was last checked
 
 // ── Candidates ────────────────────────────────────────────────
 // status: 'declared' | 'out' (publicly ruled out) | 'undeclared'
@@ -45,6 +45,13 @@ const EL_POLLS = [
     flags: ['A separate scenario without Robredo and Tulfo had Baste Duterte 29, Go 26, B. Aquino 20.'],
     src: [['Manila Times', 'https://www.manilatimes.net/2026/10/07/news/robredo-baste-duterte-emerge-top-presidential-bets-in-2028-survey/2440594']] },
 
+  { pollster: 'Momentum Research', start: '2026-08-18', end: '2026-08-23', released: '2026-08-27',
+    n: 1487, moe: 2.5, method: 'Face-to-face', sponsor: null, q: 'List question: "who they would vote as president among the names listed"',
+    r: { sara: 45.8, leni: 19.5, tulfo: 13.3 }, other: '', undec: null,
+    flags: ['Presidential figures found in only one report (Manila Times, Oct 12); undecided and other names not reported there.', 'Margin of error and method from a separate Manila Times report on the same survey.'],
+    src: [['Manila Times, Oct 12 2026', 'https://www.manilatimes.net/2026/10/12/tmt-anniversary/no-clear-challenger-to-presidential-survey-frontrunner-sara/2441843'],
+          ['Manila Times, Oct 9 2026 (method)', 'https://www.manilatimes.net/2026/10/09/news/marcos-keeps-negative-duterte-positive-approval-ratings-in-aug-survey/2442347']] },
+
   { pollster: 'Momentum Research', start: '2026-07-13', end: '2026-07-16', released: '2026-08-10',
     n: 1438, moe: 2.6, method: 'Face-to-face', sponsor: null, indep: true, q: 'Closed list of 8 names',
     r: { sara: 44.2, leni: 23.8, tulfo: 12.2, risa: 2.4, bam: 2.0, go: 1.8 }, other: 'Pangilinan 1.0, Remulla 0.5', undec: 11.9,
@@ -54,7 +61,7 @@ const EL_POLLS = [
   { pollster: 'Pulse Asia', start: '2026-06-28', end: '2026-07-06', released: '2026-07-22',
     n: 2400, moe: 2, method: 'Face-to-face', sponsor: null, indep: true, q: 'List question, one answer',
     r: { sara: 49, leni: 26, tulfo: 14 }, other: 'Dizon 1, Magalong 1, Torre 0.1', undec: 9,
-    flags: [], src: [['Pulse Asia release (PDF)', 'https://pulseasia.ph/wp-content/uploads/2026/07/MR2-UB2026-2-MR-on-the-May-2028-Elections-Final.pdf']] },
+    flags: ['Pulse release gives fieldwork as "June 28 to July 3, 6, 2026"; news reports say June 28 to July 3.'], src: [['Pulse Asia release (PDF)', 'https://pulseasia.ph/wp-content/uploads/2026/07/MR2-UB2026-2-MR-on-the-May-2028-Elections-Final.pdf']] },
 
   { pollster: 'WR Numero', start: '2026-06-09', end: '2026-06-16', released: '2026-07-31',
     n: 1432, moe: 2.6, method: 'Not stated', sponsor: null, q: 'List question',
@@ -123,6 +130,8 @@ const EL_POLLS = [
 const EL_H2H = [
   { a: 'sara', b: 'leni', pollster: 'Pulse Asia', start: '2026-09-17', end: '2026-09-24', n: 2400, moe: 2, sponsor: null, va: 54, vb: 40, undec: 6.3,
     src: [['Pulse Asia (PDF)', 'https://pulseasia.ph/wp-content/uploads/2026/10/MR1-UB2026-3-MR-on-the-May-2028-Elections-Final.pdf']] },
+  { a: 'sara', b: 'leni', pollster: 'Momentum Research', start: '2026-08-18', end: '2026-08-23', n: 1487, moe: 2.5, sponsor: null, va: 58.3, vb: 33.6, undec: null,
+    src: [['Manila Times, Oct 12 2026', 'https://www.manilatimes.net/2026/10/12/tmt-anniversary/no-clear-challenger-to-presidential-survey-frontrunner-sara/2441843']] },
   { a: 'sara', b: 'leni', pollster: 'Momentum Research', start: '2026-07-13', end: '2026-07-16', n: 1438, moe: 2.6, sponsor: null, va: 54, vb: 39, undec: 7,
     src: [['SunStar', 'https://www.sunstar.com.ph/davao/sara-beats-leni-in-latest-survey']] },
   { a: 'sara', b: 'leni', pollster: 'OCTA Research', start: '2026-07-04', end: '2026-07-11', n: 1200, moe: 3, sponsor: null, va: 43, vb: 34, undec: 22,
