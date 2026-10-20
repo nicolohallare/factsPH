@@ -749,7 +749,8 @@ async function callClaude(prompt,tier='fast',max_tokens=900){
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({tier,max_tokens,messages:[{role:'user',content:prompt}]})
   });
-  return(await r.json()).content?.[0]?.text?.trim()||'';
+  const d=await r.json();
+  return (d.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('\n').trim();
 }
 
 // Helper: get best source article for a given lean

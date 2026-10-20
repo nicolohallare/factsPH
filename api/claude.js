@@ -4,11 +4,12 @@ export const config = { runtime: 'edge' };
 // arbitrary (or expensive) models with the FactsPH API key.
 //   fast  → story summaries on the Brief (many calls per visit, so cheap and quick)
 //   smart → Search / "Ask FactsPH" (one call, user-initiated, deeper analysis)
-const MODELS = {
-  fast: 'claude-haiku-5-5',
-  smart: 'claude-sonnet-5-5',
+// These models think before answering, and thinking counts toward max_tokens. "effort" keeps the
+// thinking short; the token budget leaves room for thinking plus the answer (about 1,200 tokens).
+const TIERS = {
+  fast:  { model: 'claude-haiku-5-5',  effort: 'low',    max_tokens: 3000 },
+  smart: { model: 'claude-sonnet-5-5', effort: 'medium', max_tokens: 6000 },
 };
-const MAX_TOKENS = 1500;
 const MAX_PROMPT_CHARS = 16000;
 
 const CORS = { 'Access-Control-Allow-Origin': '*' };
@@ -37,8 +38,7 @@ export default async function handler(req) {
       && typeof msgs[0].content === 'string' && msgs[0].content.length <= MAX_PROMPT_CHARS;
     if (!ok) return json({ error: 'Invalid request' }, 400);
 
-    const model = MODELS[body.tier] || MODELS.fast;
-    const max_tokens = Math.min(Math.max(Number(body.max_tokens) || 900, 100), MAX_TOKENS);
+    const { model, effort, max_tokens } = TIERS[body.tier] || TIERS.fast;
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -47,7 +47,7 @@ export default async function handler(req) {
         'x-api-key': apiKey,
         'anthropic-version': '2023-06-01',
       },
-      body: JSON.stringify({ model, max_tokens, messages: msgs }),
+      body: JSON.stringify({ model, max_tokens, output_config: { effort }, messages: msgs }),
     });
 
     const data = await response.json();
@@ -55,7 +55,10 @@ export default async function handler(req) {
       console.error('Anthropic error:', model, JSON.stringify(data));
       return json(data, response.status);
     }
-    return json(data);
+    // Send back only the answer text (drop thinking blocks), in the shape the app already reads
+    const text = (data.content || []).filter(c => c.type === 'text').map(c => c.text).join('\n').trim();
+    if (!text) console.error('Empty answer:', model, data.stop_reason, JSON.stringify(data.usage));
+    return json({ content: [{ type: 'text', text }], stop_reason: data.stop_reason, model });
   } catch (err) {
     return json({ error: err.message }, 500);
   }
