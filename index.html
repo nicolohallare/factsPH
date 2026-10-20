@@ -571,8 +571,11 @@ function cleanTitle(t){
   if(t.length>150){t=t.slice(0,150).replace(/\s+\S*$/,'')+'…';}
   return t;
 }
+// Outlets' own feeds carry all their news (sports, crime, lifestyle). Keep politics & governance only.
+const POLITICS=/senat|congress|\bhouse\b|lawmaker|\bsen\.|\brep\.|solon|marcos|duterte|\bbbm\b|palace|malaca[nñ]ang|president|\bvp\b|\bovp\b|impeach|comelec|election|\b2028\b|survey|budget|\bbill\b|\blaw\b|resolution|ombudsman|sandiganbayan|supreme court|\bsc\b|\bdoj\b|\bnbi\b|\bdilg\b|\bdfa\b|\bdpwh\b|flood control|corruption|kickback|graft|plunder|cabinet|secretary|\bexec(utive)? order|icc|hague|china|chinese|west philippine|\bwps\b|scarborough|ambassador|embassy|\bafp\b|\bpnp chief|governor|mayor|\bdeped\b|philhealth|\bsss\b|\bgsis\b|tariff|rice import|government|gov['’]t|official|hontiveros|tulfo|robredo|romualdez|escudero|sotto|lacson|cayetano|dela rosa|bato|remulla|teodoro|\bgo\b(?= says| urges)/i;
+const isPolitics=a=>a.topic!=='general'||POLITICS.test(a.title);
 // Reference sites that Google News sometimes mixes in — not news reports
-const NOT_NEWS=/britannica|wikipedia|wikiwand|encyclopedia|youtube/i;
+const NOT_NEWS=/britannica|wikipedia|wikiwand|encyclopedia|youtube|facebook|instagram|tiktok|twitter|^x$|threads|reddit/i;
 // For Sources panel display
 const SOURCES=DIRECT_SOURCES;
 const LEAN_LBL={dds:'DDS',center:'Center',admin:'Admin',pink:'Progressive',alt:'Independent'};
@@ -594,15 +597,14 @@ async function fetchRSSUrl(url,src){
   const xml=new DOMParser().parseFromString(text,'text/xml');
   const items=Array.from(xml.querySelectorAll('item'));
   if(!items.length)throw 0;
-  // Newest first before trimming (feeds aren't always in date order)
-  const byDate=(a,b)=>ts(b.querySelector('pubDate')?.textContent||'')-ts(a.querySelector('pubDate')?.textContent||'');
-  return items.sort(byDate).slice(0,10).map(item=>({
+  // Fix mislabeled times, then newest first before trimming (feeds aren't always in date order)
+  return fixFeedDates(items.map(item=>({
     title:cleanTitle(item.querySelector('title')?.textContent||''),
     link:(item.querySelector('link')?.textContent||'#').trim(),
     date:(item.querySelector('pubDate')?.textContent||'').trim(),
     source:src.name,lean:src.lean,type:src.type,
     topic:guessTopic(item.querySelector('title')?.textContent||'')
-  })).filter(i=>i.title.length>15);
+  }))).filter(i=>i.title.length>15&&isPolitics(i)).sort((a,b)=>ts(b.date)-ts(a.date)).slice(0,10);
 }
 async function fetchRSS(src){
   try{
@@ -623,7 +625,7 @@ async function fetchGNews(gn){
     if(!items.length)throw 0;
     // Google News returns results by relevance, not date: sort newest first, then keep the top 20
     const byDate=(a,b)=>ts(b.querySelector('pubDate')?.textContent||'')-ts(a.querySelector('pubDate')?.textContent||'');
-    return items.sort(byDate).slice(0,20).map(item=>{
+    return fixFeedDates(items.sort(byDate).slice(0,20).map(item=>{
       const title=(item.querySelector('title')?.textContent||'').trim();
       // Google News title format: "Headline - Source Name"
       const dashIdx=title.lastIndexOf(' - ');
@@ -638,7 +640,7 @@ async function fetchGNews(gn){
         source:srcName,lean,type:'Online',
         topic:guessTopic(headline)
       };
-    }).filter(i=>i.title.length>15&&i.source.length>1&&!NOT_NEWS.test(i.source));
+    }),false).filter(i=>i.title.length>15&&i.source.length>1&&!NOT_NEWS.test(i.source));
   }catch{return[];}
 }
 
@@ -661,6 +663,20 @@ function sim(a,b){const ka=kw(a.title),kb=kw(b.title);const i=[...ka].filter(k=>
 const TOPIC_WEIGHT={icc:6,sara:5,wps:4,elections:3,marcos:2,general:1};
 // Parse an RSS pubDate to a timestamp; unparseable dates become 0 (sorted last, never dropped)
 function ts(s){const t=Date.parse(s);return isNaN(t)?0:t;}
+// Some outlets (e.g. Inquirer) stamp Philippine time as GMT ("+0000"), which makes every item look
+// 8 hours newer than it is and pushes old stories to the top. If a feed has items dated in the
+// future, the whole feed is mislabeled: shift it back 8 hours. Anything still in the future is
+// treated as having no date (sorted last) rather than trusted.
+function fixFeedDates(list,wholeFeed=true){
+  const now=Date.now(), SLACK=10*60000, PH=8*3600000;
+  const future=wholeFeed&&list.some(a=>ts(a.date)>now+SLACK);
+  list.forEach(a=>{
+    let t=ts(a.date); if(!t) return;
+    if(future) t-=PH;
+    a.date = t>now+SLACK ? '' : new Date(t).toUTCString();
+  });
+  return list;
+}
 function cluster(arts){
   // Newest first, so each cluster's lead headline is its latest article
   arts=[...arts].sort((a,b)=>ts(b.date)-ts(a.date));
