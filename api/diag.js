@@ -68,9 +68,9 @@ const STORY={headline:'Senate panel clears OVP budget in under 20 minutes as Dut
  {source:'Manila Bulletin',lean:'admin',title:'Senate finance panel endorses P785-M OVP budget'}]};
 export default async function handler(req){
   const p=buildPrompt(STORY);
-  const model=new URL(req.url).searchParams.get('m')||'claude-haiku-5-5';
+  const q=new URL(req.url).searchParams; const model=q.get('m')||'claude-haiku-5-5'; const effort=q.get('e')||'low';
   const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':process.env.ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01'},
-    body:JSON.stringify({model,max_tokens:900,messages:[{role:'user',content:p}]})});
+    body:JSON.stringify({model,max_tokens:3000,output_config:{effort},messages:[{role:'user',content:p}]})});
   const d=await r.json();
   return new Response(JSON.stringify({status:r.status,stop_reason:d.stop_reason,usage:d.usage,blocks:(d.content||[]).map(c=>c.type),raw:(d.content||[]).map(c=>c.text).join('\n---\n'),error:d.error},null,2),{headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});
 }
