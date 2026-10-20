@@ -108,6 +108,7 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .ttag.marcos{background:rgba(32,80,160,.08);color:var(--blue)}
 .ttag.sara{background:rgba(96,64,160,.08);color:var(--purple)}
 .ttag.wps{background:var(--green-dim);color:var(--green)}
+.ttag.national{background:rgba(176,96,0,.10);color:#8a4b00}
 .sage{font-size:calc(12px*var(--ts,1));color:var(--muted);font-weight:400}
 
 /* headline */
@@ -328,6 +329,7 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
     <button class="tab" onclick="setTab('sara',this)">Sara VP</button>
     <button class="tab" onclick="setTab('wps',this)">🌊 WPS</button>
     <button class="tab" onclick="setTab('elections',this)">🗳️ 2028</button>
+    <button class="tab" onclick="setTab('national',this)">📢 National</button>
   </div>
 </header>
 
@@ -559,6 +561,7 @@ const GNEWS_SOURCES=[
   {topic:'sara',     rss:'https://news.google.com/rss/search?q=%22sara+duterte%22+impeach+philippines+when:7d&hl=en-PH&gl=PH&ceid=PH:en'},
   {topic:'wps',      rss:'https://news.google.com/rss/search?q=west+philippine+sea+china+coast+guard+when:7d&hl=en-PH&gl=PH&ceid=PH:en'},
   {topic:'elections',rss:'https://news.google.com/rss/search?q=philippines+2028+elections+presidential+survey+when:7d&hl=en-PH&gl=PH&ceid=PH:en'},
+  {topic:'national', rss:'https://news.google.com/rss/search?q=philippines+(typhoon+OR+PAGASA+OR+NDRRMC+OR+earthquake+OR+%22class+suspension%22+OR+%22oil+price%22+OR+inflation+OR+OFW)+when:3d&hl=en-PH&gl=PH&ceid=PH:en'},
 ];
 // Tidy headlines copied from social posts: "READ: … | via Reporter/GMA News Visit www…"
 function cleanTitle(t){
@@ -573,7 +576,7 @@ function cleanTitle(t){
 }
 // Outlets' own feeds carry all their news (sports, crime, lifestyle). Keep politics & governance only.
 const POLITICS=/senat|congress|\bhouse\b|lawmaker|\bsen\.|\brep\.|solon|marcos|duterte|\bbbm\b|palace|malaca[nñ]ang|president|\bvp\b|\bovp\b|impeach|comelec|election|\b2028\b|survey|budget|\bbill\b|\blaw\b|resolution|ombudsman|sandiganbayan|supreme court|\bsc\b|\bdoj\b|\bnbi\b|\bdilg\b|\bdfa\b|\bdpwh\b|flood control|corruption|kickback|graft|plunder|cabinet|secretary|\bexec(utive)? order|icc|hague|china|chinese|west philippine|\bwps\b|scarborough|ambassador|embassy|\bafp\b|\bpnp chief|governor|mayor|\bdeped\b|philhealth|\bsss\b|\bgsis\b|tariff|rice import|government|gov['’]t|official|hontiveros|tulfo|robredo|romualdez|escudero|sotto|lacson|cayetano|dela rosa|bato|remulla|teodoro|\bgo\b(?= says| urges)/i;
-const isPolitics=a=>a.topic!=='general'||POLITICS.test(a.title);
+const isPolitics=a=>a.topic!=='general'||POLITICS.test(a.title); // 'national' topic counts too
 // Reference sites that Google News sometimes mixes in — not news reports
 const NOT_NEWS=/britannica|wikipedia|wikiwand|encyclopedia|youtube|facebook|instagram|tiktok|twitter|^x$|threads|reddit/i;
 // For Sources panel display
@@ -644,6 +647,7 @@ async function fetchGNews(gn){
   }catch{return[];}
 }
 
+const NATIONAL=/typhoon|tropical (storm|depression|cyclone)|signal no|\bpagasa\b|\bndrrmc\b|earthquake|magnitude|phivolcs|volcan|taal|kanlaon|mayon|tsunami|el ni[ñn]o|la ni[ñn]a|flood|landslide|evacuat|class(es)? suspen|work suspen|no classes|state of calamity|drought|heat index|inflation|oil price|fuel price|price (hike|rollback)|rollback|\bpeso\b|bsp (rate|policy)|interest rate|rice price|price of rice|power (rate|outage|interruption)|brownout|blackout|meralco|maynilad|manila water|water (service|interruption|supply)|ofws?\b|filipino workers|filipinos (hurt|killed|injured|safe)|repatriat|dengue|outbreak|mpox|\blrt\b|\bmrt\b|holiday|minimum wage|wage hike/i;
 function guessTopic(t){
   // 2028 race stories mention Sara/Marcos too, so catch them first
   if(/2028|presidentiable|presidential (bid|race|survey|preference)|pulse asia|octa research|wr numero|tangere/i.test(t))return'elections';
@@ -652,15 +656,17 @@ function guessTopic(t){
   if(/sara.duterte|vp.sara|vice.president.*sara|impeach.*sara|sara.*impeach/i.test(t))return'sara';
   if(/west philippine|scarborough|south china sea|coast guard.*china|china.*coast guard|pcg/i.test(t))return'wps';
   if(/election|senatorial|midterm|comelec|campaign|2028|presidentiable|presidential bid|pulse asia|octa research|survey/i.test(t))return'elections';
+  // Important national news that isn't politics: disasters & weather alerts, prices, utilities, OFWs, health
+  if(NATIONAL.test(t)&&!POLITICS.test(t))return'national';
   return'general';
 }
-const TOPIC_LABELS={icc:'⚖️ ICC / Duterte',marcos:'🏛️ Marcos Admin',sara:'Sara Duterte',wps:'🌊 WPS',elections:'🗳️ 2028 Elections',general:'🇵🇭 Politics'};
+const TOPIC_LABELS={icc:'⚖️ ICC / Duterte',marcos:'🏛️ Marcos Admin',sara:'Sara Duterte',wps:'🌊 WPS',elections:'🗳️ 2028 Elections',national:'📢 National',general:'🇵🇭 Politics'};
 
 // ── CLUSTER ──
 const STOP=new Set(['the','a','an','in','of','on','at','to','for','is','are','was','were','and','but','or','with','by','as','from','that','this','has','have','its','be','been','will','not','no','after','before','says','said','over','into','their','also','more','new','amid']);
 function kw(t){return new Set(t.toLowerCase().replace(/[^\w\s]/g,'').split(/\s+/).filter(w=>w.length>3&&!STOP.has(w)));}
 function sim(a,b){const ka=kw(a.title),kb=kw(b.title);const i=[...ka].filter(k=>kb.has(k)).length,u=new Set([...ka,...kb]).size;return u?i/u:0;}
-const TOPIC_WEIGHT={icc:6,sara:5,wps:4,elections:3,marcos:2,general:1};
+const TOPIC_WEIGHT={icc:6,sara:5,wps:4,elections:3,national:3,marcos:2,general:1};
 // Parse an RSS pubDate to a timestamp; unparseable dates become 0 (sorted last, never dropped)
 function ts(s){const t=Date.parse(s);return isNaN(t)?0:t;}
 // Some outlets (e.g. Inquirer) stamp Philippine time as GMT ("+0000"), which makes every item look
@@ -690,8 +696,11 @@ function cluster(arts){
     const c=[arts[i]];used.add(i);
     for(let j=i+1;j<arts.length;j++){
       // Cluster if: same topic AND (similar title OR same non-general topic)
+      // Political topics are narrow, so a loose match groups the same story. 'national' spans unrelated
+      // events (a typhoon vs. oil prices), so it needs the same stricter match as 'general'.
+      const loose=t=>t!=='general'&&t!=='national';
       if(!used.has(j)&&arts[i].topic===arts[j].topic&&
-        (sim(arts[i],arts[j])>0.12||(arts[i].topic!=='general'&&arts[j].topic!=='general')&&sim(arts[i],arts[j])>0.06)){
+        (sim(arts[i],arts[j])>0.12||(loose(arts[i].topic)&&loose(arts[j].topic))&&sim(arts[i],arts[j])>0.06)){
         c.push(arts[j]);used.add(j);
       }
     }
@@ -789,6 +798,7 @@ Your task — generate exactly 8 fields:
 8. PINK_SUMMARY: 2–3 sentences. Based ONLY on these progressive outlet headlines: ${pinkLines} — explain how they frame the story, what they emphasize or omit, and why.
 
 If a side has no source, note that no outlet from that side covered this story and explain what that silence might mean.
+If this is not a political story (for example a typhoon, earthquake, price change or outage), do not invent a political spin: say plainly when coverage is factual and similar across outlets, and put practical details people need (where, when, what to do) in the neutral summary.
 
 ${PLAIN_STYLE}
 
@@ -847,7 +857,7 @@ function renderStories(){
   }
 
   wrap.innerHTML=list.map((s,i)=>{
-    const tc=s.topic==='icc'?'icc':s.topic==='marcos'?'marcos':s.topic==='sara'?'sara':s.topic==='wps'?'wps':'';
+    const tc=['icc','marcos','sara','wps','national'].includes(s.topic)?s.topic:'';
     const leans=[...new Set(s.sources.map(x=>x.lean))];
     const cbar=leans.map(l=>`<div class="cv cv-${l}"></div>`).join('');
     const badges=s.sources.slice(0,4).map(x=>`<span class="sbadge bd-${x.lean}">${esc(x.source.length>20?x.source.slice(0,19)+'…':x.source)}</span>`).join('')+(s.sources.length>4?`<span class="sbadge bd-center">+${s.sources.length-4}</span>`:'');
@@ -1380,7 +1390,7 @@ function renderSourcesPanel(){
   // Google News section
   grpEl.innerHTML += `<div class="gnews-row">
     <div class="gnews-row-title">🔄 Google News Aggregator (always-on fallback)</div>
-    <div class="gnews-row-desc">When direct feeds are blocked, FactsPH fetches topic-specific Google News feeds covering PH Politics, ICC/Duterte, Sara Duterte, West Philippine Sea, and the 2028 elections. Articles from Inquirer, Rappler, GMA, Manila Times, Philippine Star, ABS-CBN and more appear here automatically.</div>
+    <div class="gnews-row-desc">When direct feeds are blocked, FactsPH fetches topic-specific Google News feeds covering PH Politics, ICC/Duterte, Sara Duterte, West Philippine Sea, the 2028 elections, and major national news like typhoons and price changes. Articles from Inquirer, Rappler, GMA, Manila Times, Philippine Star, ABS-CBN and more appear here automatically.</div>
   </div>`;
 }
 
