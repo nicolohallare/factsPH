@@ -283,6 +283,11 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 .srch-foot{text-align:center;margin-top:10px;font-size:calc(13px*var(--ts,1));color:var(--muted);font-style:italic}
 .srch-result .listen-btn{margin-bottom:12px}
 .listen-all-wrap{padding:4px 12px 10px}
+.el-alert{display:block;width:calc(100% - 24px);margin:4px 12px 8px;text-align:left;border:1px solid var(--gold);background:var(--s1);border-left:5px solid var(--gold);border-radius:10px;padding:10px 12px;font-family:'IBM Plex Sans',sans-serif;font-size:calc(15px*var(--ts,1));line-height:1.45;color:var(--text);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.el-alert[hidden]{display:none}
+.el-alert .go{display:block;margin-top:4px;color:var(--gold);font-weight:700}
+.ni{position:relative}
+.ni.has-new::after{content:'NEW';position:absolute;top:0;right:calc(50% - 30px);background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.04em;padding:1px 5px;border-radius:8px}
 .listen-all{width:100%;min-height:52px;border-radius:12px;border:1px solid var(--gold);background:var(--gold-dim);color:var(--gold);font-family:'IBM Plex Sans',sans-serif;font-size:calc(16px*var(--ts,1));font-weight:700;cursor:pointer}
 .listen-all.on{background:var(--gold);color:#fffdf8}
 .sc.reading{outline:3px solid var(--gold);outline-offset:2px}
@@ -355,6 +360,7 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
   <div class="sec-line"></div>
 </div>
 
+<button class="el-alert" id="el-alert" hidden onclick="openNewSurvey()"></button>
 <div class="listen-all-wrap"><button class="listen-all" id="listen-all" onclick="listenAll()" hidden>🔊 Listen to today's news</button></div>
 <script>if('speechSynthesis' in window)document.getElementById('listen-all').hidden=false;</script>
 
@@ -1472,6 +1478,21 @@ loadNews();
   <div class="srch-result" id="srch-result" style="padding:14px 14px 100px;"></div>
 </div>
 <script src="/elections.js"></script>
+<script>
+// "New survey" alert: shown until the 2028 tab is opened on this device
+function syncSurveyAlert(){
+  const n=window.FactsElections&&FactsElections.newSurvey&&FactsElections.newSurvey();
+  const a=document.getElementById('el-alert'), nav=document.getElementById('nav-elections');
+  if(!a||!nav) return;
+  if(n){
+    a.innerHTML=`📊 <b>New presidential survey:</b> ${esc(n.pollster)} (${esc(n.dates)}). ${esc(n.top)}.<span class="go">See how it changes the race ›</span>`;
+    a.hidden=false; nav.classList.add('has-new');
+  } else { a.hidden=true; nav.classList.remove('has-new'); }
+}
+function openNewSurvey(){ showView('elections'); if(window.FactsElections) FactsElections.go('overview'); }
+window.onElectionsSeen=syncSurveyAlert;
+syncSurveyAlert();
+</script>
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {

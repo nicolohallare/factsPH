@@ -6,9 +6,11 @@
    Everything else (averages, charts, confidence) recomputes.
    Rules: only numbers you saw in a source; put every source
    link in `src`; anything odd goes in `flags`.
+   `added` = the date the survey was added to FactsPH. The app uses it
+   to show "New survey" alerts; if left out, `released` is used.
    ============================================================ */
 
-const EL_AS_OF = '2026-10-19'; // date the data below was last checked
+const EL_AS_OF = '2026-10-22'; // date the data below was last checked
 
 // ── Candidates ────────────────────────────────────────────────
 // status: 'declared' | 'out' (publicly ruled out) | 'undeclared'
@@ -45,11 +47,13 @@ const EL_POLLS = [
     flags: ['A separate scenario without Robredo and Tulfo had Baste Duterte 29, Go 26, B. Aquino 20.'],
     src: [['Manila Times', 'https://www.manilatimes.net/2026/10/07/news/robredo-baste-duterte-emerge-top-presidential-bets-in-2028-survey/2440594']] },
 
-  { pollster: 'Momentum Research', start: '2026-08-18', end: '2026-08-23', released: '2026-08-27',
+  { pollster: 'Momentum Research', start: '2026-08-18', end: '2026-08-23', released: '2026-10-12',
     n: 1487, moe: 2.5, method: 'Face-to-face', sponsor: null, q: 'List question: "who they would vote as president among the names listed"',
-    r: { sara: 45.8, leni: 19.5, tulfo: 13.3 }, other: '', undec: null,
-    flags: ['Presidential figures found in only one report (Manila Times, Oct 12); undecided and other names not reported there.', 'Margin of error and method from a separate Manila Times report on the same survey.'],
-    src: [['Manila Times, Oct 12 2026', 'https://www.manilatimes.net/2026/10/12/tmt-anniversary/no-clear-challenger-to-presidential-survey-frontrunner-sara/2441843'],
+    added: '2026-10-22', indep: true,
+    r: { sara: 45.8, leni: 19.5, tulfo: 13.3, bam: 3.9, go: 2.4, risa: 2.1 }, other: 'Remulla 0.5, Pangilinan 0.0', undec: 12.5,
+    flags: ['Reported Oct 12 (Manila Times) and Oct 22 (Daily Guardian); the full list and undecided figure are from Daily Guardian.'],
+    src: [['Daily Guardian, Oct 22 2026', 'https://www.dailyguardian.com.ph/blog/sara-duterte-still-tops-2028-poll-leni-robredo-second'],
+          ['Manila Times, Oct 12 2026', 'https://www.manilatimes.net/2026/10/12/tmt-anniversary/no-clear-challenger-to-presidential-survey-frontrunner-sara/2441843'],
           ['Manila Times, Oct 9 2026 (method)', 'https://www.manilatimes.net/2026/10/09/news/marcos-keeps-negative-duterte-positive-approval-ratings-in-aug-survey/2442347']] },
 
   { pollster: 'Momentum Research', start: '2026-07-13', end: '2026-07-16', released: '2026-08-10',
@@ -147,6 +151,8 @@ const EL_H2H = [
     src: [['OCTA Research', 'https://octaresearch.com/?p=2177']] },
   { a: 'sara', b: 'leni', pollster: 'Pulse Asia', start: '2026-02-27', end: '2026-03-02', n: 1200, moe: 2.8, sponsor: "Office of Sen. Zubiri", va: 51, vb: 43, undec: 6,
     src: [['Philstar', 'https://www.philstar.com/headlines/2026/05/05/2525809/robredo-cuts-dutertes-wide-lead-hypothetical-2028-pulse-poll']] },
+  { a: 'sara', b: 'risa', pollster: 'Momentum Research', start: '2026-08-18', end: '2026-08-23', n: 1487, moe: 2.5, sponsor: null, va: 64.9, vb: 22.6, undec: null,
+    src: [['Daily Guardian', 'https://www.dailyguardian.com.ph/blog/sara-duterte-still-tops-2028-poll-leni-robredo-second']] },
   { a: 'sara', b: 'risa', pollster: 'Pulse Asia', start: '2026-09-17', end: '2026-09-24', n: 2400, moe: 2, sponsor: null, va: 60, vb: 23, undec: 17.4,
     src: [['Pulse Asia (PDF)', 'https://pulseasia.ph/wp-content/uploads/2026/10/MR1-UB2026-3-MR-on-the-May-2028-Elections-Final.pdf']] },
   { a: 'sara', b: 'risa', pollster: 'Pulse Asia', start: '2026-06-28', end: '2026-07-06', n: 2400, moe: 2, sponsor: null, va: 60, vb: 21, undec: 19,
@@ -161,6 +167,8 @@ const EL_TIMELINE = [
   { date: '2026-04-21', text: 'Leni Robredo rules out a national run in 2028.', src: 'https://plus.inquirer.net/news/leni-rules-out-natl-run-in-28/' },
   { date: '2026-05-05', text: 'Raffy Tulfo rules out a presidential or VP run.', src: 'https://www.gmanetwork.com/news_duplicate/balitambayan/balita/986540/raffy-tulfo-walang-balak-tumakbong-pangulo-sa-2028-polls-na-puwede-niyang-makalaban-si-sara-duter/story/' },
   { date: '2026-09-23', text: 'Impeachment court sets 14 of 20 eligible senators as the votes needed to convict.', src: 'https://www.illawarramercury.com.au/story/9356262/philippine-senate-lowers-votes-to-convict-vp-duterte/' },
+  { date: '2026-10-13', text: 'Impeachment court lets prosecutors drop three of four charges against Sara Duterte; only the unexplained-wealth charge remains.', src: 'https://www.philstar.com/headlines/2026/10/13/2562940/impeach-court-grants-prosecution-bid-drop-3-4-charges-vs-vp-sara' },
+  { date: '2026-11-09', text: 'Sara Duterte’s defense begins presenting its case in the impeachment trial.', src: 'https://www.gmanetwork.com/news/topstories/nation/1005740/prosecution-drops-3-articles-retains-article-ii-in-sara-duterte-impeachment-trial/story/', future: true },
   { date: '2027-10-01', text: 'Filing of certificates of candidacy (Oct 1–8, 2027). The field becomes official.', src: 'https://en.wikipedia.org/wiki/2028_Philippine_presidential_election', future: true },
   { date: '2028-05-08', text: 'Election day.', src: 'https://en.wikipedia.org/wiki/2028_Philippine_presidential_election', future: true },
 ];
@@ -251,7 +259,68 @@ const EL = (() => {
     return { a, b, rows, va, vb, lc };
   }
 
-  return { weight, recencyW, sampleW, inAverage, used, totalW, average, ranked, single, undecAvg, listLead, h2hSummary, phi, ageDays, HALF_LIFE, WINDOW };
+  // ── Progress over time ──────────────────────────────────────
+  // A survey counts from the day it was made public (released, else fieldwork end).
+  const avail = p => Date.parse(p.released || p.end);
+  const addedOn = p => Date.parse(p.added || p.released || p.end);
+  const wAt = (p, when) => Math.pow(0.5, ((when - mid(p)) / DAY) / HALF_LIFE) * sampleW(p);
+  const poolAt = (when, skip) => EL_POLLS.filter(p => p !== skip && p.include !== false && avail(p) <= when
+    && when >= mid(p) && (when - mid(p)) / DAY <= WINDOW);
+  // The average for one candidate as it stood on a given date (same method as today's average)
+  function averageAt(key, when, skip) {
+    const rows = poolAt(when, skip).filter(p => p.r[key] != null);
+    if (!rows.length) return null;
+    let sw = 0, sv = 0;
+    rows.forEach(p => { const w = wAt(p, when); sw += w; sv += w * p.r[key]; });
+    return sv / sw;
+  }
+  // What one survey did: the average right before vs right after it came out, and its weight then and now
+  function impact(p, keys) {
+    const when = avail(p), pool = poolAt(when);
+    const tw = pool.reduce((s, q) => s + wAt(q, when), 0);
+    return {
+      p, when,
+      weightThen: pool.includes(p) ? wAt(p, when) / tw : 0,
+      weightNow: inAverage(p).ok ? weight(p) / totalW : 0,
+      moves: keys.filter(k => p.r[k] != null).map(k => ({ key: k, before: averageAt(k, when, p), after: averageAt(k, when) })),
+      // effect on TODAY's average: today's average with vs without this survey
+      today: keys.filter(k => p.r[k] != null && inAverage(p).ok).map(k => {
+        const a = average(k), b = average(k, used.filter(q => q !== p));
+        return { key: k, without: b ? b.avg : null, with: a ? a.avg : null };
+      }),
+    };
+  }
+  const updates = [...EL_POLLS].sort((a, b) => addedOn(b) - addedOn(a) || avail(b) - avail(a));
+  const latestUpdate = updates.length ? new Date(addedOn(updates[0])).toISOString().slice(0, 10) : EL_AS_OF;
+
+  // ── Chances of finishing first ──────────────────────────────
+  // Simulation: each candidate's election-day share = today's average
+  //   + survey uncertainty (how much the surveys disagree about them)
+  //   + a "swing" for everything that can change before election day (σ in points, chosen by the reader).
+  // Same random seed every time, so the numbers don't jump around between visits.
+  function rng(seed) { return () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  const gauss = r => { let u = 0; while (!u) u = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * r()); };
+  const spread = a => Math.max(1, Math.sqrt(a.parts.reduce((s, { v, share }) => s + share * (v - a.avg) ** 2, 0)));
+  const chanceCache = {};
+  function chances(swing, N = 20000) {
+    if (chanceCache[swing]) return chanceCache[swing];
+    const r = rng(2028), wins = Object.fromEntries(ranked.map(a => [a.key, 0])), sd = ranked.map(spread);
+    for (let i = 0; i < N; i++) {
+      let best = -1e9, bk = null;
+      ranked.forEach((a, j) => { const v = a.avg + gauss(r) * sd[j] + gauss(r) * swing; if (v > best) { best = v; bk = a.key; } });
+      wins[bk]++;
+    }
+    return (chanceCache[swing] = ranked.map((a, j) => ({ key: a.key, p: wins[a.key] / N, avg: a.avg, sd: sd[j] })));
+  }
+  // Two-way version for head-to-head match-ups: each side can swing by σ, so the lead swings by σ√2
+  function h2hChance(a, b, swing) {
+    const s = h2hSummary(a, b); if (!s) return null;
+    const se = s.lc ? s.lc.se : 3;
+    return phi((s.va - s.vb) / Math.sqrt(se * se + 2 * swing * swing));
+  }
+
+  return { weight, recencyW, sampleW, inAverage, used, totalW, average, ranked, single, undecAvg, listLead, h2hSummary, phi, ageDays, HALF_LIFE, WINDOW,
+    avail, addedOn, averageAt, impact, updates, latestUpdate, chances, h2hChance, spread };
 })();
 
 /* ============================================================
@@ -353,6 +422,17 @@ const EL = (() => {
   .el-hs.h{font-size:calc(12px*var(--ts,1));font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
   .el-hs span:not(:first-child){text-align:right}
   .el-formula{font-family:ui-monospace,Menlo,monospace;font-size:calc(13px*var(--ts,1));background:var(--s2);padding:8px 10px;border-radius:6px;margin:8px 0;color:var(--text);overflow-x:auto}
+  .el-newcard{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold-dim)}
+  .el-upd{padding:10px 0;border-bottom:1px solid var(--border)} .el-upd:last-child{border-bottom:none;padding-bottom:0}
+  .el-newtag{display:inline-block;background:var(--gold);color:#fffdf8;font-size:calc(11px*var(--ts,1));font-weight:700;letter-spacing:.06em;padding:1px 6px;border-radius:3px;vertical-align:2px}
+  .el-moves{display:flex;flex-direction:column;gap:3px;font-size:calc(14px*var(--ts,1));color:var(--muted2)}
+  .el-moves .el-sw{margin-right:6px}
+  .el-moves .up{color:var(--green);font-weight:600} .el-moves .dn{color:var(--red);font-weight:600} .el-moves .eq{color:var(--muted)}
+  .el-log{padding:10px 0;border-bottom:1px solid var(--border)} .el-log:last-child{border-bottom:none}
+  .el-seg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .el-seg button{min-height:44px;border:1px solid var(--border2);background:var(--s1);border-radius:8px;font-family:'IBM Plex Sans',sans-serif;font-size:calc(14px*var(--ts,1));color:var(--muted2);cursor:pointer;padding:6px}
+  .el-seg button.on{background:var(--gold);border-color:var(--gold);color:#fffdf8;font-weight:600}
+  .el-crow{padding:10px 0;border-bottom:1px solid var(--border)} .el-crow:last-of-type{border-bottom:none}
   svg.el-chart text{font-family:'IBM Plex Sans',sans-serif;font-size:calc(12px*var(--ts,1));fill:var(--muted)}
   `;
   const style = document.createElement('style'); style.textContent = css; document.head.appendChild(style);
@@ -372,9 +452,23 @@ const EL = (() => {
   </div>`;
   document.body.appendChild(panel);
 
-  const TABS = [['overview', 'Overview'], ['h2h', 'Head-to-head'], ['polls', 'All surveys'], ['trend', 'Trend'], ['pollsters', 'Pollsters'], ['method', 'Method']];
+  const TABS = [['overview', 'Overview'], ['chances', 'Chances'], ['trend', 'Progress'], ['h2h', 'Head-to-head'], ['polls', 'All surveys'], ['pollsters', 'Pollsters'], ['method', 'Method']];
   let cur = 'overview';
   const hidden = new Set();
+  const DAYMS = 864e5;
+  const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+
+  // How much can the race still change before election day? (σ, in percentage points)
+  const SWINGS = [
+    { k: 0,  label: 'If the vote were today', note: 'Only the uncertainty in today’s surveys. Assumes nothing changes before election day.' },
+    { k: 8,  label: 'Small changes', note: 'Each candidate’s share could plausibly move about 8 points either way by election day.' },
+    { k: 15, label: 'Moderate changes', note: 'About 15 points either way. Still smaller than what happened in 2016 and 2022.' },
+    { k: 25, label: 'Like 2016 & 2022', note: 'About 25 points either way, the size of the late swings in the last two elections (see below).' },
+  ];
+  let swing = (() => { const v = +store.get('factsph-swing'); return SWINGS.some(x => x.k === v) && store.get('factsph-swing') != null ? v : 25; })();
+  const PLAIN = k => C(k).name.split(' ').pop();
+  const lastSeen = () => store.get('factsph-el-seen') || '';
+  const isNew = p => new Date(EL.addedOn(p)).toISOString().slice(0, 10) > lastSeen();
 
   function tabs() {
     $('#el-tabs').innerHTML = TABS.map(([k, l]) => `<button class="el-tab${k === cur ? ' on' : ''}" onclick="FactsElections.go('${k}')">${l}</button>`).join('');
@@ -402,7 +496,8 @@ const EL = (() => {
 
     const conf = lc ? (lc.conf > .99 ? 'over 99%' : Math.round(lc.conf * 100) + '%') : '—';
     const h = EL.h2hSummary('sara', 'leni');
-    return `
+    const ch = EL.chances(swing).slice().sort((a, b) => b.p - a.p);
+    return `${whatsNew()}
       <div class="el-card">
         <div class="el-lbl">The picture right now</div>
         <div class="el-h">${esc(C(top.key).name)} leads the poll average by ${lc ? lc.lead.toFixed(1) : '—'} points.</div>
@@ -411,7 +506,7 @@ const EL = (() => {
         <div class="el-stat">
           <div><b>${EL.used.length}</b><span>surveys in the average (last 12 months)</span></div>
           <div><b>${pct(EL.undecAvg)}</b><span>average undecided / none</span></div>
-          <div><b>${conf}</b><span>confidence the leader is truly ahead today</span></div>
+          <div onclick="FactsElections.go('chances')" style="cursor:pointer"><b>${chanceTxt(ch[0].p)}</b><span>${esc(PLAIN(ch[0].key))}’s chance of finishing first (${esc(SWINGS.find(x => x.k === swing).label.toLowerCase())}) · see Chances ›</span></div>
           <div><b>${h ? pct(h.va, 0) + '–' + pct(h.vb, 0) : '—'}</b><span>Duterte vs Robredo, head-to-head avg</span></div>
         </div>
       </div>
@@ -420,6 +515,61 @@ const EL = (() => {
       <div class="el-note">This is a snapshot of preferences ${Math.round((Date.parse('2028-05-08') - Date.parse(EL_AS_OF)) / 864e5 / 30.4)} months before election day, not a forecast. In mid-2015, Grace Poe led most surveys for the 2016 race; Rodrigo Duterte, who hadn't declared yet, won.</div>
       <div class="el-card"><div class="el-lbl">Key dates</div><div class="el-tl">${EL_TIMELINE.map(t =>
         `<div class="el-tli${t.future ? ' f' : ''}"><small>${fmtD(t.date)}</small><span>${esc(t.text)}</span> <a href="${esc(t.src)}" target="_blank" rel="noopener">source ↗</a></div>`).join('')}</div></div>`;
+  }
+
+  const chanceTxt = p => p >= 0.995 ? 'over 99%' : p < 0.005 ? 'under 1%' : Math.round(p * 100) + '%';
+  const mv = (a, b) => a == null || b == null ? '' : `${pct(a)} → ${pct(b)} <span class="${b - a >= 0.05 ? 'up' : b - a <= -0.05 ? 'dn' : 'eq'}">(${pts(b - a)})</span>`;
+
+  // ── What's new: surveys added in the last 30 days, and what each did to the average ──
+  function whatsNew() {
+    const keys = EL.ranked.slice(0, 3).map(a => a.key);
+    const recent = EL.updates.filter(p => (Date.now() - EL.addedOn(p)) / DAYMS <= 30).slice(0, 3);
+    if (!recent.length) return '';
+    return `<div class="el-card el-newcard"><div class="el-lbl">What’s new · latest surveys</div>${recent.map(p => {
+      const im = EL.impact(p, keys);
+      const top = Object.entries(p.r).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k, v]) => `${esc(C(k) ? PLAIN(k) : k)} ${pct(v)}`).join(' · ');
+      const inc = EL.inAverage(p);
+      return `<div class="el-upd">
+        <div class="el-ptop"><span class="el-pname">${isNew(p) ? '<span class="el-newtag">NEW</span> ' : ''}${esc(p.pollster)}</span><span class="el-pdate">${range(p)}</span></div>
+        <div class="el-p" style="margin:4px 0 6px"><b>${top}</b></div>
+        ${inc.ok ? `<div class="el-meta" style="display:block;margin:0 0 4px">Weight in today’s average: <b>${Math.round(im.weightNow * 100)}%</b> of all surveys</div>
+        <div class="el-moves">${im.today.map(m => `<div><span class="el-sw" style="background:${C(m.key).color}"></span>${esc(PLAIN(m.key))}: average ${mv(m.without, m.with)}</div>`).join('')}</div>`
+        : `<div class="el-flag">Not counted in the average: ${esc(inc.why)}</div>`}
+        <div class="el-meta" style="display:block;margin-top:4px">Added ${fmtD(new Date(EL.addedOn(p)).toISOString().slice(0, 10), { month: 'short', day: 'numeric' })} · <a href="#" onclick="FactsElections.go('polls');return false" style="color:var(--gold)">full details ›</a></div>
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  // ── Chances of finishing first ──
+  function chancesView() {
+    const res = EL.chances(swing).slice().sort((a, b) => b.p - a.p);
+    const S = SWINGS.find(x => x.k === swing);
+    const rows = res.map(r => {
+      const c = C(r.key), [sl, sc] = STATUS[c.status];
+      return `<div class="el-crow">
+        <div class="el-rtop"><div class="el-name"><span class="el-sw" style="background:${c.color}"></span>${esc(c.name)} <span class="el-st ${sc}">${sl}</span></div><div class="el-num">${chanceTxt(r.p)}</div></div>
+        <div class="el-bar"><div class="el-fill" style="width:${Math.max(r.p * 100, 0.6)}%;background:${c.color}"></div></div>
+        <div class="el-meta"><span>Poll average ${pct(r.avg)}</span><span>surveys disagree by ±${r.sd.toFixed(1)}</span></div>
+      </div>`;
+    }).join('');
+    const hh = [['sara', 'leni'], ['sara', 'risa']].map(([a, b]) => { const p = EL.h2hChance(a, b, swing); return p == null ? '' :
+      `<div class="el-hs"><span>${esc(PLAIN(a))} vs ${esc(PLAIN(b))}</span><span></span><span>${esc(PLAIN(a))}</span><span><b>${chanceTxt(p)}</b></span></div>`; }).join('');
+    return `<div class="el-card">
+      <div class="el-lbl">Chance of finishing first</div>
+      <div class="el-seg" role="group" aria-label="How much can the race change">${SWINGS.map(x => `<button class="${x.k === swing ? 'on' : ''}" onclick="FactsElections.swing(${x.k})">${esc(x.label)}</button>`).join('')}</div>
+      <p class="el-p" style="margin:8px 0 10px">${esc(S.note)}</p>
+      ${rows}
+      <div class="el-meta" style="display:block;margin-top:8px">Based on 20,000 simulated elections using the poll averages. Candidates asked about in only one survey are left out.</div>
+    </div>
+    <div class="el-card"><div class="el-lbl">One-on-one match-ups · same assumption</div>
+      <div class="el-hs h"><span>Match-up</span><span></span><span>Chance for</span><span></span></div>${hh}
+      <p class="el-p" style="margin-top:8px">From the head-to-head surveys, where voters choose between only two names.</p></div>
+    <div class="el-note"><b>Read this before trusting any percentage.</b> Robredo and Tulfo have said they won’t run, and no one has filed yet; that happens in October 2027. Sara Duterte’s impeachment trial is ongoing, and a conviction would bar her from running. None of this is in the numbers above.</div>
+    <div class="el-card"><div class="el-lbl">Why the swing matters so much</div>
+      <p class="el-p">In the last two elections, the leader eight months out did not win:</p>
+      <p class="el-p"><b>2016:</b> In September 2015, Pulse Asia had Grace Poe ahead at 26% and Rodrigo Duterte at 16%. Duterte won with 39%, a 23-point rise. <span class="el-src"><a href="https://newsinfo.inquirer.net/725880/poe-leads-pulse-asia-poll-roxas-binay-duterte-tied-in-2nd-place" target="_blank" rel="noopener">Inquirer ↗</a> · <a href="https://en.wikipedia.org/wiki/2016_Philippine_presidential_election" target="_blank" rel="noopener">results ↗</a></span></p>
+      <p class="el-p"><b>2022:</b> In September 2021, Pulse Asia had Sara Duterte ahead at 20%, Bongbong Marcos at 15% and Leni Robredo at 8%. Sara Duterte ran for vice president instead; Marcos won with 58.8%, a 44-point rise, and Robredo got 27.9%. <span class="el-src"><a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Philippine_presidential_election" target="_blank" rel="noopener">polls & results ↗</a></span></p>
+      <p class="el-p">That is why “Like 2016 & 2022” is the default here. Today we are ${Math.round((Date.parse('2028-05-08') - Date.parse(EL_AS_OF)) / DAYMS / 30.4)} months out, even earlier than those comparisons.</p></div>`;
   }
 
   // ── Head-to-head ──
@@ -479,36 +629,52 @@ const EL = (() => {
       }).join('');
   }
 
-  // ── Trend chart ──
+  // ── Progress: the average as it stood on each date, and what each survey did to it ──
   function trend() {
     const keys = ['sara', 'leni', 'tulfo'];
-    const pts_ = EL_POLLS.filter(p => p.include !== false);
-    const t0 = Date.parse('2023-03-01'), t1 = Date.parse(EL_AS_OF) + 20 * 864e5;
+    const t0 = Date.parse('2024-01-01'), t1 = Date.parse(EL_AS_OF);
     const W = 360, H = 230, L = 26, R = 8, T = 10, B = 22;
     const x = t => L + (t - t0) / (t1 - t0) * (W - L - R), y = v => T + (1 - v / 60) * (H - T - B);
     const mid = p => (Date.parse(p.start) + Date.parse(p.end)) / 2;
     let g = '';
     [0, 10, 20, 30, 40, 50, 60].forEach(v => g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--border)" stroke-width="${v ? .6 : 1}"/><text x="${L - 4}" y="${y(v) + 3}" text-anchor="end">${v}</text>`);
-    ['2024', '2025', '2026'].forEach(yr => { const t = Date.parse(yr + '-01-01'); g += `<line x1="${x(t)}" x2="${x(t)}" y1="${T}" y2="${H - B}" stroke="var(--border)" stroke-width=".6" stroke-dasharray="2 3"/><text x="${x(t)}" y="${H - 8}" text-anchor="middle">${yr}</text>`; });
+    ['2025', '2026'].forEach(yr => { const t = Date.parse(yr + '-01-01'); g += `<line x1="${x(t)}" x2="${x(t)}" y1="${T}" y2="${H - B}" stroke="var(--border)" stroke-width=".6" stroke-dasharray="2 3"/><text x="${x(t)}" y="${H - 8}" text-anchor="middle">${yr}</text>`; });
+    g += `<text x="${x(t0) + 2}" y="${H - 8}">2024</text>`;
     keys.filter(k => !hidden.has(k)).forEach(k => {
-      const c = C(k), ps = pts_.filter(p => p.r[k] != null);
-      // Smoothed poll-of-polls: Gaussian kernel (σ = 75 days) weighted by sample size
-      const line = [];
-      for (let t = t0; t <= t1; t += 14 * 864e5) {
-        let sw = 0, sv = 0;
-        ps.forEach(p => { const d = (t - mid(p)) / 864e5; const w = Math.exp(-d * d / (2 * 75 * 75)) * Math.sqrt(p.n / 1200); sw += w; sv += w * p.r[k]; });
-        line.push(sw > .25 ? [t, sv / sw] : null);
-      }
+      const c = C(k);
+      // step through time weekly; the average only changes when a new survey comes out (and slowly as weights age)
       let path = '', pen = false;
-      line.forEach(pt => { if (!pt) { pen = false; return; } path += (pen ? 'L' : 'M') + x(pt[0]).toFixed(1) + ',' + y(pt[1]).toFixed(1); pen = true; });
-      g += `<path d="${path}" fill="none" stroke="${c.color}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>`;
-      ps.forEach(p => g += `<circle cx="${x(mid(p)).toFixed(1)}" cy="${y(p.r[k]).toFixed(1)}" r="3.2" fill="${c.color}" fill-opacity=".35" stroke="${c.color}" stroke-width="1"><title>${esc(c.name)} ${p.r[k]}% · ${esc(p.pollster)} · ${range(p)}</title></circle>`);
+      for (let t = t0; t <= t1 + 1; t += 7 * DAYMS) {
+        const v = EL.averageAt(k, Math.min(t, t1));
+        if (v == null) { pen = false; continue; }
+        path += (pen ? 'L' : 'M') + x(Math.min(t, t1)).toFixed(1) + ',' + y(v).toFixed(1); pen = true;
+      }
+      g += `<path d="${path}" fill="none" stroke="${c.color}" stroke-width="2.6" stroke-linejoin="round" opacity=".95"/>`;
+      EL_POLLS.filter(p => p.include !== false && p.r[k] != null && mid(p) >= t0).forEach(p =>
+        g += `<circle cx="${x(mid(p)).toFixed(1)}" cy="${y(p.r[k]).toFixed(1)}" r="2.6" fill="${c.color}" fill-opacity=".25" stroke="${c.color}" stroke-opacity=".6" stroke-width=".8"><title>${esc(c.name)} ${p.r[k]}% · ${esc(p.pollster)} · ${range(p)}</title></circle>`);
     });
     const chips = keys.map(k => `<button class="el-chip${hidden.has(k) ? ' off' : ''}" onclick="FactsElections.toggle('${k}')"><span class="el-sw" style="background:${C(k).color}"></span>${esc(C(k).name)}</button>`).join('');
-    return `<div class="el-card"><div class="el-lbl">Support over time · list questions, 2023–2026</div>
+
+    // Change log: every survey in the 12-month window, newest first
+    const log = EL_POLLS.filter(p => p.include !== false && (Date.parse(EL_AS_OF) - EL.avail(p)) / DAYMS <= 400)
+      .sort((a, b) => EL.avail(b) - EL.avail(a)).map(p => {
+        const im = EL.impact(p, keys);
+        return `<div class="el-log">
+          <div class="el-ptop"><span class="el-pname">${esc(p.pollster)}</span><span class="el-pdate">out ${fmtD(new Date(im.when).toISOString().slice(0, 10), { month: 'short', day: 'numeric', year: 'numeric' })}</span></div>
+          <div class="el-meta" style="display:block;margin:2px 0 4px">Weight when it came out: <b>${Math.round(im.weightThen * 100)}%</b> · today: <b>${Math.round(im.weightNow * 100)}%</b> <span style="color:var(--muted)">(newer surveys take over as it ages)</span></div>
+          <div class="el-moves">${im.moves.map(m => `<div><span class="el-sw" style="background:${C(m.key).color}"></span>${esc(PLAIN(m.key))} ${pct(p.r[m.key])} → average ${m.before == null ? `starts at ${pct(m.after)}` : mv(m.before, m.after)}</div>`).join('')}</div>
+        </div>`;
+      }).join('');
+
+    const now = keys.map(k => ({ k, v: EL.averageAt(k, Date.parse(EL_AS_OF)), v3: EL.averageAt(k, Date.parse(EL_AS_OF) - 90 * DAYMS), v12: EL.averageAt(k, Date.parse(EL_AS_OF) - 365 * DAYMS) }));
+    return `<div class="el-card"><div class="el-lbl">The poll average over time</div>
       <div class="el-chips">${chips}</div>
-      <svg class="el-chart" viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Poll trend chart">${g}</svg>
-      <p class="el-p" style="margin-top:6px">Each dot is one survey. The line is a smoothed average of nearby surveys, weighted by sample size. Gaps mean no survey asked about that name, not zero support.</p></div>
+      <svg class="el-chart" viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Poll average over time">${g}</svg>
+      <p class="el-p" style="margin-top:6px">Lines show the weighted average as it stood on each date, using only surveys public by then. Faint dots are individual surveys.</p>
+      <div style="margin-top:8px"><div class="el-hs h"><span>Average</span><span>now</span><span>3 mo ago</span><span>1 yr ago</span></div>
+      ${now.map(n => `<div class="el-hs"><span><span class="el-sw" style="background:${C(n.k).color}"></span> ${esc(C(n.k).name)}</span><span><b>${pct(n.v)}</b></span><span>${pct(n.v3)}</span><span>${pct(n.v12)}</span></div>`).join('')}</div></div>
+      <div class="el-card"><div class="el-lbl">What each survey did to the average</div>
+      <p class="el-p" style="margin-bottom:8px">Newest first. Each row shows that survey's numbers and how the average moved the day it came out.</p>${log}</div>
       <div class="el-card"><div class="el-lbl">What changed</div>
       <p class="el-p">In 2024, Raffy Tulfo twice matched or edged Sara Duterte (Pulse Asia, March: 35% vs 34%; WR Numero, September: tied at 24%). Since 2025 Duterte has led every survey, and Robredo has overtaken Tulfo for second in most 2026 rounds.</p>
       <p class="el-p">Duterte's numbers also depend heavily on the list: 33% on OCTA's 26-name list vs 50% on Pulse Asia's shorter list in September 2026.</p></div>`;
@@ -562,6 +728,10 @@ const EL = (() => {
       <p class="el-p">For every survey that asked about both of the top two, we take the gap between them and its sampling error. We then pool the gaps with the same weights. Two sources of error are measured: sampling error inside each survey, and disagreement between surveys. We use whichever is larger.</p>
       ${lc ? `<div class="el-formula">lead ${lc.lead.toFixed(1)} pts · sampling SE ${lc.seSampling.toFixed(2)} · between-survey SE ${lc.seBetween.toFixed(2)}<br>confidence = Φ(lead ÷ SE) = ${(lc.conf * 100).toFixed(lc.conf > .999 ? 2 : 1)}%</div>` : ''}
       <p class="el-p">This answers "is the leader really ahead in today's surveys?" It is not a chance of winning in May 2028: it can't account for who actually files, the impeachment outcome, alliances, or how 19 months of campaigning moves voters.</p></div>
+      <div class="el-card"><div class="el-lbl">How the Chances tab works</div>
+      <p class="el-p">We simulate the election 20,000 times. In each run, every candidate's share starts at their poll average and moves by two random amounts: one for how much the surveys disagree about them, and one for how much the race can change before election day (the "swing" you choose). Whoever is highest wins that run. A candidate's chance is the share of runs they win.</p>
+      <div class="el-formula">share = average + N(0, survey disagreement) + N(0, swing)</div>
+      <p class="el-p">Swing choices: 0, 8, 15 or 25 points. The default, 25, matches the size of the late moves in 2016 and 2022. The model can't know who will actually file, the impeachment outcome, or alliances, so treat these as "what the surveys imply under this assumption", not predictions.</p></div>
       <div class="el-card"><div class="el-lbl">What gets included</div>
       <p class="el-p">Published surveys from named firms with a fieldwork date and sample size. Commissioned surveys are included and flagged. A survey stays out of the average if it left out a front-runner, if its figures can't be confirmed, or if it's over a year old. Excluded surveys still appear on the All surveys tab, with the reason.</p>
       <p class="el-p">Not included: online "polls" anyone can vote in, social media engagement counts, and unsourced survey images (Rappler has fact-checked AI-generated ones).</p></div>
@@ -569,11 +739,21 @@ const EL = (() => {
       <p class="el-p">Where sources disagree, the conflict is noted on that survey's card along with the figure we used. Spotted an error or a survey we missed? Email <a href="mailto:hello@factsph.app?subject=2028%20polls%20correction">hello@factsph.app</a>.</p></div>`;
   }
 
-  const VIEWS = { overview, h2h, polls, trend, pollsters, method };
+  const VIEWS = { overview, chances: chancesView, h2h, polls, trend, pollsters, method };
   function render() { tabs(); $('#el-body').innerHTML = VIEWS[cur](); }
+  // A survey added since this device last opened the 2028 tab (and within 14 days) counts as "new"
+  function newSurvey() {
+    const p = EL.updates[0];
+    if (!p || (Date.now() - EL.addedOn(p)) / DAYMS > 14 || !isNew(p)) return null;
+    const top = Object.entries(p.r).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k, v]) => `${C(k) ? PLAIN(k) : k} ${pct(v)}`).join(', ');
+    return { pollster: p.pollster, dates: range(p), top };
+  }
 
   window.FactsElections = {
-    open() { panel.style.display = 'block'; render(); panel.scrollTop = 0; if (location.hash !== '#2028') history.replaceState(null, '', '#2028'); },
+    open() { panel.style.display = 'block'; render(); panel.scrollTop = 0; if (location.hash !== '#2028') history.replaceState(null, '', '#2028');
+      store.set('factsph-el-seen', EL.latestUpdate); if (window.onElectionsSeen) window.onElectionsSeen(); },
+    newSurvey,
+    swing(k) { swing = k; store.set('factsph-swing', String(k)); render(); },
     close() { panel.style.display = 'none'; if (location.hash === '#2028') history.replaceState(null, '', location.pathname); },
     go(k) { cur = k; render(); panel.scrollTop = 0; },
     toggle(k) { hidden.has(k) ? hidden.delete(k) : hidden.add(k); render(); },
