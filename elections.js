@@ -10,7 +10,7 @@
    to show "New survey" alerts; if left out, `released` is used.
    ============================================================ */
 
-const EL_AS_OF = '2026-10-22'; // date the data below was last checked
+const EL_AS_OF = '2026-10-29'; // date the data below was last checked
 
 // ── Candidates ────────────────────────────────────────────────
 // status: 'declared' | 'out' (publicly ruled out) | 'undeclared'
@@ -35,6 +35,14 @@ const EL_CANDS = {
 // undec = don't know + refused + none.  indep:true only when a source says it wasn't commissioned.  include:false keeps a poll
 // out of the average (reason in `exclude`) but still shows it.
 const EL_POLLS = [
+  { pollster: 'Momentum Research', start: '2026-10-16', end: '2026-10-19', released: '2026-10-27',
+    n: 1401, moe: 2.6, method: 'Face-to-face', sponsor: null, indep: true, q: 'Two-way match-up: Robredo vs. Baste Duterte (Sara Duterte not in this question)',
+    added: '2026-10-29',
+    r: { leni: 45.7 }, other: 'Baste Duterte 43.2', undec: 11,
+    include: false, exclude: 'A two-way Robredo vs. Baste Duterte question without Sara Duterte, so it is not comparable with the list surveys. The same survey had Sara Duterte leading two- and three-way match-ups by more than 20 points at about 44%, but exact figures were not published in any source we could open.',
+    flags: ['Undecided = 6.4 unsure + 4.6 declined.', 'Only one source opened (Iloilo Metropolitan Times, Oct 27); it cites the Momentum Research dashboard. Release date is the earliest report found.'],
+    src: [['Iloilo Metropolitan Times, Oct 27 2026', 'https://www.imtnews.ph/filipinos-split-between-robredo-baste-duterte-in-two-way-race-for-president-survey/']] },
+
   { pollster: 'Pulse Asia', start: '2026-09-17', end: '2026-09-24', released: '2026-10-12',
     n: 2400, moe: 2, method: 'Face-to-face', sponsor: null, indep: true, q: 'List question: "whom would you vote for as President"',
     r: { sara: 50, leni: 26, tulfo: 12, risa: 3 }, other: 'Teodoro 1, Dizon 1, Magalong 0.3, others 0.2', undec: 7,
