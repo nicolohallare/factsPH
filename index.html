@@ -150,6 +150,10 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
 
 /* loading state */
 .bias-phrase.loading{opacity:.35;font-style:normal}
+.bias-none{font-size:calc(14px*var(--ts,1));color:var(--muted);line-height:1.5;padding:6px 2px 0}
+.bias-row.none{background:transparent!important;border-style:dashed!important;cursor:default}
+.bias-row.none .bias-chevron{display:none}
+.bias-row.none .bias-phrase{font-style:normal;color:var(--muted)}
 
 /* ── SOURCES FOOTER ── */
 .src-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);cursor:pointer}
@@ -499,7 +503,7 @@ function listenStory(i){
   const card=document.getElementById('sc-'+i);
   const steps=[{text:()=>txt(card?.querySelector('.shl'))+'. '+g('ns-'+i)+' '+g('nl-'+i)}];
   [['admin','Administration-leaning outlets'],['dds','Pro-Duterte outlets'],['pink','Progressive outlets']].forEach(([k,lbl])=>{
-    steps.push({text:()=>{const ph=g(k+'-phrase-'+i);return ph?`${lbl}: ${ph}. ${g(k+'-sum-'+i)}`:'';}});
+    steps.push({text:()=>{if(document.getElementById(k+'-row-'+i)?.classList.contains('none'))return'';const ph=g(k+'-phrase-'+i);return ph&&ph!=='—'?`${lbl}: ${ph}. ${g(k+'-sum-'+i)}`:'';}});
   });
   play('story-'+i,document.getElementById('ls-'+i),steps);
 }
@@ -582,9 +586,14 @@ function cleanTitle(t){
 }
 // Outlets' own feeds carry all their news (sports, crime, lifestyle). Keep politics & governance only.
 const POLITICS=/senat|congress|\bhouse\b|lawmaker|\bsen\.|\brep\.|solon|marcos|duterte|\bbbm\b|palace|malaca[nñ]ang|president|\bvp\b|\bovp\b|impeach|comelec|election|\b2028\b|survey|budget|\bbill\b|\blaw\b|resolution|ombudsman|sandiganbayan|supreme court|\bsc\b|\bdoj\b|\bnbi\b|\bdilg\b|\bdfa\b|\bdpwh\b|flood control|corruption|kickback|graft|plunder|cabinet|secretary|\bexec(utive)? order|icc|hague|china|chinese|west philippine|\bwps\b|scarborough|ambassador|embassy|\bafp\b|\bpnp chief|governor|mayor|\bdeped\b|philhealth|\bsss\b|\bgsis\b|tariff|rice import|government|gov['’]t|official|hontiveros|tulfo|robredo|romualdez|escudero|sotto|lacson|cayetano|dela rosa|bato|remulla|teodoro|\bgo\b(?= says| urges)/i;
-const isPolitics=a=>a.topic!=='general'||POLITICS.test(a.title); // 'national' topic counts too
+// Foreign politics (e.g. US elections) isn't Philippine news unless it mentions the Philippines
+const FOREIGN=/\b(trump|biden|democrats?|republicans?|white house|ukraine|gaza|israel|kremlin|putin)\b/i, PH_CTX=/philippin|filipino|pinoy|\bph\b|manila|marcos|duterte|ofw|pinas/i;
+const isForeign=t=>(FOREIGN.test(t)||/\bU\.?S\.?\b/.test(t))&&!PH_CTX.test(t);
+// Small earthquakes (below magnitude 5) are routine and not national news
+const minorQuake=t=>{const m=String(t).match(/magnitude\s*(\d+(?:\.\d)?)|mag\.?\s*(\d+(?:\.\d)?)|(\d+(?:\.\d)?)[- ]magnitude/i);const v=m&&parseFloat(m[1]||m[2]||m[3]);return /earthquake|quake|lindol/i.test(t)&&v&&v<5;};
+const isPolitics=a=>!isForeign(a.title)&&!minorQuake(a.title)&&(a.topic!=='general'||POLITICS.test(a.title)); // 'national' topic counts too
 // Reference sites that Google News sometimes mixes in — not news reports
-const NOT_NEWS=/britannica|wikipedia|wikiwand|encyclopedia|youtube|facebook|instagram|tiktok|twitter|^x$|threads|reddit/i;
+const NOT_NEWS=/britannica|wikipedia|wikiwand|encyclopedia|youtube|facebook|instagram|tiktok|twitter|^x$|threads|reddit|volcano ?discovery|earthquake ?(track|list|report)|newswav/i;
 // For Sources panel display
 const SOURCES=DIRECT_SOURCES;
 const LEAN_LBL={dds:'DDS',center:'Center',admin:'Admin',pink:'Progressive',alt:'Independent'};
@@ -634,7 +643,7 @@ async function fetchGNews(gn){
     if(!items.length)throw 0;
     // Google News returns results by relevance, not date: sort newest first, then keep the top 20
     const byDate=(a,b)=>ts(b.querySelector('pubDate')?.textContent||'')-ts(a.querySelector('pubDate')?.textContent||'');
-    return fixFeedDates(items.sort(byDate).slice(0,20).map(item=>{
+    return fixFeedDates(items.sort(byDate).slice(0,gn.max||20).map(item=>{
       const title=(item.querySelector('title')?.textContent||'').trim();
       // Google News title format: "Headline - Source Name"
       const dashIdx=title.lastIndexOf(' - ');
@@ -649,7 +658,7 @@ async function fetchGNews(gn){
         source:srcName,lean,type:'Online',
         topic:guessTopic(headline)
       };
-    }),false).filter(i=>i.title.length>15&&i.source.length>1&&!NOT_NEWS.test(i.source));
+    }),false).filter(i=>i.title.length>15&&i.source.length>1&&!NOT_NEWS.test(i.source)&&!isForeign(i.title));
   }catch{return[];}
 }
 
@@ -670,6 +679,64 @@ const TOPIC_LABELS={icc:'⚖️ ICC / Duterte',marcos:'🏛️ Marcos Admin',sar
 
 // ── CLUSTER ──
 const STOP=new Set(['the','a','an','in','of','on','at','to','for','is','are','was','were','and','but','or','with','by','as','from','that','this','has','have','its','be','been','will','not','no','after','before','says','said','over','into','their','also','more','new','amid']);
+// ── FIND OTHER OUTLETS' COVERAGE ──
+// Newest stories are often from one outlet. Search Google News (last 3 days) for the same headline
+// and add other outlets' versions, so each side's framing can be compared.
+const srcKey=n=>String(n||'').toLowerCase().replace(/^the /,'').replace(/\.(com|net|org|gov)(\.ph)?$|\.ph$/,'')
+  .replace('philstar','philippine star').replace(/[^a-z]/g,'');
+function searchWords(t){
+  return t.replace(/[‘’'"“”]/g,'').replace(/[^\w\s-]/g,' ').split(/\s+/)
+    .filter(w=>w.length>2&&!STOP.has(w.toLowerCase())).slice(0,7).join(' ');
+}
+// 2–3 most distinctive words: names and places first (capitalized mid-headline), then other specific words
+function keyWords(t){
+  const words=String(t).replace(/n['’]t\b/g,'').replace(/['’]s\b/g,'').replace(/[^\w\s-]/g,' ').split(/\s+/).filter(Boolean);
+  const GENERIC=/^(says|said|wants|seeks|urges|calls|asks|vows|backs|slams|hits|did|you|let|out|watch|look|read|breaking|news|update|live)$/i;
+  const ok=w=>w.length>2&&!STOP.has(w.toLowerCase())&&!GENERIC.test(w);
+  // names and places (capitalized after the first word, or acronyms like BJMP) first, then other specific words
+  const proper=words.filter((w,i)=>ok(w)&&(/^[A-Z]{2,}$/.test(w)||(i>0&&/^[A-Z]/.test(w))));
+  const rest=words.filter(w=>ok(w)&&!COMMON.has(w.toLowerCase())&&!proper.includes(w));
+  return [...new Set([...proper,...rest])].slice(0,3).join(' ');
+}
+// Each side's own outlets, for a targeted search when a story has no coverage from that side yet
+const SIDE_SITES={
+  admin:['pna.gov.ph','mb.com.ph','ptvnews.ph'],
+  dds:['manilatimes.net','manilastandard.net'],
+  pink:['rappler.com','verafiles.org','pcij.org','tribune.net.ph'],
+};
+const GN=q=>`https://news.google.com/rss/search?q=${q}&hl=en-PH&gl=PH&ceid=PH:en`;
+async function enrichStory(s){
+  const missing=l=>!s.sources.some(x=>x.lean===l);
+  const need=['admin','dds','pink'].filter(missing);
+  if(!need.length) return;
+  const sites=need.flatMap(l=>SIDE_SITES[l]).map(d=>'site:'+d).join(' OR ');
+  const [broad,sides]=await Promise.all([
+    fetchGNews({topic:'match',max:40,rss:GN(encodeURIComponent(searchWords(s.headline))+'+when:3d')}),
+    fetchGNews({topic:'match',max:60,rss:GN(encodeURIComponent(keyWords(s.headline)+' ('+sites+')')+'+when:3d')}),
+  ]);
+  const now=Date.now(), recent=a=>ts(a.date)&&now-ts(a.date)<=4*86400000;
+  const have=new Set(s.sources.map(x=>srcKey(x.source)));
+  // the missing sides first, newest first; a candidate joins only if it is the same story as something already in the card
+  const pool=[...sides,...broad].filter(recent).sort((a,b)=>(missing(b.lean)-missing(a.lean))||(ts(b.date)-ts(a.date)));
+  for(let pass=0;pass<2;pass++) pool.forEach(a=>{
+    if(s.sources.length>=8||have.has(srcKey(a.source))) return;
+    if(!s.sources.some(x=>sameStory(x,a))) return;
+    a.topic=s.topic; s.sources.push(a); have.add(srcKey(a.source));
+  });
+}
+async function enrichStories(list){
+  // run all searches at once; give up waiting after 7 seconds so the page never hangs
+  await Promise.race([Promise.allSettled(list.map(enrichStory)),new Promise(r=>setTimeout(r,7000))]);
+}
+// Same story? Compare the distinctive words of two headlines (names, places, specific terms).
+// Words that appear in most political headlines don't count, and "Romualdez's" counts as "Romualdez".
+const COMMON=new Set(['senate','senator','senators','house','court','government','govt','president','palace','marcos','duterte','philippines','philippine','says','said','wants','seeks','urges','calls','asks','vows','backs','slams','hits','did','you','let','out','who','what','why','how','its','are','was','will','can','may','than','more','first','last','new','not','but','his','her','they','them','just','now','today','news','update','report','reports','amid','over','after','with','from','into','about','against','before','during','under','still','says','told','tells','claims','claim']);
+const toks=t=>new Set(String(t||'').toLowerCase().replace(/['’]s\b/g,'').replace(/[^\w\s]/g,' ').split(/\s+/).filter(w=>w.length>2&&!STOP.has(w)&&!COMMON.has(w)));
+function sameStory(a,b){
+  const A=toks(a.title),B=toks(b.title); let n=0; A.forEach(w=>{if(B.has(w))n++;});
+  const u=new Set([...A,...B]).size;
+  return n>=2||(u&&n/u>=0.3);
+}
 function kw(t){return new Set(t.toLowerCase().replace(/[^\w\s]/g,'').split(/\s+/).filter(w=>w.length>3&&!STOP.has(w)));}
 function sim(a,b){const ka=kw(a.title),kb=kw(b.title);const i=[...ka].filter(k=>kb.has(k)).length,u=new Set([...ka,...kb]).size;return u?i/u:0;}
 const TOPIC_WEIGHT={icc:6,sara:5,wps:4,elections:3,national:3,marcos:2,general:1};
@@ -701,12 +768,8 @@ function cluster(arts){
     if(used.has(i))continue;
     const c=[arts[i]];used.add(i);
     for(let j=i+1;j<arts.length;j++){
-      // Cluster if: same topic AND (similar title OR same non-general topic)
-      // Political topics are narrow, so a loose match groups the same story. 'national' spans unrelated
-      // events (a typhoon vs. oil prices), so it needs the same stricter match as 'general'.
-      const loose=t=>t!=='general'&&t!=='national';
-      if(!used.has(j)&&arts[i].topic===arts[j].topic&&
-        (sim(arts[i],arts[j])>0.12||(loose(arts[i].topic)&&loose(arts[j].topic))&&sim(arts[i],arts[j])>0.06)){
+      // Group only articles about the same story, and only one article per outlet in a card
+      if(!used.has(j)&&sameStory(arts[i],arts[j])&&!c.some(x=>srcKey(x.source)===srcKey(arts[j].source))){
         c.push(arts[j]);used.add(j);
       }
     }
@@ -804,7 +867,7 @@ Your task — generate exactly 8 fields:
 7. PINK_PHRASE: Max 9 words — the angle/spin in the progressive/Pinklawan headlines below.
 8. PINK_SUMMARY: 2–3 sentences. Based ONLY on these progressive outlet headlines: ${pinkLines} — explain how they frame the story, what they emphasize or omit, and why.
 
-If a side has no source, note that no outlet from that side covered this story and explain what that silence might mean.
+If a side has no source above, write exactly "NONE" for both that side's PHRASE and SUMMARY. Do not guess how that side would frame it.
 If this is not a political story (for example a typhoon, earthquake, price change or outage), do not invent a political spin: say plainly when coverage is factual and similar across outlets, and put practical details people need (where, when, what to do) in the neutral summary.
 
 ${PLAIN_STYLE}
@@ -821,7 +884,7 @@ PINK_SUMMARY: [paragraph]`;
 
   try{
     const t=await callClaude(p);
-    const get=(key,next)=>t.match(new RegExp(`${key}:\\s*(.+?)(?=\\n${next}:|$)`,'s'))?.[1]?.trim()||'';
+    const get=(key,next)=>{const v=t.match(new RegExp(`${key}:\\s*(.+?)(?=\\n${next}:|$)`,'s'))?.[1]?.trim().replace(/^["“]|["”]$/g,'')||'';return /^none\.?$/i.test(v)?'':v;};
     return{
       neutralShort: get('NEUTRAL_SHORT','NEUTRAL_LONG') || story.headline,
       neutralLong:  get('NEUTRAL_LONG','ADMIN_PHRASE'),
@@ -846,6 +909,8 @@ PINK_SUMMARY: [paragraph]`;
 }
 
 // ── RENDER ──
+const SIDE_NAME={admin:'pro-administration',dds:'pro-Duterte',pink:'progressive'};
+const NO_SIDE={admin:'No pro-administration outlet has reported this yet.',dds:'No pro-Duterte outlet has reported this yet.',pink:'No progressive outlet has reported this yet.'};
 function getFiltered(){
   return currentTab==='all'?allStories:allStories.filter(s=>s.topic===currentTab);
 }
@@ -871,9 +936,11 @@ function renderStories(){
     const srcRows=s.sources.map(x=>`<div class="src-row" onclick="window.open('${esc(x.link)}','_blank')"><div class="src-bar lb-${x.lean}"></div><div class="src-info"><div class="src-name">${esc(x.source)}</div><div class="src-type">${esc(x.type)} · ${LEAN_LBL[x.lean]||x.lean}</div><div class="src-hl">${esc(x.title.slice(0,72))}${x.title.length>72?'…':''}</div></div><span class="src-ext">↗</span></div>`).join('');
 
     const isLoaded=!!s.neutralShort;
-    const adminPhraseTxt=s.adminPhrase||'Loading…';
-    const ddsPhraseTxt=s.ddsPhrase||'Loading…';
-    const pinkPhraseTxt=s.pinkPhrase||'Loading…';
+    const has=l=>s.sources.some(x=>x.lean===l);
+    const none=l=>has(l)?'':' none';
+    const adminPhraseTxt=has('admin')?(s.adminPhrase||(isLoaded?'—':'Loading…')):NO_SIDE.admin;
+    const ddsPhraseTxt=has('dds')?(s.ddsPhrase||(isLoaded?'—':'Loading…')):NO_SIDE.dds;
+    const pinkPhraseTxt=has('pink')?(s.pinkPhrase||(isLoaded?'—':'Loading…')):NO_SIDE.pink;
     const phraseLoadClass=isLoaded?'':'loading';
 
     return`<div class="sc" id="sc-${i}">
@@ -898,9 +965,10 @@ function renderStories(){
       </div>
     </div>
 
-    <!-- BIAS ROWS -->
+    <!-- BIAS ROWS: only sides that reported the story -->
     <div class="bias-rows">
-      <div class="bias-row admin-row" id="admin-row-${i}" onclick="toggleBias('admin',${i})">
+      ${has('admin')?`
+      <div class="bias-row admin-row${none('admin')}" id="admin-row-${i}" onclick="toggleBias('admin',${i})">
         <div class="bias-head">
           <div class="bias-dot dot-admin"></div>
           <div style="flex:1;min-width:0;">
@@ -908,7 +976,7 @@ function renderStories(){
               <span class="bias-lbl lbl-admin">Bagong Pilipinas</span>
               ${isLoaded&&s.adminSource?`<span style="font-size:calc(12px*var(--ts,1));color:var(--admin);opacity:.7;">${esc(s.adminSource.source)}</span>`:''}
             </div>
-            <span class="bias-phrase ${phraseLoadClass}" id="admin-phrase-${i}">${esc(adminPhraseTxt)}</span>
+            <span class="bias-phrase ${has('admin')?phraseLoadClass:''}" id="admin-phrase-${i}">${esc(adminPhraseTxt)}</span>
           </div>
           <span class="bias-chevron">▾</span>
         </div>
@@ -919,7 +987,9 @@ function renderStories(){
           </div>
         </div>
       </div>
-      <div class="bias-row dds-row" id="dds-row-${i}" onclick="toggleBias('dds',${i})">
+      `:''}
+      ${has('dds')?`
+      <div class="bias-row dds-row${none('dds')}" id="dds-row-${i}" onclick="toggleBias('dds',${i})">
         <div class="bias-head">
           <div class="bias-dot dot-dds"></div>
           <div style="flex:1;min-width:0;">
@@ -927,7 +997,7 @@ function renderStories(){
               <span class="bias-lbl lbl-dds">DDS</span>
               ${isLoaded&&s.ddsSource?`<span style="font-size:calc(12px*var(--ts,1));color:var(--dds);opacity:.7;">${esc(s.ddsSource.source)}</span>`:''}
             </div>
-            <span class="bias-phrase ${phraseLoadClass}" id="dds-phrase-${i}">${esc(ddsPhraseTxt)}</span>
+            <span class="bias-phrase ${has('dds')?phraseLoadClass:''}" id="dds-phrase-${i}">${esc(ddsPhraseTxt)}</span>
           </div>
           <span class="bias-chevron">▾</span>
         </div>
@@ -938,7 +1008,9 @@ function renderStories(){
           </div>
         </div>
       </div>
-      <div class="bias-row pink-row" id="pink-row-${i}" onclick="toggleBias('pink',${i})">
+      `:''}
+      ${has('pink')?`
+      <div class="bias-row pink-row${none('pink')}" id="pink-row-${i}" onclick="toggleBias('pink',${i})">
         <div class="bias-head">
           <div class="bias-dot dot-pink"></div>
           <div style="flex:1;min-width:0;">
@@ -946,7 +1018,7 @@ function renderStories(){
               <span class="bias-lbl lbl-pink">Progressives</span>
               ${isLoaded&&s.pinkSource?`<span style="font-size:calc(12px*var(--ts,1));color:var(--pink);opacity:.7;">${esc(s.pinkSource.source)}</span>`:''}
             </div>
-            <span class="bias-phrase ${phraseLoadClass}" id="pink-phrase-${i}">${esc(pinkPhraseTxt)}</span>
+            <span class="bias-phrase ${has('pink')?phraseLoadClass:''}" id="pink-phrase-${i}">${esc(pinkPhraseTxt)}</span>
           </div>
           <span class="bias-chevron">▾</span>
         </div>
@@ -957,6 +1029,8 @@ function renderStories(){
           </div>
         </div>
       </div>
+      `:''}
+      ${['admin','dds','pink'].some(l=>!has(l))?`<div class="bias-none">${['admin','dds','pink'].every(l=>!has(l))?'None of the pro-administration, pro-Duterte or progressive outlets we track has reported this yet.':'Not yet reported by '+['admin','dds','pink'].filter(l=>!has(l)).map(l=>SIDE_NAME[l]).join(' or ')+' outlets.'}</div>`:''}
     </div>
 
     <!-- SOURCES FOOTER -->
@@ -1192,9 +1266,10 @@ function applyGenResult(story, idx, r){
     else{nb.appendChild(longDiv);nb.appendChild(btn);}
   }
 
-  if(adminPh){adminPh.textContent=r.adminPhrase||'—';adminPh.classList.remove('loading');}
-  if(ddsPh){ddsPh.textContent=r.ddsPhrase||'—';ddsPh.classList.remove('loading');}
-  if(pinkPh){pinkPh.textContent=r.pinkPhrase||'—';pinkPh.classList.remove('loading');}
+  const covered=l=>!document.getElementById(`${l}-row-${idx}`)?.classList.contains('none');
+  if(adminPh&&covered('admin')){adminPh.textContent=r.adminPhrase||'—';adminPh.classList.remove('loading');}
+  if(ddsPh&&covered('dds')){ddsPh.textContent=r.ddsPhrase||'—';ddsPh.classList.remove('loading');}
+  if(pinkPh&&covered('pink')){pinkPh.textContent=r.pinkPhrase||'—';pinkPh.classList.remove('loading');}
   if(adminSum){adminSum.textContent=r.adminSummary||'';}
   if(ddsSum){ddsSum.textContent=r.ddsSummary||'';}
   if(pinkSum){pinkSum.textContent=r.pinkSummary||'';}
@@ -1217,7 +1292,7 @@ async function loadNews(){
 
   // 2. Always also fetch Google News (reliable multi-outlet aggregator)
   const gnResults=await Promise.allSettled(GNEWS_SOURCES.map(fetchGNews));
-  const gnArticles=gnResults.flatMap(r=>r.status==='fulfilled'?r.value:[]);
+  const gnArticles=gnResults.flatMap(r=>r.status==='fulfilled'?r.value:[]).filter(isPolitics);
 
   // Merge: deduplicate by title similarity, Google News fills gaps
   const titleSet=new Set(articles.map(a=>a.title.slice(0,60).toLowerCase()));
@@ -1238,6 +1313,7 @@ async function loadNews(){
       document.getElementById('err-msg').textContent=`Limited sources loaded (${totalSrcs} outlets, ${leans} perspective${leans!==1?'s':''}). Pull to refresh.`;
     }
     allStories=cluster(articles);
+    await enrichStories(allStories);
   }
   renderStories();
   renderSourcesPanel();

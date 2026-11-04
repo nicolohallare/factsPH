@@ -1,5 +1,5 @@
 // Cache version — bump this to force all clients to update
-const CACHE = 'factsPH-v20261022';
+const CACHE = 'factsPH-v20261105';
 
 const STATIC = [
   '/manifest.json',
