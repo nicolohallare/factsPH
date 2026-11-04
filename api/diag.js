@@ -1,14 +1,55 @@
 export const config = { runtime: 'edge' };
-// TEMPORARY diagnostic: calls the app's own /api/claude with a real story prompt. Remove after use.
-export default async function handler(req) {
-  const origin = 'https://factsph.vercel.app';
-  const prompt = `You are a neutral Philippine political news analyst. Below are actual headlines about the same story.
-ALL HEADLINES:
-[Philippine Star / Center] Senate panel clears OVP budget in under 20 minutes as Duterte skips hearing
-[Rappler / Progressive] Senate panel approves proposed 2027 OVP budget in under 20 minutes
-[Manila Times / DDS] Senate extends courtesy to OVP in budget hearing
-[Manila Bulletin / Admin] Senate finance panel endorses P785-M OVP budget
-Respond in EXACTLY this format:
+// TEMPORARY diagnostic. Remove after use.
+const LEAN_LBL={dds:'DDS',center:'Center',admin:'Admin',pink:'Progressive',alt:'Independent'};
+const TODAY=()=>new Date().toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric',timeZone:'Asia/Manila'});
+const PLAIN_STYLE=`WRITING STYLE — readers include older Filipinos and people who don't follow politics closely:
+- Short sentences (about 20 words or fewer). Common, everyday words.
+- The first time an acronym or term appears, explain it in a few words, e.g. "ICC (International Criminal Court)", "WPS (West Philippine Sea)", "DDS (Duterte supporters)".
+- Say who is who: give a person's role the first time you name them (e.g. "Senator", "Vice President").
+- No jargon, no sarcasm, no loaded adjectives. Do not take sides.
+- Never add facts that are not in the headlines given to you.`;
+function getLeanSources(story, lean){ return story.sources.filter(s=>s.lean===lean); }
+function buildPrompt(story){
+  // Build source-grounded input — each lean gets its actual headlines
+  const allLines = story.sources.map(s=>`[${s.source} / ${LEAN_LBL[s.lean]||s.lean}] ${s.title}`).join('\n');
+
+  const adminSrcs  = getLeanSources(story,'admin');
+  const ddsSrcs    = getLeanSources(story,'dds');
+  const pinkSrcs   = getLeanSources(story,'pink');
+  const centerSrcs = getLeanSources(story,'center');
+
+  const adminLines  = adminSrcs.length  ? adminSrcs.map(s=>`${s.source}: "${s.title}"`).join('\n')  : 'No admin source covered this story.';
+  const ddsLines    = ddsSrcs.length    ? ddsSrcs.map(s=>`${s.source}: "${s.title}"`).join('\n')    : 'No DDS source covered this story.';
+  const pinkLines   = pinkSrcs.length   ? pinkSrcs.map(s=>`${s.source}: "${s.title}"`).join('\n')   : 'No progressive source covered this story.';
+  const centerLines = centerSrcs.length ? centerSrcs.map(s=>`${s.source}: "${s.title}"`).join('\n') : '';
+
+  const hasSide = (srcs) => srcs.length > 0;
+
+  const p=`You are a neutral Philippine political news analyst. Today is ${TODAY()}. Below are actual headlines published by different outlets about the same story. Each outlet has a known editorial lean.
+
+ALL HEADLINES COVERING THIS STORY:
+${allLines}
+
+Your task — generate exactly 8 fields:
+
+1. NEUTRAL_SHORT: One factual sentence (max 30 words) synthesizing what happened across all sources — no framing, no opinion.
+2. NEUTRAL_LONG: 3–4 sentence factual summary drawing on all headlines above. What are the confirmed facts?
+
+3. ADMIN_PHRASE: Max 9 words — the angle/spin in the admin/Bagong Pilipinas headlines below.
+4. ADMIN_SUMMARY: 2–3 sentences. Based ONLY on these admin outlet headlines: ${adminLines} — explain how they frame the story, what they emphasize or omit, and why.
+
+5. DDS_PHRASE: Max 9 words — the angle/spin in the DDS/pro-Duterte headlines below.
+6. DDS_SUMMARY: 2–3 sentences. Based ONLY on these DDS outlet headlines: ${ddsLines} — explain how they frame the story, what they emphasize or omit, and why.
+
+7. PINK_PHRASE: Max 9 words — the angle/spin in the progressive/Pinklawan headlines below.
+8. PINK_SUMMARY: 2–3 sentences. Based ONLY on these progressive outlet headlines: ${pinkLines} — explain how they frame the story, what they emphasize or omit, and why.
+
+If a side has no source, note that no outlet from that side covered this story and explain what that silence might mean.
+If this is not a political story (for example a typhoon, earthquake, price change or outage), do not invent a political spin: say plainly when coverage is factual and similar across outlets, and put practical details people need (where, when, what to do) in the neutral summary.
+
+${PLAIN_STYLE}
+
+Respond in EXACTLY this format with no extra text:
 NEUTRAL_SHORT: [sentence]
 NEUTRAL_LONG: [paragraph]
 ADMIN_PHRASE: [phrase]
@@ -17,13 +58,25 @@ DDS_PHRASE: [phrase]
 DDS_SUMMARY: [paragraph]
 PINK_PHRASE: [phrase]
 PINK_SUMMARY: [paragraph]`;
-  const out = {};
-  for (const tier of ['fast', 'smart']) {
-    const t0 = Date.now();
-    const r = await fetch(origin + '/api/claude', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tier, messages: [{ role: 'user', content: prompt }] }) });
-    const txt = await r.text();
-    out[tier] = { status: r.status, ms: Date.now() - t0, body: txt.slice(0, 1500) };
-  }
-  return new Response(JSON.stringify(out, null, 2), { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
+
+  return p;
+}
+const STORIES=[
+ {headline:'Senate panel clears OVP budget in under 20 minutes',sources:[
+  {source:'Philippine Star',lean:'center',title:'Senate panel clears OVP budget in under 20 minutes as Duterte skips hearing'},
+  {source:'Rappler',lean:'pink',title:'Senate panel approves proposed 2027 OVP budget in under 20 minutes'},
+  {source:'Manila Times',lean:'dds',title:'Senate extends courtesy to OVP in budget hearing'}]},
+ {headline:'Marcos vows reforms to boost investor confidence',sources:[
+  {source:'Inquirer',lean:'center',title:'Marcos vows reforms to boost investor confidence, stock market'}]},
+ {headline:'Super Typhoon Rosal enters PAR',sources:[
+  {source:'Inquirer',lean:'center',title:'Super Typhoon Rosal enters PAR; Signal No. 1 in 5 Luzon areas'},
+  {source:'Rappler',lean:'pink',title:'Super Typhoon Champi enters PAR, named Rosal'}]}];
+export default async function handler(){
+  const out=[];
+  await Promise.all(STORIES.map(async (st,i)=>{
+    const r=await fetch('https://factsph.vercel.app/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({tier:'fast',max_tokens:900,messages:[{role:'user',content:buildPrompt(st)}]})});
+    out[i]={status:r.status,body:await r.json()};
+  }));
+  return new Response(JSON.stringify(out),{headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});
 }
