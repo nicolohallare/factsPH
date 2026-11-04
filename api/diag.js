@@ -1,7 +1,7 @@
 export const config = { runtime: 'edge' };
 // TEMPORARY diagnostic: calls the app's own /api/claude with a real story prompt. Remove after use.
 export default async function handler(req) {
-  const origin = new URL(req.url).origin;
+  const origin = 'https://factsph.vercel.app';
   const prompt = `You are a neutral Philippine political news analyst. Below are actual headlines about the same story.
 ALL HEADLINES:
 [Philippine Star / Center] Senate panel clears OVP budget in under 20 minutes as Duterte skips hearing
