@@ -10,7 +10,7 @@
    to show "New survey" alerts; if left out, `released` is used.
    ============================================================ */
 
-const EL_AS_OF = '2026-11-04'; // date the data below was last checked
+const EL_AS_OF = '2026-11-05'; // date the data below was last checked
 
 // ── Candidates ────────────────────────────────────────────────
 // status: 'declared' | 'out' (publicly ruled out) | 'undeclared'
@@ -140,6 +140,11 @@ const EL_POLLS = [
 
 // ── Head-to-head match-ups ────────────────────────────────────
 const EL_H2H = [
+  { a: 'sara', b: 'leni', pollster: 'OCTA Research', start: '2026-09-28', end: '2026-10-04', released: '2026-11-04', added: '2026-11-05',
+    n: 1200, moe: 3, method: 'Face-to-face', sponsor: null, va: 40, vb: 33, undec: 27,
+    flags: ['Undecided = 26 neither/don\'t know + 1 refused (SunStar). Manila Times reports only the 26.', 'Commissioning status not stated in any source opened; OCTA\'s own release page could not be opened.'],
+    src: [['Manila Times, Nov 4 2026', 'https://www.manilatimes.net/2026/11/04/news/dutertes-lead-over-robredo-narrows-to-7-points-in-octa-survey/2461287'],
+          ['SunStar Davao, Nov 4 2026', 'https://www.sunstar.com.ph/davao/saras-lead-vs-leni-continues']] },
   { a: 'sara', b: 'leni', pollster: 'Pulse Asia', start: '2026-09-17', end: '2026-09-24', n: 2400, moe: 2, sponsor: null, va: 54, vb: 40, undec: 6.3,
     src: [['Pulse Asia (PDF)', 'https://pulseasia.ph/wp-content/uploads/2026/10/MR1-UB2026-3-MR-on-the-May-2028-Elections-Final.pdf']] },
   { a: 'sara', b: 'leni', pollster: 'Momentum Research', start: '2026-08-18', end: '2026-08-23', n: 1487, moe: 2.5, sponsor: null, va: 58.3, vb: 33.6, undec: null,
