@@ -10,7 +10,7 @@
    to show "New survey" alerts; if left out, `released` is used.
    ============================================================ */
 
-const EL_AS_OF = '2026-11-05'; // date the data below was last checked
+const EL_AS_OF = '2026-11-06'; // date the data below was last checked
 
 // ── Candidates ────────────────────────────────────────────────
 // status: 'declared' | 'out' (publicly ruled out) | 'undeclared'
@@ -35,6 +35,14 @@ const EL_CANDS = {
 // undec = don't know + refused + none.  indep:true only when a source says it wasn't commissioned.  include:false keeps a poll
 // out of the average (reason in `exclude`) but still shows it.
 const EL_POLLS = [
+  { pollster: 'WR Numero', start: '2026-10-07', end: '2026-10-13', released: '2026-11-05',
+    n: 1225, moe: 2.6, method: 'Face-to-face', sponsor: null, q: 'List question (first choice for president)',
+    added: '2026-11-06',
+    r: { sara: 42.4, leni: 15.9, tulfo: 6.7, bam: 2.5, risa: 2.0 }, other: 'Baste Duterte 6.9, Padilla 3.8, Pangilinan 1.9, Teodoro 1.5', undec: null,
+    flags: ['Undecided not reported in any source opened; the named candidates add up to 83.6%.', 'Bong Go not mentioned in any source opened.', 'Margin of error ±2.6% is from Mindanao Times; a sample of 1,225 implies about ±2.8%.', 'Release date is the earliest report found (SunStar and Mindanao Times, Nov 5); WR Numero\'s own release could not be opened.', 'Second choice: Baste Duterte 21.3, Tulfo 10.0, Robredo 9.4, Padilla 9.3, Sara Duterte 8.6.'],
+    src: [['Mindanao Times, Nov 5 2026', 'https://www.mindanaotimes.com.ph/second-choice/'],
+          ['SunStar Davao, Nov 5 2026', 'https://www.sunstar.com.ph/davao/survey-duterte-siblings-most-preferred-presidential-bets']] },
+
   { pollster: 'Momentum Research', start: '2026-10-16', end: '2026-10-19', released: '2026-10-27',
     n: 1401, moe: 2.6, method: 'Face-to-face', sponsor: null, indep: true, q: 'Two-way match-up: Robredo vs. Baste Duterte (Sara Duterte not in this question)',
     added: '2026-10-29',
