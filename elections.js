@@ -10,7 +10,7 @@
    to show "New survey" alerts; if left out, `released` is used.
    ============================================================ */
 
-const EL_AS_OF = '2026-11-10'; // date the data below was last checked
+const EL_AS_OF = '2026-11-11'; // date the data below was last checked
 
 // ── Candidates ────────────────────────────────────────────────
 // status: 'declared' | 'out' (publicly ruled out) | 'undeclared'
@@ -189,7 +189,7 @@ const EL_TIMELINE = [
   { date: '2026-05-05', text: 'Raffy Tulfo rules out a presidential or VP run.', src: 'https://www.gmanetwork.com/news_duplicate/balitambayan/balita/986540/raffy-tulfo-walang-balak-tumakbong-pangulo-sa-2028-polls-na-puwede-niyang-makalaban-si-sara-duter/story/' },
   { date: '2026-09-23', text: 'Impeachment court sets 14 of 20 eligible senators as the votes needed to convict.', src: 'https://www.illawarramercury.com.au/story/9356262/philippine-senate-lowers-votes-to-convict-vp-duterte/' },
   { date: '2026-10-13', text: 'Impeachment court lets prosecutors drop three of four charges against Sara Duterte; only the unexplained-wealth charge remains.', src: 'https://www.philstar.com/headlines/2026/10/13/2562940/impeach-court-grants-prosecution-bid-drop-3-4-charges-vs-vp-sara' },
-  { date: '2026-11-09', text: 'Sara Duterte’s defense begins presenting its case in the impeachment trial.', src: 'https://www.gmanetwork.com/news/topstories/nation/1005740/prosecution-drops-3-articles-retains-article-ii-in-sara-duterte-impeachment-trial/story/', future: true },
+  { date: '2026-11-09', text: 'Sara Duterte’s defense begins presenting its case in the impeachment trial; its first witness is a Davao City assessor.', src: 'https://www.gmanetwork.com/news/topstories/nation/1008771/live-updates-sara-duterte-impeachment-trial-november-9-2026/story/' },
   { date: '2027-10-01', text: 'Filing of certificates of candidacy (Oct 1–8, 2027). The field becomes official.', src: 'https://en.wikipedia.org/wiki/2028_Philippine_presidential_election', future: true },
   { date: '2028-05-08', text: 'Election day.', src: 'https://en.wikipedia.org/wiki/2028_Philippine_presidential_election', future: true },
 ];
