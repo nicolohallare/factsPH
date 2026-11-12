@@ -1,12 +1,15 @@
 // Cache version — bump this to force all clients to update
-const CACHE = 'factsPH-v20261112';
+const CACHE = 'factsPH-v20261112b';
 
 const STATIC = [
   '/manifest.json',
   '/assets/favicon.ico',
   '/assets/apple-touch-icon.png',
   '/assets/icon-512.png',
-  'https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap'
+  '/assets/fonts/ahn-400.woff2',
+  '/assets/fonts/ahn-600.woff2',
+  '/assets/fonts/ahn-700.woff2',
+  '/assets/fonts/ahn-800.woff2'
 ];
 
 // Install — cache static assets (NOT index.html — fetch fresh every time)
