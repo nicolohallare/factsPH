@@ -10,7 +10,7 @@
    to show "New survey" alerts; if left out, `released` is used.
    ============================================================ */
 
-const EL_AS_OF = '2026-11-05'; // date the data below was last checked
+const EL_AS_OF = '2026-11-12'; // date the data below was last checked
 
 // ── Candidates ────────────────────────────────────────────────
 // status: 'declared' | 'out' (publicly ruled out) | 'undeclared'
@@ -35,6 +35,14 @@ const EL_CANDS = {
 // undec = don't know + refused + none.  indep:true only when a source says it wasn't commissioned.  include:false keeps a poll
 // out of the average (reason in `exclude`) but still shows it.
 const EL_POLLS = [
+  { pollster: 'WR Numero', start: '2026-10-07', end: '2026-10-13', released: '2026-11-04',
+    n: 1225, moe: 2.6, method: 'Face-to-face', sponsor: null, q: 'List question (first choice), with a second-choice follow-up',
+    added: '2026-11-12',
+    r: { sara: 42.4, leni: 15.9, tulfo: 6.7, bam: 2.5, risa: 2.0 }, other: 'Baste Duterte 6.9, Padilla 3.8, Pangilinan 1.9, Teodoro 1.5', undec: null,
+    flags: ['Undecided share not published in any source we opened.', 'Margin of error: Mindanao Times says ±2.6; SunStar says it was not reported.', 'Second choice: Baste Duterte 21.3, Tulfo 10.0, Robredo 9.4, Padilla 9.3, Sara Duterte 8.6.'],
+    src: [['Mindanao Times', 'https://www.mindanaotimes.com.ph/second-choice/'],
+          ['SunStar Davao', 'https://www.sunstar.com.ph/davao/survey-duterte-siblings-most-preferred-presidential-bets']] },
+
   { pollster: 'Momentum Research', start: '2026-10-16', end: '2026-10-19', released: '2026-10-27',
     n: 1401, moe: 2.6, method: 'Face-to-face', sponsor: null, indep: true, q: 'Two-way match-up: Robredo vs. Baste Duterte (Sara Duterte not in this question)',
     added: '2026-10-29',
@@ -180,7 +188,7 @@ const EL_TIMELINE = [
   { date: '2026-05-05', text: 'Raffy Tulfo rules out a presidential or VP run.', src: 'https://www.gmanetwork.com/news_duplicate/balitambayan/balita/986540/raffy-tulfo-walang-balak-tumakbong-pangulo-sa-2028-polls-na-puwede-niyang-makalaban-si-sara-duter/story/' },
   { date: '2026-09-23', text: 'Impeachment court sets 14 of 20 eligible senators as the votes needed to convict.', src: 'https://www.illawarramercury.com.au/story/9356262/philippine-senate-lowers-votes-to-convict-vp-duterte/' },
   { date: '2026-10-13', text: 'Impeachment court lets prosecutors drop three of four charges against Sara Duterte; only the unexplained-wealth charge remains.', src: 'https://www.philstar.com/headlines/2026/10/13/2562940/impeach-court-grants-prosecution-bid-drop-3-4-charges-vs-vp-sara' },
-  { date: '2026-11-09', text: 'Sara Duterte’s defense begins presenting its case in the impeachment trial.', src: 'https://www.gmanetwork.com/news/topstories/nation/1005740/prosecution-drops-3-articles-retains-article-ii-in-sara-duterte-impeachment-trial/story/', future: true },
+  { date: '2026-11-09', text: 'Sara Duterte’s defense begins presenting its case in the impeachment trial.', src: 'https://www.manilatimes.net/2026/11/09/news/vp-saras-impeachment-trial-resumes/2464835' },
   { date: '2026-11-04', text: 'OCTA: Sara Duterte’s one-on-one lead over Leni Robredo narrows to 7 points (40–33), from 11 in March.', src: 'https://www.manilatimes.net/2026/11/04/news/dutertes-lead-over-robredo-narrows-to-7-points-in-octa-survey/2461287' },
   { date: '2027-10-01', text: 'Filing of certificates of candidacy (Oct 1–8, 2027). The field becomes official.', src: 'https://en.wikipedia.org/wiki/2028_Philippine_presidential_election', future: true },
   { date: '2028-05-08', text: 'Election day.', src: 'https://en.wikipedia.org/wiki/2028_Philippine_presidential_election', future: true },
@@ -193,14 +201,81 @@ const EL_TIMELINE = [
 // r = { 'Full Name': percent }. Names are kept exactly as each pollster published them.
 // SEN_PEOPLE adds optional facts per name (only sourced ones).
 const EL_SEN_POLLS = [
-  /*SEN_POLLS*/
+  {"pollster": "Momentum Research", "start": "2026-10-16", "end": "2026-10-19", "released": "2026-11-10", "added": "2026-11-12", "n": 1401, "moe": 2.6, "method": "Face-to-face", "indep": true, "q": "Up to 12 names from a list of 51", "r": {"Robin Padilla": 37.0, "Baste Duterte": 36.0, "Alan Peter Cayetano": 35.0, "Raffy Tulfo": 34.0, "Vico Sotto": 32.0, "Grace Poe": 29.0, "Manny Pacquiao": 26.0, "Chiz Escudero": 23.0, "Loren Legarda": 23.0, "Paolo Duterte": 21.0, "Nancy Binay": 19.0, "Ben Tulfo": 17.0}, "flags": ["Only the top 12 names were published.", "Gen Z voters: Baste Duterte 47, Padilla 40, Sotto 33, Cayetano 27."], "src": [["The Global Filipino Magazine", "https://theglobalfilipinomagazine.com/baste-duterte-is-gen-zs-top-pick-for-senator-in-early-2028-survey"]], "sponsor": null},
+  {"pollster": "WR Numero", "start": "2026-10-01", "end": "2026-10-31", "released": "2026-11-09", "method": "Not stated", "q": "Senate preference (exact question and fieldwork dates not published; shown as October)", "r": {"Alan Peter Cayetano": 39.0, "Robin Padilla": 37.0, "Raffy Tulfo": 32.0, "Vico Sotto": 32.0, "Grace Poe": 30.0}, "include": false, "exclude": "Only five names, no fieldwork dates and no sample size were published in any source we could open.", "flags": ["Undecided 14%, down from 19.4% in June.", "One of the sources is Sen. Cayetano’s own press release."], "src": [["Cayetano press release", "https://alanpetercayetano.com/press/cayetano-continues-to-rank-among-top-choices-in-2028-senate-polls/"], ["Boracay Island News", "https://www.boracayislandnews.com/cayetano-nangunguna-sa-paunang-2028-senatorial-survey"]], "sponsor": null},
+  {"pollster": "Publicus Asia", "start": "2026-10-01", "end": "2026-10-04", "released": "2026-10-20", "n": 1581, "method": "Online panel", "q": "Senate voting preference", "r": {"Vico Sotto": 39.0, "Chel Diokno": 28.0, "Grace Poe": 23.0, "Baste Duterte": 23.0, "Alan Peter Cayetano": 23.0, "Raffy Tulfo": 22.0, "Leila de Lima": 21.0, "Robin Padilla": 20.0, "Gibo Teodoro": 20.0, "Chiz Escudero": 19.0}, "include": false, "exclude": "An opt-in online panel, not a random sample, so its error can’t be measured the way the others can.", "flags": ["Heidi Mendoza and Willie Ong tied for 11th–12th; their percentages were not published."], "src": [["DZRH", "https://www.dzrh.com.ph/post/vico-sotto-chel-diokno-top-publicus-asias-2028-senatorial-preference-survey"]], "sponsor": null},
+  {"pollster": "OCTA Research", "start": "2026-09-28", "end": "2026-10-04", "released": "2026-10-19", "n": 1200, "moe": 3, "method": "Face-to-face", "indep": true, "q": "\"If the May 2028 elections will be held today, who will you likely vote for as SENATOR?\" Up to 12.", "r": {"Raffy Tulfo": 47.0, "Robin Padilla": 45.0, "Alan Peter Cayetano": 44.0, "Vico Sotto": 42.0, "Grace Poe": 36.0, "Baste Duterte": 36.0, "Loren Legarda": 31.0, "Abby Binay": 29.0, "Mark Lapid": 28.0, "Chiz Escudero": 27.0, "Sonny Angara": 25.0, "Manny Pacquiao": 25.0, "Ben Tulfo": 23.0, "Jinggoy Estrada": 22.0, "Koko Pimentel": 20.0, "Sal Panelo": 20.0, "Mark Villar": 19.0, "Gringo Honasan": 18.0, "Francis Tolentino": 18.0, "Gibo Teodoro": 16.0, "Willie Revillame": 16.0, "Benhur Abalos": 16.0, "Bonifacio Bosita": 16.0, "JV Ejercito": 16.0, "Bong Revilla": 15.0, "Franklin Drilon": 15.0, "Ace Barbers": 15.0}, "flags": ["OCTA issued an erratum the same day to add Baste Duterte.", "Philstar names the Makati mayor “Abby” Binay; Pulse Asia lists Nancy Binay as Makati mayor. Shown as reported."], "src": [["Philstar", "https://www.philstar.com/headlines/2026/10/19/2564265/raffy-tulfo-padilla-cayetano-vico-sotto-statistically-tied-hypothetical-2028-senate-race"], ["Inquirer", "https://www.inquirer.net/493342/raffy-tulfo-overtakes-padilla-in-octas-2028-senate-survey/"]], "sponsor": null},
+  {"pollster": "Pulse Asia", "start": "2026-09-17", "end": "2026-09-24", "released": "2026-10-12", "n": 2400, "moe": 2, "method": "Face-to-face", "indep": true, "q": "Up to 12 names from a list of 66", "r": {"Grace Poe": 50.2, "Alan Peter Cayetano": 46.5, "Robin Padilla": 45.9, "Raffy Tulfo": 44.4, "Baste Duterte": 37.2, "Manny Pacquiao": 36.5, "Loren Legarda": 33.0, "Nancy Binay": 31.7, "Chiz Escudero": 30.1, "Sonny Angara": 26.3, "Ben Tulfo": 21.5, "Mark Lapid": 19.8, "Jinggoy Estrada": 18.2, "Willie Revillame": 17.7, "Mike Defensor": 16.9, "Mark Villar": 16.6, "Mar Roxas": 16.5, "JV Ejercito": 15.5, "Koko Pimentel": 14.2, "Rex Gatchalian": 14.1, "Bong Revilla": 13.8, "Benhur Abalos": 13.7, "Chel Diokno": 11.8, "Francis Tolentino": 11.5, "Ralph Recto": 11.4, "Leila de Lima": 11.2}, "flags": ["Vico Sotto was not on Pulse Asia’s list.", "Voters named 7 people on average; 22% named a full 12."], "src": [["Pulse Asia release (PDF)", "https://pulseasia.ph/wp-content/uploads/2026/10/MR1-UB2026-3-MR-on-the-May-2028-Elections-Final.pdf"]], "sponsor": null},
+  {"pollster": "Tangere", "start": "2026-09-10", "end": "2026-09-14", "released": "2026-09-21", "n": 2400, "moe": 2, "method": "Mobile app", "indep": true, "q": "Senate preference, up to 12", "r": {"Raffy Tulfo": 39.9, "Grace Poe": 36.7, "Robin Padilla": 34.0, "Baste Duterte": 33.7, "Paolo Duterte": 32.8, "Manny Pacquiao": 32.5, "Ben Tulfo": 30.8, "Chiz Escudero": 27.3, "Alan Peter Cayetano": 26.6, "Sonny Angara": 23.6, "Chel Diokno": 22.9, "Loren Legarda": 22.5, "Nancy Binay": 19.0, "Jimmy Bondoc": 18.5, "Joy Belmonte": 15.2, "Mike Defensor": 14.5, "Richard Mata": 13.1, "Zia Adiong": 12.5}, "flags": ["Left out Vico Sotto, Isko Moreno and Leni Robredo, saying they will not run. Other names may score higher as a result."], "src": [["Tangere", "https://tangereapp.com/tangere-2028-senatorial-survey-september/"]], "sponsor": null},
+  {"pollster": "Tangere", "start": "2026-08-12", "end": "2026-08-15", "released": "2026-08-22", "n": 2400, "moe": 1.96, "method": "Mobile app", "indep": true, "q": "Up to 12 names from a list of 75", "r": {"Vico Sotto": 42.1, "Baste Duterte": 37.0, "Raffy Tulfo": 36.5, "Robin Padilla": 36.0, "Grace Poe": 35.8, "Alan Peter Cayetano": 32.3, "Paolo Duterte": 31.6, "Leni Robredo": 30.8, "Isko Moreno": 30.8, "Ben Tulfo": 28.7, "Manny Pacquiao": 28.0, "Chel Diokno": 25.1, "Chiz Escudero": 24.3, "Loren Legarda": 20.6, "Francis Tolentino": 16.7, "Richard Mata": 15.1, "JV Ejercito": 11.5, "Mark Villar": 9.6}, "flags": ["The article skips some ranks, so names between 15th and 33rd are partly missing.", "The same article also says Tulfo placed 4th."], "src": [["Newswav", "https://newswav.com/article/vico-sotto-takes-lead-in-tangere-senate-poll-A2608_KKxD6v"]], "sponsor": null},
+  {"pollster": "OCTA Research", "start": "2026-07-04", "end": "2026-07-11", "released": "2026-07-29", "n": 1200, "moe": 3, "method": "Face-to-face", "indep": true, "q": "\"If the May 2028 elections will be held today, who will you likely vote for as SENATOR?\" Up to 12.", "r": {"Robin Padilla": 53.9, "Raffy Tulfo": 47.4, "Alan Peter Cayetano": 45.4, "Grace Poe": 44.5, "Vico Sotto": 42.0, "Loren Legarda": 39.0, "Manny Pacquiao": 34.5, "Paolo Duterte": 34.3, "Ben Tulfo": 31.0, "Abby Binay": 26.1, "Jinggoy Estrada": 25.5, "Mark Lapid": 25.0, "Chiz Escudero": 23.2, "Koko Pimentel": 21.2, "Mark Villar": 19.5, "Sonny Angara": 19.2, "Sal Panelo": 18.4, "JV Ejercito": 18.1, "Gringo Honasan": 16.9, "Philip Salvador": 16.3, "Nicolas Torre III": 15.5, "Willie Revillame": 15.1, "Bonifacio Bosita": 14.9, "Leila de Lima": 13.7, "Benhur Abalos": 13.3, "Antonio Trillanes": 12.9, "Francis Tolentino": 12.5, "Ralph Recto": 12.0, "Gibo Teodoro": 11.2, "Chel Diokno": 10.6}, "flags": ["Baste Duterte was not on this list.", "Newswav says 1,200 registered voters; other outlets say adults."], "src": [["Philstar", "https://www.philstar.com/headlines/2026/07/29/2545571/robin-padilla-leads-hypothetical-2028-senate-race-vico-sotto-cracks-top-5-survey"], ["GMA News", "https://www.gmanetwork.com/news/topstories/nation/996537/robin-padilla-raffy-tulfo-alan-peter-cayetano-top-voting-preference-for-senatorial-polls-octa/story/"]], "sponsor": null},
+  {"pollster": "Momentum Research", "start": "2026-07-13", "end": "2026-07-16", "released": "2026-08-14", "n": 1438, "moe": 2.6, "method": "Face-to-face", "indep": true, "q": "Up to 12 names from a list of 50", "r": {"Robin Padilla": 43.9, "Alan Peter Cayetano": 43.4, "Raffy Tulfo": 38.2, "Baste Duterte": 34.8, "Grace Poe": 33.7, "Vico Sotto": 32.9, "Loren Legarda": 31.0, "Manny Pacquiao": 24.2, "Nancy Binay": 23.6, "Chiz Escudero": 23.0, "Paolo Duterte": 22.4, "Cynthia Villar": 19.1, "Jinggoy Estrada": 18.3, "Ben Tulfo": 17.6, "Abby Binay": 15.0, "Sonny Angara": 14.6, "Mark Villar": 14.5, "Koko Pimentel": 13.5, "JV Ejercito": 12.9, "Bong Revilla": 12.7, "Chel Diokno": 12.4, "Philip Salvador": 11.8, "Francis Tolentino": 11.4, "Leila de Lima": 11.4, "Jimmy Bondoc": 10.6}, "flags": ["Undecided 8.2, declined 2.7."], "src": [["Newswav", "https://newswav.com/article/incumbent-senators-lead-2028-survey-A2608_1XaMNd"]], "sponsor": null},
+  {"pollster": "Pulse Asia", "start": "2026-06-28", "end": "2026-07-06", "released": "2026-07-22", "n": 2400, "moe": 2, "method": "Face-to-face", "indep": true, "q": "Up to 12 names from a list of 53", "r": {"Robin Padilla": 48.4, "Vico Sotto": 47.9, "Raffy Tulfo": 43.9, "Alan Peter Cayetano": 43.2, "Loren Legarda": 40.3, "Manny Pacquiao": 35.6, "Nancy Binay": 32.4, "Sonny Angara": 27.2, "Mark Villar": 26.1, "Ben Tulfo": 20.7, "Jinggoy Estrada": 19.5, "Willie Revillame": 19.0, "Chiz Escudero": 17.2, "Mike Defensor": 17.1, "Mar Roxas": 17.1, "Benhur Abalos": 17.0, "Mark Lapid": 16.9, "Philip Salvador": 14.9, "Jimmy Bondoc": 14.9, "JV Ejercito": 14.2}, "flags": ["Grace Poe and Baste Duterte were not on this list.", "Pulse Asia’s first 2028 Senate round."], "src": [["Pulse Asia release (PDF)", "https://pulseasia.ph/wp-content/uploads/2026/07/MR2-UB2026-2-MR-on-the-May-2028-Elections-Final.pdf"]], "sponsor": null},
+  {"pollster": "Tangere", "start": "2026-06-23", "end": "2026-06-27", "released": "2026-07-22", "n": 1500, "moe": 2.15, "method": "Mobile app", "q": "Senate preference, up to 12", "r": {"Raffy Tulfo": 37.6, "Vico Sotto": 36.0, "Grace Poe": 35.6, "Isko Moreno": 34.7, "Baste Duterte": 34.3, "Paolo Duterte": 34.1, "Robin Padilla": 32.3, "Chiz Escudero": 30.9, "Sonny Angara": 28.3, "Manny Pacquiao": 26.1, "Alan Peter Cayetano": 25.0, "Chel Diokno": 20.3, "Benhur Abalos": 19.9, "Loren Legarda": 19.6, "Rex Gatchalian": 19.4}, "flags": [], "src": [["Tangere", "https://tangereapp.com/tulfo-sotto-and-poe-lead-tangeres-2028-senatorial-preference-survey-as-race-tightens/"]], "sponsor": null},
+  {"pollster": "Arkipelago Analytics", "start": "2026-05-26", "end": "2026-06-02", "released": "2026-06-29", "n": 2637, "method": "Face-to-face", "q": "Senate election preference (election year not stated)", "r": {"Baste Duterte": 48.0, "Leni Robredo": 48.0, "Robin Padilla": 48.0, "Vico Sotto": 45.0, "Loren Legarda": 45.0, "Raffy Tulfo": 42.0, "Alan Peter Cayetano": 42.0, "Paolo Duterte": 39.0, "Chiz Escudero": 39.0, "Mark Villar": 39.0, "Dingdong Dantes": 35.0, "Grace Poe": 35.0}, "include": false, "exclude": "The published results are rounded into tie groups, and the article does not say the question is about 2028.", "flags": [], "src": [["OneNews", "https://www.onenews.ph/articles/baste-duterte-leni-robredo-robin-padilla-lead-senate-preference-survey"]], "sponsor": null},
+  {"pollster": "Arkipelago Analytics", "start": "2026-02-26", "end": "2026-03-06", "released": "2026-04-01", "n": 2637, "moe": 2, "method": "Face-to-face", "q": "Senate election preference (election year not stated)", "r": {"Baste Duterte": 47.0, "Raffy Tulfo": 47.0, "Vico Sotto": 47.0, "Robin Padilla": 42.0, "Loren Legarda": 42.0, "Leni Robredo": 42.0, "Alan Peter Cayetano": 39.0, "Paolo Duterte": 39.0, "Chiz Escudero": 39.0}, "include": false, "exclude": "The published results are rounded into tie groups, and the article does not say the question is about 2028.", "flags": ["SunStar and Edge Davao list different names in the lower groups."], "src": [["SunStar Davao", "https://www.sunstar.com.ph/davao/baste-duterte-raffy-tulfo-vico-sotto-lead-2026-voting-survey-arkipelago-analytics"]], "sponsor": null},
+  {"pollster": "Tangere", "start": "2026-02-02", "end": "2026-02-06", "released": "2026-02-12", "n": 2000, "moe": 2.15, "method": "Mobile app", "indep": true, "q": "Senate preference, up to 12", "r": {"Raffy Tulfo": 49.8, "Grace Poe": 43.5, "Alan Peter Cayetano": 38.0, "Loren Legarda": 38.0, "Paolo Duterte": 37.1, "Baste Duterte": 36.6, "Rex Gatchalian": 34.4, "Manny Pacquiao": 31.2, "Chiz Escudero": 30.2, "Ben Tulfo": 30.1, "Joy Belmonte": 29.3, "Sonny Angara": 28.4, "Chel Diokno": 27.4, "Francis Zamora": 19.8, "Benjie Magalong": 15.1, "Lala Sotto": 14.7}, "flags": ["Left out Robin Padilla and Vico Sotto, then reported as not running. Both returned in later surveys.", "The reported ranks don’t match the percentages in one source."], "src": [["DZRH", "https://www.dzrh.com.ph/post/raffy-tulfo-grace-poe-lead-tangeres-2028-senatorial-race"], ["Newswav", "https://newswav.com/article/tulfo-poe-top-2028-senatorial-poll-after-padilla-sotto-exit-A2602_ZP8x04"]], "sponsor": null},
+  {"pollster": "Tangere", "start": "2025-07-18", "end": "2025-07-20", "released": "2025-07-24", "n": 2400, "moe": 1.96, "method": "Mobile app", "indep": true, "q": "Up to 12 names from a list of 42", "r": {"Vico Sotto": 61.0, "Raffy Tulfo": 55.3, "Grace Poe": 46.1, "Chiz Escudero": 37.7, "Loren Legarda": 37.0, "Paolo Duterte": 36.6, "Alan Peter Cayetano": 34.8, "Ben Tulfo": 32.2, "Robin Padilla": 30.1, "Benhur Abalos": 29.0, "Sonny Angara": 27.7, "Bong Revilla": 26.7}, "flags": [], "src": [["Manila Bulletin", "https://mb.com.ph/2025/07/26/vico-sotto-dominates-early-2028-senate-race-survey-with-61research-firm"]], "sponsor": null}
 ];
 const SEN_PEOPLE = {
-  /*SEN_PEOPLE*/
+  "Leni Robredo": {"note": "Has said she will not run for a national post in 2028 (April 21; repeated November 9)."},
+  "Vico Sotto": {"note": "Tangere left him off its September list, saying he has said he will not run."}
 };
 
 // ── Senate impeachment trial of Vice President Sara Duterte ──
-const EL_TRIAL = /*TRIAL*/null;
+const EL_TRIAL = {
+  asOf: '2026-11-12',
+  stage: 'The defense is presenting its witnesses on the one remaining charge: unexplained wealth.',
+  details: [
+    'Only Article II is left: assets and business interests the prosecution says were not declared in her SALN, at least ₱817.87 million. Prosecutors dropped the other three charges (confidential funds, bribery, threats) on October 13.',
+    'The defense started on November 9. Witnesses so far include local assessors, a GenCorp lawyer who said Duterte received ₱2.14 million from a Jollibee branch investment with no written records, and people explaining specific card charges. The defense dropped most of its bank witnesses on November 12.',
+    'Next hearing dates: November 13, 19, 20 and 23. December dates depend on how many more days the defense asks for. No verdict date has been set; the presiding officer, Sen. Chiz Escudero, said the trial could end within 2026.',
+    'Still pending at the Supreme Court: a petition by Sens. Robin Padilla and Bong Go against the 14-vote rule. The Court has asked for comments but has not stopped the trial.',
+  ],
+  stageSrc: [['DZRH, Nov 12', 'https://www.dzrh.com.ph/post/day-43-of-vp-sara-duterte-impeachment-trial-or-november-12-2026'],
+             ['Reuters via BusinessDay, Nov 9', 'https://www.businessday.co.za/world/2026-11-09-explainer-where-does-philippine-vp-sara-dutertes-impeachment-trial-stand/'],
+             ['GMA, Nov 11', 'https://gmanetwork.com/news/topstories/nation/1009172/vp-sara-impeachment-trial-future-defense-witnesses-could-fill-in-gaps-says-poa/story'],
+             ['DZRH schedule', 'https://www.dzrh.com.ph/post/court-sets-november-schedule-for-vp-sara-duterte-impeachment-trial'],
+             ['Daily Tribune, SC petition', 'https://tribune.net.ph/amp/story/2026/11/04/osg-urges-sc-to-junk-petition-vs-sara-impeachment-voting-threshold']],
+  seats: {
+    total: 24, eligible: 20, needed: 14,
+    note: 'On September 23 the court voted 13–1 to count two-thirds of the senators able to take part, not of all 24. Four are not taking part: Jinggoy Estrada and Rodante Marcoleta (detained in separate plunder cases), Bato dela Rosa (has not attended, amid an ICC arrest order) and Loren Legarda (on leave since August). Two-thirds of 20 is 13.3, so 14 votes convict. Before that ruling, 16 were needed. The court has not formally named who is excluded.',
+    src: [['Daily Tribune, Sep 23', 'https://tribune.net.ph/2026/09/23/when-16-is-not-16-senate-rewrites-impeach-math-2'],
+          ['Asia News Network', 'https://asianews.network/2-3-rule-revisited-fewer-votes-needed-to-convict-philippine-vp-sara-duterte/'],
+          ['Daily Tribune, Nov 5', 'https://tribune.net.ph/2026/11/05/luistro-warns-impeachment-chaos-looms-sans-sc-ruling']],
+  },
+  outcomes: [
+    'Convicted (14 or more votes): she is removed as Vice President and barred from public office, so she cannot run in 2028. President Marcos would nominate a new VP from the Senate or House, who needs a majority vote in each chamber.',
+    'Acquitted (13 or fewer): she stays in office and can run in 2028. She leads every presidential survey FactsPH tracks.',
+  ],
+  outcomesSrc: [['Reuters via BusinessDay', 'https://www.businessday.co.za/world/2026-11-09-explainer-where-does-philippine-vp-sara-dutertes-impeachment-trial-stand/'],
+                ['Daily Tribune, Oct 16', 'https://tribune.net.ph/2026/10/16/sara-barred-from-2028-race-if-convicted-prosecutor-insists']],
+  opinion: [
+    { pollster: 'Momentum Research', start: '2026-10-16', end: '2026-10-19', n: 1401, moe: 2.6,
+      q: 'Should she be convicted or acquitted?', convict: 38.8, acquit: 33.8,
+      note: 'Undecided 22.6, refused 4.7.',
+      src: [['Daily Guardian, Oct 31', 'https://www.dailyguardian.com.ph/blog/more-filipinos-favor-sara-duterte-conviction-october-survey-finds']] },
+    { pollster: 'OCTA Research', start: '2026-09-28', end: '2026-10-04', n: 1200, moe: 3,
+      q: 'Convict or acquit?', convict: 21, acquit: 25,
+      note: '47% said they need to see the evidence first. NCR: convict 34, acquit 17. Mindanao: acquit 52. At the start of the trial it was convict 17, acquit 21.',
+      src: [['GMA News, Oct 21', 'https://www.gmanetwork.com/news/topstories/nation/1006632/acquit-or-convict-filipinos-split-over-vp-sara-duterte-impeachment-trial-in-latest-octa-survey/story/']] },
+    { pollster: 'Publicus Asia', start: '2026-10-01', end: '2026-10-04', n: 1581, moe: null,
+      q: 'What do you expect the outcome to be?', convict: 44, acquit: 31, convictLbl: 'Expect conviction', acquitLbl: 'Expect acquittal',
+      note: 'This asks what people expect, not what they want. Online panel, not a random sample, so no margin of error. Done before three charges were dropped.',
+      src: [['Manila Times, Oct 14', 'https://www.manilatimes.net/2026/10/14/news/44-expect-sara-dutertes-conviction-in-impeachment-trial-survey/2445251']] },
+  ],
+  timeline: [
+    { date: '2026-05-11', text: 'House impeaches Sara Duterte: 257 yes, 25 no, 9 abstain.', src: 'https://en.wikipedia.org/wiki/Second_impeachment_of_Sara_Duterte' },
+    { date: '2026-07-06', text: 'Trial opens. Escudero is elected presiding officer and rules 16 votes are needed to convict.', src: 'https://en.wikipedia.org/wiki/Second_impeachment_of_Sara_Duterte' },
+    { date: '2026-09-23', text: 'Court votes 13–1 to count only senators able to take part: 14 of 20 votes now convict.', src: 'https://tribune.net.ph/2026/09/23/when-16-is-not-16-senate-rewrites-impeach-math-2' },
+    { date: '2026-09-30', text: 'Supreme Court dismisses three petitions against the vote rule.', src: 'https://www.philstar.com/headlines/2026/09/30/2560026/sc-dismisses-petitions-vs-vote-threshold-sara-duterte-impeachment-trial' },
+    { date: '2026-10-13', text: 'Prosecution drops three of four charges; only unexplained wealth remains.', src: 'https://www.manilatimes.net/2026/10/13/news/prosecution-drops-3-impeachment-articles-vs-sara-duterte/2444253' },
+    { date: '2026-10-14', text: 'Supreme Court asks for comments on the Padilla–Go petition against the 14-vote rule.', src: 'https://tribune.net.ph/2026/10/29/sc-orders-congress-to-respond-to-challenge-on-sara-impeachment-voting-rule' },
+    { date: '2026-11-09', text: 'Defense begins presenting witnesses.', src: 'https://www.manilatimes.net/2026/11/09/news/vp-saras-impeachment-trial-resumes/2464835' },
+    { date: '2026-11-12', text: 'Day 43: defense drops most of its bank witnesses.', src: 'https://www.dzrh.com.ph/post/day-43-of-vp-sara-duterte-impeachment-trial-or-november-12-2026' },
+    { date: '2026-11-23', text: 'Last November hearing date set so far (10 a.m.–2 p.m.).', src: 'https://www.dzrh.com.ph/post/court-sets-november-schedule-for-vp-sara-duterte-impeachment-trial', future: true },
+  ],
+};
 
 const ELS = (() => {
   const DAY = 864e5, HALF_LIFE = 90, WINDOW = 365, asOf = Date.parse(EL_AS_OF);
@@ -866,7 +941,7 @@ const EL = (() => {
   const SEN_SWINGS = [
     { k: 0, label: 'If the vote were today', note: 'Only the uncertainty in today’s surveys.' },
     { k: 5, label: 'Some changes', note: 'Each name’s share could move about 5 points either way by election day.' },
-    { k: 10, label: 'Big changes', note: 'About 10 points either way, the kind of late surge some candidates rode in past Senate races.' },
+    { k: 10, label: 'Big changes', note: 'Each name’s share could move about 10 points either way by election day.' },
   ];
   let senSwing = (() => { const v = store.get('factsph-sen-swing'); return SEN_SWINGS.some(x => String(x.k) === v) ? +v : 5; })();
   const senLink = n => SEN_PEOPLE[n] && SEN_PEOPLE[n].note ? `<div class="sn-sub">${esc(SEN_PEOPLE[n].note)}</div>` : '';
@@ -875,7 +950,8 @@ const EL = (() => {
     const res = ELS.top12(senSwing);
     const max = Math.max(...res.map(r => r.max), 1);
     const S = SEN_SWINGS.find(x => x.k === senSwing);
-    const rows = res.map((r, i) => `${i === 12 ? '<div class="sn-cut">12 seats · cut-off</div>' : ''}
+    const SHOW = 20, rest = res.slice(SHOW);
+    const rows = res.slice(0, SHOW).map((r, i) => `${i === 12 ? '<div class="sn-cut">12 seats · cut-off</div>' : ''}
       <div class="sn-row" onclick="this.nextElementSibling.classList.toggle('open')" style="cursor:pointer">
         <div class="sn-rank">${i + 1}</div>
         <div><div class="sn-name">${esc(r.name)}</div>
@@ -884,6 +960,7 @@ const EL = (() => {
         <div class="sn-num">${pct(r.avg)}<span class="sn-chance">${chanceTxt(r.p)} top-12 chance</span></div>
       </div>
       <div class="el-parts">${r.parts.slice().sort((a, b) => b.share - a.share).map(({ p, v, share }) => `<div class="el-part"><span><b>${esc(p.pollster)}</b> · ${range(p)}</span><span style="text-align:right">${pct(v)}</span><span><div class="el-wbar" style="width:${Math.max(4, share * 100)}%"></div><div style="font-size:calc(12px*var(--ts,1));color:var(--muted)">${Math.round(share * 100)}% wt</div></span></div>`).join('')}</div>`).join('');
+    const more = rest.length ? `<div class="el-meta" style="display:block;margin-top:10px">Also averaged, below #${SHOW}: ${rest.map(r => `${esc(r.name)} ${pct(r.avg)}`).join('; ')}.</div>` : '';
     const singles = ELS.single.length ? `<div class="el-meta" style="display:block;margin-top:10px">In only one survey so far, so not averaged: ${ELS.single.slice(0, 12).map(r => `${esc(r.name)} ${pct(r.avg)} (${esc(r.parts[0].p.pollster)})`).join('; ')}${ELS.single.length > 12 ? `; and ${ELS.single.length - 12} more` : ''}.</div>` : '';
     const polls = EL_SEN_POLLS.map(p => {
       const inc = ELS.inAverage(p);
@@ -914,7 +991,7 @@ const EL = (() => {
         <div class="el-lbl">Weighted average · ${ELS.used.length} survey${ELS.used.length === 1 ? '' : 's'}</div>
         <div class="el-seg" style="grid-template-columns:1fr 1fr 1fr">${SEN_SWINGS.map(x => `<button class="${x.k === senSwing ? 'on' : ''}" onclick="FactsElections.senSwing(${x.k})">${esc(x.label)}</button>`).join('')}</div>
         <p class="el-p" style="margin:8px 0 6px">${esc(S.note)} The “top-12 chance” is how often each name finished in the top 12 across 10,000 simulated elections. Tap a name to see which surveys its average comes from.</p>
-        ${rows}${singles}
+        ${rows}${more}${singles}
       </div>
       <div class="el-note">No one has filed to run yet; that happens in October 2027. Surveys this early mostly measure name recognition.</div>
       <div class="el-card"><div class="el-lbl">The Senate surveys</div></div>${polls}`;
@@ -964,9 +1041,9 @@ const EL = (() => {
 
   const VIEWS = { overview, chances: chancesView, h2h, polls, trend, pollsters, method };
   function render() {
+    if (section === 'senate' && ELS.latest) store.set('factsph-sen-seen', new Date(ELS.addedOn(ELS.latest)).toISOString().slice(0, 10));
     tabs();
     $('#el-body').innerHTML = section === 'senate' ? senateView() : section === 'trial' ? trialView() : VIEWS[cur]();
-    if (section === 'senate' && ELS.latest) store.set('factsph-sen-seen', new Date(ELS.addedOn(ELS.latest)).toISOString().slice(0, 10));
   }
   // A survey added since this device last opened the 2028 tab (and within 14 days) counts as "new"
   function newSurvey() {
