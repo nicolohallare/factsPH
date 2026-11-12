@@ -10,7 +10,7 @@
    to show "New survey" alerts; if left out, `released` is used.
    ============================================================ */
 
-const EL_AS_OF = '2026-11-11'; // date the data below was last checked
+const EL_AS_OF = '2026-11-12'; // date the data below was last checked
 
 // ── Candidates ────────────────────────────────────────────────
 // status: 'declared' | 'out' (publicly ruled out) | 'undeclared'
@@ -20,8 +20,10 @@ const EL_CANDS = {
            src: [['Arab News, Feb 18 2026', 'https://www.arabnews.com/node/2633452/world'],
                  ['Inquirer, trial highlights', 'https://newsinfo.inquirer.net/2312504/icymi-sara-duterte-impeachment-trial-week-12-highlights']] },
   leni:  { name: 'Leni Robredo',    color: '#5b5fc7', status: 'out',
-           note: 'Ruled out a national run on Apr 21, 2026; plans a second term as Naga mayor.',
-           src: [['Inquirer', 'https://plus.inquirer.net/news/leni-rules-out-natl-run-in-28/']] },
+           note: 'Ruled out a national run on Apr 21, 2026; plans a second term as Naga mayor. Repeated on Nov 9, 2026 that her door to a 2028 run "is already closed."',
+           src: [['Inquirer', 'https://plus.inquirer.net/news/leni-rules-out-natl-run-in-28/'],
+                 ['GMA News, Nov 9 2026', 'https://www.gmanetwork.com/news/topstories/nation/1008836/leni-robredo-won-t-run-for-president-in-2028-will-support-deserving-candidate/story'],
+                 ['Daily Tribune, Nov 9 2026', 'https://tribune.net.ph/2026/11/09/robredo-says-its-final-im-not-running-for-any-natl-post']] },
   tulfo: { name: 'Raffy Tulfo',     color: '#2f8f8a', status: 'out',
            note: 'Ruled out a presidential or VP run on May 5, 2026; seeking Senate re-election. Asked to be left out of 2028 polls.',
            src: [['GMA News', 'https://www.gmanetwork.com/news_duplicate/balitambayan/balita/986540/raffy-tulfo-walang-balak-tumakbong-pangulo-sa-2028-polls-na-puwede-niyang-makalaban-si-sara-duter/story/']] },
@@ -190,6 +192,7 @@ const EL_TIMELINE = [
   { date: '2026-09-23', text: 'Impeachment court sets 14 of 20 eligible senators as the votes needed to convict.', src: 'https://www.illawarramercury.com.au/story/9356262/philippine-senate-lowers-votes-to-convict-vp-duterte/' },
   { date: '2026-10-13', text: 'Impeachment court lets prosecutors drop three of four charges against Sara Duterte; only the unexplained-wealth charge remains.', src: 'https://www.philstar.com/headlines/2026/10/13/2562940/impeach-court-grants-prosecution-bid-drop-3-4-charges-vs-vp-sara' },
   { date: '2026-11-09', text: 'Sara Duterte’s defense begins presenting its case in the impeachment trial; its first witness is a Davao City assessor.', src: 'https://www.gmanetwork.com/news/topstories/nation/1008771/live-updates-sara-duterte-impeachment-trial-november-9-2026/story/' },
+  { date: '2026-11-09', text: 'Leni Robredo again rules out a 2028 run, saying at a Naga City briefing that the door "is already closed."', src: 'https://tribune.net.ph/2026/11/09/robredo-says-its-final-im-not-running-for-any-natl-post' },
   { date: '2027-10-01', text: 'Filing of certificates of candidacy (Oct 1–8, 2027). The field becomes official.', src: 'https://en.wikipedia.org/wiki/2028_Philippine_presidential_election', future: true },
   { date: '2028-05-08', text: 'Election day.', src: 'https://en.wikipedia.org/wiki/2028_Philippine_presidential_election', future: true },
 ];
