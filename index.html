@@ -335,7 +335,7 @@ header{padding:48px 18px 0;position:sticky;top:0;background:rgba(245,240,232,0.9
     <button class="tab active" onclick="setTab('all',this)">All</button>
     <button class="tab" onclick="setTab('icc',this)">⚖️ ICC</button>
     <button class="tab" onclick="setTab('marcos',this)">🏛️ Marcos</button>
-    <button class="tab" onclick="setTab('sara',this)">Sara VP</button>
+    <button class="tab" onclick="setTab('sara',this)">VP Trial</button>
     <button class="tab" onclick="setTab('wps',this)">🌊 WPS</button>
     <button class="tab" onclick="setTab('elections',this)">🗳️ 2028</button>
     <button class="tab" onclick="setTab('national',this)">📢 National</button>
@@ -544,7 +544,7 @@ const SOURCE_LEAN={
   'philippine news agency':'admin','pna':'admin','manila bulletin':'admin','mb.com':'admin','ptv':'admin',
   'gma network':'center','gma news':'center','inquirer':'center','philippine star':'center','philstar':'center',
   'abs-cbn':'center','abscbn':'center','one news':'center','businessmirror':'center','sunstar':'center',
-  'rappler':'pink','vera files':'pink','pcij':'pink','daily tribune':'pink',
+  'rappler':'pink','vera files':'pink','pcij':'pink','daily tribune':'dds','tribune.net':'dds',
 };
 function guessLean(sourceName){
   const s=(sourceName||'').toLowerCase();
@@ -675,7 +675,7 @@ function guessTopic(t){
   if(NATIONAL.test(t)&&!POLITICS.test(t))return'national';
   return'general';
 }
-const TOPIC_LABELS={icc:'⚖️ ICC / Duterte',marcos:'🏛️ Marcos Admin',sara:'Sara Duterte',wps:'🌊 WPS',elections:'🗳️ 2028 Elections',national:'📢 National',general:'🇵🇭 Politics'};
+const TOPIC_LABELS={icc:'⚖️ ICC / Duterte',marcos:'🏛️ Marcos Admin',sara:'⚖️ VP Trial',wps:'🌊 WPS',elections:'🗳️ 2028 Elections',national:'📢 National',general:'🇵🇭 Politics'};
 
 // ── CLUSTER ──
 const STOP=new Set(['the','a','an','in','of','on','at','to','for','is','are','was','were','and','but','or','with','by','as','from','that','this','has','have','its','be','been','will','not','no','after','before','says','said','over','into','their','also','more','new','amid']);
@@ -701,8 +701,8 @@ function keyWords(t){
 // Each side's own outlets, for a targeted search when a story has no coverage from that side yet
 const SIDE_SITES={
   admin:['pna.gov.ph','mb.com.ph','ptvnews.ph'],
-  dds:['manilatimes.net','manilastandard.net'],
-  pink:['rappler.com','verafiles.org','pcij.org','tribune.net.ph'],
+  dds:['manilatimes.net','manilastandard.net','tribune.net.ph'],
+  pink:['rappler.com','verafiles.org','pcij.org'],
 };
 const GN=q=>`https://news.google.com/rss/search?q=${q}&hl=en-PH&gl=PH&ceid=PH:en`;
 async function enrichStory(s){

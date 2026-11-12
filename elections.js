@@ -10,7 +10,7 @@
    to show "New survey" alerts; if left out, `released` is used.
    ============================================================ */
 
-const EL_AS_OF = '2026-10-29'; // date the data below was last checked
+const EL_AS_OF = '2026-11-05'; // date the data below was last checked
 
 // ── Candidates ────────────────────────────────────────────────
 // status: 'declared' | 'out' (publicly ruled out) | 'undeclared'
@@ -22,7 +22,7 @@ const EL_CANDS = {
   leni:  { name: 'Leni Robredo',    color: '#5b5fc7', status: 'out',
            note: 'Ruled out a national run on Apr 21, 2026; plans a second term as Naga mayor.',
            src: [['Inquirer', 'https://plus.inquirer.net/news/leni-rules-out-natl-run-in-28/']] },
-  tulfo: { name: 'Raffy Tulfo',     color: '#2f8f8a', status: 'out',
+  tulfo: { name: 'Raffy Tulfo',     color: '#0f9488', status: 'out',
            note: 'Ruled out a presidential or VP run on May 5, 2026; seeking Senate re-election. Asked to be left out of 2028 polls.',
            src: [['GMA News', 'https://www.gmanetwork.com/news_duplicate/balitambayan/balita/986540/raffy-tulfo-walang-balak-tumakbong-pangulo-sa-2028-polls-na-puwede-niyang-makalaban-si-sara-duter/story/']] },
   risa:  { name: 'Risa Hontiveros', color: '#7a8b2f', status: 'undeclared', note: '', src: [] },
@@ -38,7 +38,7 @@ const EL_POLLS = [
   { pollster: 'Momentum Research', start: '2026-10-16', end: '2026-10-19', released: '2026-10-27',
     n: 1401, moe: 2.6, method: 'Face-to-face', sponsor: null, indep: true, q: 'Two-way match-up: Robredo vs. Baste Duterte (Sara Duterte not in this question)',
     added: '2026-10-29',
-    r: { leni: 45.7 }, other: 'Baste Duterte 43.2', undec: 11,
+    r: { leni: 45.7 }, other: 'Baste Duterte 43.2%', undec: 11,
     include: false, exclude: 'A two-way Robredo vs. Baste Duterte question without Sara Duterte, so it is not comparable with the list surveys. The same survey had Sara Duterte leading two- and three-way match-ups by more than 20 points at about 44%, but exact figures were not published in any source we could open.',
     flags: ['Undecided = 6.4 unsure + 4.6 declined.', 'Only one source opened (Iloilo Metropolitan Times, Oct 27); it cites the Momentum Research dashboard. Release date is the earliest report found.'],
     src: [['Iloilo Metropolitan Times, Oct 27 2026', 'https://www.imtnews.ph/filipinos-split-between-robredo-baste-duterte-in-two-way-race-for-president-survey/']] },
@@ -140,6 +140,10 @@ const EL_POLLS = [
 
 // ── Head-to-head match-ups ────────────────────────────────────
 const EL_H2H = [
+  { a: 'sara', b: 'leni', pollster: 'OCTA Research', start: '2026-09-28', end: '2026-10-04', released: '2026-11-04', added: '2026-11-05', n: 1200, moe: 3, sponsor: null, va: 40, vb: 33, undec: 27,
+    note: 'Undecided/neither 26, refused 1. By region (Duterte–Robredo): Mindanao 71–2, Visayas 46–27, Balance Luzon 24–49, NCR 32–39.',
+    src: [['Manila Times, Nov 4 2026', 'https://www.manilatimes.net/2026/11/04/news/dutertes-lead-over-robredo-narrows-to-7-points-in-octa-survey/2461287'],
+          ['SunStar', 'https://www.sunstar.com.ph/davao/saras-lead-vs-leni-continues']] },
   { a: 'sara', b: 'leni', pollster: 'Pulse Asia', start: '2026-09-17', end: '2026-09-24', n: 2400, moe: 2, sponsor: null, va: 54, vb: 40, undec: 6.3,
     src: [['Pulse Asia (PDF)', 'https://pulseasia.ph/wp-content/uploads/2026/10/MR1-UB2026-3-MR-on-the-May-2028-Elections-Final.pdf']] },
   { a: 'sara', b: 'leni', pollster: 'Momentum Research', start: '2026-08-18', end: '2026-08-23', n: 1487, moe: 2.5, sponsor: null, va: 58.3, vb: 33.6, undec: null,
@@ -177,6 +181,7 @@ const EL_TIMELINE = [
   { date: '2026-09-23', text: 'Impeachment court sets 14 of 20 eligible senators as the votes needed to convict.', src: 'https://www.illawarramercury.com.au/story/9356262/philippine-senate-lowers-votes-to-convict-vp-duterte/' },
   { date: '2026-10-13', text: 'Impeachment court lets prosecutors drop three of four charges against Sara Duterte; only the unexplained-wealth charge remains.', src: 'https://www.philstar.com/headlines/2026/10/13/2562940/impeach-court-grants-prosecution-bid-drop-3-4-charges-vs-vp-sara' },
   { date: '2026-11-09', text: 'Sara Duterte’s defense begins presenting its case in the impeachment trial.', src: 'https://www.gmanetwork.com/news/topstories/nation/1005740/prosecution-drops-3-articles-retains-article-ii-in-sara-duterte-impeachment-trial/story/', future: true },
+  { date: '2026-11-04', text: 'OCTA: Sara Duterte’s one-on-one lead over Leni Robredo narrows to 7 points (40–33), from 11 in March.', src: 'https://www.manilatimes.net/2026/11/04/news/dutertes-lead-over-robredo-narrows-to-7-points-in-octa-survey/2461287' },
   { date: '2027-10-01', text: 'Filing of certificates of candidacy (Oct 1–8, 2027). The field becomes official.', src: 'https://en.wikipedia.org/wiki/2028_Philippine_presidential_election', future: true },
   { date: '2028-05-08', text: 'Election day.', src: 'https://en.wikipedia.org/wiki/2028_Philippine_presidential_election', future: true },
 ];
@@ -184,6 +189,60 @@ const EL_TIMELINE = [
 /* ============================================================
    Computation
    ============================================================ */
+// ── Senate surveys (May 2028: 12 seats; voters pick up to 12 names) ──
+// r = { 'Full Name': percent }. Names are kept exactly as each pollster published them.
+// SEN_PEOPLE adds optional facts per name (only sourced ones).
+const EL_SEN_POLLS = [
+  /*SEN_POLLS*/
+];
+const SEN_PEOPLE = {
+  /*SEN_PEOPLE*/
+};
+
+// ── Senate impeachment trial of Vice President Sara Duterte ──
+const EL_TRIAL = /*TRIAL*/null;
+
+const ELS = (() => {
+  const DAY = 864e5, HALF_LIFE = 90, WINDOW = 365, asOf = Date.parse(EL_AS_OF);
+  const mid = p => (Date.parse(p.start) + Date.parse(p.end)) / 2;
+  const weight = p => Math.pow(0.5, ((asOf - mid(p)) / DAY) / HALF_LIFE) * Math.sqrt((p.n || 1200) / 1200);
+  const inAverage = p => p.include === false ? { ok: false, why: p.exclude }
+    : (asOf - mid(p)) / DAY > WINDOW ? { ok: false, why: 'Older than 12 months; shown for history only.' } : { ok: true };
+  const used = EL_SEN_POLLS.filter(p => inAverage(p).ok);
+  const names = [...new Set(used.flatMap(p => Object.keys(p.r)))];
+  const rows = names.map(name => {
+    const ps = used.filter(p => p.r[name] != null);
+    const W = ps.reduce((s, p) => s + weight(p), 0);
+    const avg = ps.reduce((s, p) => s + weight(p) * p.r[name], 0) / W;
+    const vals = ps.map(p => p.r[name]);
+    // how much the surveys disagree about this name (weighted spread), at least 2 points
+    const sd = Math.max(2, Math.sqrt(ps.reduce((s, p) => s + weight(p) / W * (p.r[name] - avg) ** 2, 0)));
+    return { name, avg, sd, polls: ps.length, of: used.length, min: Math.min(...vals), max: Math.max(...vals),
+      parts: ps.map(p => ({ p, v: p.r[name], share: weight(p) / W })) };
+  });
+  // A name needs 2+ surveys to be averaged
+  const ranked = rows.filter(r => r.polls >= 2).sort((a, b) => b.avg - a.avg);
+  const single = rows.filter(r => r.polls === 1).sort((a, b) => b.avg - a.avg);
+
+  // Chance of finishing in the top 12: simulate the election many times
+  function rng(seed) { return () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  const gauss = r => { let u = 0; while (!u) u = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * r()); };
+  const cache = {};
+  function top12(swing, N = 10000) {
+    if (cache[swing]) return cache[swing];
+    const r = rng(2028), hits = ranked.map(() => 0);
+    for (let i = 0; i < N; i++) {
+      const sim = ranked.map((a, j) => ({ j, v: a.avg + gauss(r) * a.sd + gauss(r) * swing }));
+      sim.sort((a, b) => b.v - a.v);
+      for (let k = 0; k < Math.min(12, sim.length); k++) hits[sim[k].j]++;
+    }
+    return (cache[swing] = ranked.map((a, j) => ({ ...a, p: hits[j] / N })));
+  }
+  const addedOn = p => Date.parse(p.added || p.released || p.end);
+  const latest = [...EL_SEN_POLLS].sort((a, b) => addedOn(b) - addedOn(a))[0] || null;
+  return { used, ranked, single, top12, weight, inAverage, addedOn, latest, total: EL_SEN_POLLS.length };
+})();
+
 const EL = (() => {
   const DAY = 864e5;
   const HALF_LIFE = 90;      // days: a poll's weight halves every 90 days
@@ -299,7 +358,10 @@ const EL = (() => {
     };
   }
   const updates = [...EL_POLLS].sort((a, b) => addedOn(b) - addedOn(a) || avail(b) - avail(a));
-  const latestUpdate = updates.length ? new Date(addedOn(updates[0])).toISOString().slice(0, 10) : EL_AS_OF;
+  // head-to-head-only releases also count as news when they carry `added`
+  const h2hUpdates = EL_H2H.filter(h => h.added).sort((a, b) => addedOn(b) - addedOn(a));
+  const latestAdded = [...updates.slice(0, 1), ...h2hUpdates.slice(0, 1)].map(addedOn);
+  const latestUpdate = latestAdded.length ? new Date(Math.max(...latestAdded)).toISOString().slice(0, 10) : EL_AS_OF;
 
   // ── Chances of finishing first ──────────────────────────────
   // Simulation: each candidate's election-day share = today's average
@@ -328,7 +390,7 @@ const EL = (() => {
   }
 
   return { weight, recencyW, sampleW, inAverage, used, totalW, average, ranked, single, undecAvg, listLead, h2hSummary, phi, ageDays, HALF_LIFE, WINDOW,
-    avail, addedOn, averageAt, impact, updates, latestUpdate, chances, h2hChance, spread };
+    avail, addedOn, averageAt, impact, updates, h2hUpdates, latestUpdate, chances, h2hChance, spread };
 })();
 
 /* ============================================================
@@ -442,6 +504,33 @@ const EL = (() => {
   .el-seg button.on{background:var(--gold);border-color:var(--gold);color:#fffdf8;font-weight:600}
   .el-crow{padding:10px 0;border-bottom:1px solid var(--border)} .el-crow:last-of-type{border-bottom:none}
   svg.el-chart text{font-family:'IBM Plex Sans',sans-serif;font-size:calc(12px*var(--ts,1));fill:var(--muted)}
+  .el-sec{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:4px;margin-top:12px}
+  .el-sec button{min-height:44px;border:none;background:transparent;border-radius:7px;font-family:'IBM Plex Sans',sans-serif;font-size:calc(15px*min(var(--ts,1),1.15));font-weight:600;color:var(--muted2);cursor:pointer}
+  .el-sec button.on{background:var(--s1);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .el-sec button .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);margin-left:5px;vertical-align:2px}
+  .sn-row{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+  .sn-rank{font-family:'Libre Baskerville',serif;font-weight:700;color:var(--muted);text-align:right;font-size:calc(15px*var(--ts,1))}
+  .sn-name{font-size:calc(16px*var(--ts,1));font-weight:600;line-height:1.3}
+  .sn-sub{font-size:calc(13px*var(--ts,1));color:var(--muted);margin-top:2px}
+  .sn-bar{height:8px;background:var(--s3);border-radius:4px;margin-top:6px;position:relative}
+  .sn-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:#5b5fc7}
+  .sn-bar.out i{background:#a9a6c9}
+  .sn-bar b{position:absolute;top:-3px;height:14px;border-left:1.5px solid var(--muted);border-right:1.5px solid var(--muted);opacity:.5}
+  .sn-num{text-align:right;font-family:'Libre Baskerville',serif;font-weight:700;font-size:calc(18px*var(--ts,1));white-space:nowrap}
+  .sn-chance{font-family:'IBM Plex Sans',sans-serif;font-weight:500;font-size:calc(12px*var(--ts,1));color:var(--muted2);display:block}
+  .sn-cut{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:calc(12px*var(--ts,1));font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+  .sn-cut:before,.sn-cut:after{content:'';flex:1;height:2px;background:var(--gold);opacity:.5}
+  .tr-stage{font-family:'Libre Baskerville',serif;font-size:calc(19px*var(--ts,1));font-weight:700;line-height:1.35;margin:4px 0 8px}
+  .tr-seats{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:10px 0 6px}
+  .tr-seats span{aspect-ratio:1;border-radius:4px;background:var(--s3);border:1px solid var(--border2)}
+  .tr-seats span.need{background:#2f6db5;border-color:#2f6db5}
+  .tr-seats span.off{background:transparent;border-style:dashed}
+  .tr-key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:calc(13px*var(--ts,1));color:var(--muted2)}
+  .tr-key i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:5px;border:1px solid var(--border2)}
+  .tr-op{margin:10px 0 4px}
+  .tr-opbar{display:flex;height:30px;border-radius:6px;overflow:hidden;gap:2px;font-size:calc(13px*var(--ts,1));font-weight:700;color:#fff}
+  .tr-opbar div{display:flex;align-items:center;justify-content:center;white-space:nowrap;min-width:0}
+  .tr-opbar .cv{background:#2f6db5} .tr-opbar .aq{background:#b5562f} .tr-opbar .un{background:#e4ded2;color:var(--muted2)}
   `;
   const style = document.createElement('style'); style.textContent = css; document.head.appendChild(style);
 
@@ -451,9 +540,10 @@ const EL = (() => {
     <div class="el-head">
       <div class="el-top">
         <div><div class="el-title">2028 <em>Race</em></div>
-        <div class="el-sub">Presidential surveys, pooled and explained · data as of ${fmtD(EL_AS_OF)}</div></div>
+        <div class="el-sub" id="el-sub"></div></div>
         <button class="el-x" aria-label="Close" onclick="showView('brief')">✕</button>
       </div>
+      <div class="el-sec" id="el-sec" role="tablist" aria-label="Section"></div>
       <div class="el-tabs" id="el-tabs"></div>
     </div>
     <div class="el-body" id="el-body"></div>
@@ -478,7 +568,18 @@ const EL = (() => {
   const lastSeen = () => store.get('factsph-el-seen') || '';
   const isNew = p => new Date(EL.addedOn(p)).toISOString().slice(0, 10) > lastSeen();
 
+  const SECTIONS = [['president', 'President'], ['senate', 'Senate'], ['trial', 'VP Trial']];
+  let section = (() => { const v = store.get('factsph-el-section'); return SECTIONS.some(x => x[0] === v) ? v : 'president'; })();
+  const SUBS = {
+    president: 'Presidential surveys, pooled and explained',
+    senate: 'Senate surveys: who is in the Magic 12',
+    trial: 'The Senate impeachment trial of VP Sara Duterte',
+  };
+  const senNew = () => ELS.latest && (Date.now() - ELS.addedOn(ELS.latest)) / DAYMS <= 14 && new Date(ELS.addedOn(ELS.latest)).toISOString().slice(0, 10) > (store.get('factsph-sen-seen') || '');
   function tabs() {
+    $('#el-sub').textContent = `${SUBS[section]} · data as of ${fmtD(EL_AS_OF)}`;
+    $('#el-sec').innerHTML = SECTIONS.map(([k, l]) => `<button role="tab" aria-selected="${k === section}" class="${k === section ? 'on' : ''}" onclick="FactsElections.section('${k}')">${l}${k === 'senate' && senNew() ? '<span class="dot" aria-label="new"></span>' : ''}</button>`).join('');
+    $('#el-tabs').style.display = section === 'president' ? '' : 'none';
     $('#el-tabs').innerHTML = TABS.map(([k, l]) => `<button class="el-tab${k === cur ? ' on' : ''}" onclick="FactsElections.go('${k}')">${l}</button>`).join('');
   }
 
@@ -531,21 +632,35 @@ const EL = (() => {
   // ── What's new: surveys added in the last 30 days, and what each did to the average ──
   function whatsNew() {
     const keys = EL.ranked.slice(0, 3).map(a => a.key);
-    const recent = EL.updates.filter(p => (Date.now() - EL.addedOn(p)) / DAYMS <= 30).slice(0, 3);
-    if (!recent.length) return '';
-    return `<div class="el-card el-newcard"><div class="el-lbl">What’s new · latest surveys</div>${recent.map(p => {
-      const im = EL.impact(p, keys);
+    const within = x => (Date.now() - EL.addedOn(x)) / DAYMS <= 30;
+    const items = [...EL.updates.filter(within).slice(0, 3), ...EL.h2hUpdates.filter(within).slice(0, 2)]
+      .sort((a, b) => EL.addedOn(b) - EL.addedOn(a)).slice(0, 4);
+    if (!items.length) return '';
+    const added = x => `Added ${fmtD(new Date(EL.addedOn(x)).toISOString().slice(0, 10), { month: 'short', day: 'numeric' })}`;
+    const row = x => {
+      if (x.va != null) {   // one-on-one match-up
+        const s = EL.h2hSummary(x.a, x.b);
+        const prev = s && s.rows.filter(r => r !== x && r.pollster === x.pollster)[0];
+        return `<div class="el-upd">
+          <div class="el-ptop"><span class="el-pname">${isNew(x) ? '<span class="el-newtag">NEW</span> ' : ''}${esc(x.pollster)} · one-on-one</span><span class="el-pdate">${range(x)}</span></div>
+          <div class="el-p" style="margin:4px 0 6px"><b>${esc(PLAIN(x.a))} ${pct(x.va, 0)} vs ${esc(PLAIN(x.b))} ${pct(x.vb, 0)}</b>${prev ? ` <span style="color:var(--muted)">(${esc(x.pollster)}’s previous round: ${prev.va}–${prev.vb})</span>` : ''}</div>
+          ${s ? `<div class="el-moves"><div>One-on-one average now: ${esc(PLAIN(x.a))} ${pct(s.va, 0)} – ${esc(PLAIN(x.b))} ${pct(s.vb, 0)}</div></div>` : ''}
+          ${x.note ? `<div class="el-meta" style="display:block;margin-top:4px">${esc(x.note)}</div>` : ''}
+          <div class="el-meta" style="display:block;margin-top:4px">${added(x)} · <a href="#" onclick="FactsElections.go('h2h');return false" style="color:var(--gold)">all match-ups ›</a></div>
+        </div>`;
+      }
+      const p = x, im = EL.impact(p, keys), inc = EL.inAverage(p);
       const top = Object.entries(p.r).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k, v]) => `${esc(C(k) ? PLAIN(k) : k)} ${pct(v)}`).join(' · ');
-      const inc = EL.inAverage(p);
       return `<div class="el-upd">
         <div class="el-ptop"><span class="el-pname">${isNew(p) ? '<span class="el-newtag">NEW</span> ' : ''}${esc(p.pollster)}</span><span class="el-pdate">${range(p)}</span></div>
-        <div class="el-p" style="margin:4px 0 6px"><b>${top}</b></div>
+        <div class="el-p" style="margin:4px 0 6px"><b>${top}${p.other && Object.keys(p.r).length < 2 ? ' · ' + esc(p.other) : ''}</b></div>
         ${inc.ok ? `<div class="el-meta" style="display:block;margin:0 0 4px">Weight in today’s average: <b>${Math.round(im.weightNow * 100)}%</b> of all surveys</div>
         <div class="el-moves">${im.today.map(m => `<div><span class="el-sw" style="background:${C(m.key).color}"></span>${esc(PLAIN(m.key))}: average ${mv(m.without, m.with)}</div>`).join('')}</div>`
         : `<div class="el-flag">Not counted in the average: ${esc(inc.why)}</div>`}
-        <div class="el-meta" style="display:block;margin-top:4px">Added ${fmtD(new Date(EL.addedOn(p)).toISOString().slice(0, 10), { month: 'short', day: 'numeric' })} · <a href="#" onclick="FactsElections.go('polls');return false" style="color:var(--gold)">full details ›</a></div>
+        <div class="el-meta" style="display:block;margin-top:4px">${added(p)} · <a href="#" onclick="FactsElections.go('polls');return false" style="color:var(--gold)">full details ›</a></div>
       </div>`;
-    }).join('')}</div>`;
+    };
+    return `<div class="el-card el-newcard"><div class="el-lbl">What’s new · latest surveys</div>${items.map(row).join('')}</div>`;
   }
 
   // ── Chances of finishing first ──
@@ -747,12 +862,119 @@ const EL = (() => {
       <p class="el-p">Where sources disagree, the conflict is noted on that survey's card along with the figure we used. Spotted an error or a survey we missed? Email <a href="mailto:hello@factsph.app?subject=2028%20polls%20correction">hello@factsph.app</a>.</p></div>`;
   }
 
+  // ── Senate ──
+  const SEN_SWINGS = [
+    { k: 0, label: 'If the vote were today', note: 'Only the uncertainty in today’s surveys.' },
+    { k: 5, label: 'Some changes', note: 'Each name’s share could move about 5 points either way by election day.' },
+    { k: 10, label: 'Big changes', note: 'About 10 points either way, the kind of late surge some candidates rode in past Senate races.' },
+  ];
+  let senSwing = (() => { const v = store.get('factsph-sen-swing'); return SEN_SWINGS.some(x => String(x.k) === v) ? +v : 5; })();
+  const senLink = n => SEN_PEOPLE[n] && SEN_PEOPLE[n].note ? `<div class="sn-sub">${esc(SEN_PEOPLE[n].note)}</div>` : '';
+  function senateView() {
+    if (!ELS.total) return `<div class="el-card"><p class="el-p">No Senate surveys have been added yet.</p></div>`;
+    const res = ELS.top12(senSwing);
+    const max = Math.max(...res.map(r => r.max), 1);
+    const S = SEN_SWINGS.find(x => x.k === senSwing);
+    const rows = res.map((r, i) => `${i === 12 ? '<div class="sn-cut">12 seats · cut-off</div>' : ''}
+      <div class="sn-row" onclick="this.nextElementSibling.classList.toggle('open')" style="cursor:pointer">
+        <div class="sn-rank">${i + 1}</div>
+        <div><div class="sn-name">${esc(r.name)}</div>
+          <div class="sn-bar${i >= 12 ? ' out' : ''}"><i style="width:${r.avg / max * 100}%"></i>${r.polls > 1 ? `<b style="left:${r.min / max * 100}%;width:${(r.max - r.min) / max * 100}%"></b>` : ''}</div>
+          <div class="sn-sub">Range ${pct(r.min)}–${pct(r.max)} · in ${r.polls} of ${r.of} surveys</div>${senLink(r.name)}</div>
+        <div class="sn-num">${pct(r.avg)}<span class="sn-chance">${chanceTxt(r.p)} top-12 chance</span></div>
+      </div>
+      <div class="el-parts">${r.parts.slice().sort((a, b) => b.share - a.share).map(({ p, v, share }) => `<div class="el-part"><span><b>${esc(p.pollster)}</b> · ${range(p)}</span><span style="text-align:right">${pct(v)}</span><span><div class="el-wbar" style="width:${Math.max(4, share * 100)}%"></div><div style="font-size:calc(12px*var(--ts,1));color:var(--muted)">${Math.round(share * 100)}% wt</div></span></div>`).join('')}</div>`).join('');
+    const singles = ELS.single.length ? `<div class="el-meta" style="display:block;margin-top:10px">In only one survey so far, so not averaged: ${ELS.single.slice(0, 12).map(r => `${esc(r.name)} ${pct(r.avg)} (${esc(r.parts[0].p.pollster)})`).join('; ')}${ELS.single.length > 12 ? `; and ${ELS.single.length - 12} more` : ''}.</div>` : '';
+    const polls = EL_SEN_POLLS.map(p => {
+      const inc = ELS.inAverage(p);
+      const top = Object.entries(p.r).sort((a, b) => b[1] - a[1]);
+      const miss = t => `<span class="miss">${t}: not reported</span>`;
+      return `<div class="el-poll${inc.ok ? '' : ' out'}">
+        <div class="el-ptop"><span class="el-pname">${esc(p.pollster)}</span><span class="el-pdate">${range(p)}</span></div>
+        <div class="el-disc">
+          ${p.n ? `<span>n = ${p.n.toLocaleString()}</span>` : miss('Sample')}
+          ${p.moe ? `<span>±${p.moe} pts</span>` : miss('Margin of error')}
+          ${p.method && p.method !== 'Not stated' ? `<span>${esc(p.method)}</span>` : miss('Method')}
+          ${p.sponsor ? `<span style="color:var(--red);font-weight:600">Commissioned: ${esc(p.sponsor)}</span>` : p.indep ? '<span>Not commissioned</span>' : miss('Sponsor')}
+          ${p.released ? `<span>Released ${fmtD(p.released, { month: 'short', day: 'numeric' })}</span>` : ''}
+        </div>
+        <ol class="el-p" style="margin:0 0 0 22px;columns:2;column-gap:18px">${top.slice(0, 16).map(([n, v]) => `<li style="break-inside:avoid">${esc(n)} <b>${pct(v)}</b></li>`).join('')}</ol>
+        ${top.length > 16 ? `<div class="el-meta" style="display:block">…and ${top.length - 16} more names</div>` : ''}
+        ${p.q ? `<div class="el-meta" style="display:block;margin-top:4px">${esc(p.q)}</div>` : ''}
+        ${(p.flags || []).map(f => `<div class="el-flag">⚠ ${esc(f)}</div>`).join('')}
+        <div class="el-inc ${inc.ok ? 'y' : 'n'}">${inc.ok ? '✓ In the Senate average' : `✕ Not in the average · ${esc(inc.why)}`}</div>
+        <div class="el-src">${links(p.src)}</div>
+      </div>`;
+    }).join('');
+    return `<div class="el-card">
+        <div class="el-lbl">How the Senate race works</div>
+        <p class="el-p">12 of the 24 Senate seats are up in May 2028. Each voter can pick up to 12 names, and the 12 with the most votes win. Surveys ask the same way, so a name’s percentage is the share of voters who included them in their list.</p>
+      </div>
+      <div class="el-card">
+        <div class="el-lbl">Weighted average · ${ELS.used.length} survey${ELS.used.length === 1 ? '' : 's'}</div>
+        <div class="el-seg" style="grid-template-columns:1fr 1fr 1fr">${SEN_SWINGS.map(x => `<button class="${x.k === senSwing ? 'on' : ''}" onclick="FactsElections.senSwing(${x.k})">${esc(x.label)}</button>`).join('')}</div>
+        <p class="el-p" style="margin:8px 0 6px">${esc(S.note)} The “top-12 chance” is how often each name finished in the top 12 across 10,000 simulated elections. Tap a name to see which surveys its average comes from.</p>
+        ${rows}${singles}
+      </div>
+      <div class="el-note">No one has filed to run yet; that happens in October 2027. Surveys this early mostly measure name recognition.</div>
+      <div class="el-card"><div class="el-lbl">The Senate surveys</div></div>${polls}`;
+  }
+
+  // ── VP Trial ──
+  function trialView() {
+    const T = EL_TRIAL;
+    if (!T) return `<div class="el-card"><p class="el-p">Trial information is being updated.</p></div>`;
+    const seats = Array.from({ length: T.seats.total }, (_, i) => `<span class="${i >= T.seats.eligible ? 'off' : i < T.seats.needed ? 'need' : ''}"></span>`).join('');
+    const op = (T.opinion || []).map(o => {
+      const u = Math.max(0, 100 - o.convict - o.acquit);
+      return `<div class="tr-op">
+        <div class="el-ptop"><span class="el-pname">${esc(o.pollster)}</span><span class="el-pdate">${range(o)}</span></div>
+        <div class="el-meta" style="display:block;margin:2px 0 6px">${esc(o.q)}${o.n ? ` · n = ${o.n.toLocaleString()}` : ''}${o.moe ? ` · ±${o.moe} pts` : ''}</div>
+        <div class="tr-opbar" role="img" aria-label="${esc(o.convictLbl || 'Convict')} ${o.convict}%, ${esc(o.acquitLbl || 'Acquit')} ${o.acquit}%, undecided ${u}%">
+          <div class="cv" style="width:${o.convict}%">${o.convict}%</div><div class="un" style="width:${u}%">${u >= 8 ? u + '%' : ''}</div><div class="aq" style="width:${o.acquit}%">${o.acquit}%</div></div>
+        <div class="el-meta"><span>■ ${esc(o.convictLbl || 'Convict')}</span><span>Undecided / other</span><span>${esc(o.acquitLbl || 'Acquit')} ■</span></div>
+        ${o.note ? `<div class="el-meta" style="display:block">${esc(o.note)}</div>` : ''}
+        <div class="el-src">${links(o.src)}</div>
+      </div>`;
+    }).join('<div style="height:1px;background:var(--border);margin:10px 0"></div>');
+    return `<div class="el-card">
+        <div class="el-lbl">Where the trial stands · as of ${fmtD(T.asOf)}</div>
+        <div class="tr-stage">${esc(T.stage)}</div>
+        ${T.details.map(d => `<p class="el-p">${esc(d)}</p>`).join('')}
+        <div class="el-src" style="margin-top:6px">${links(T.stageSrc)}</div>
+      </div>
+      <div class="el-card">
+        <div class="el-lbl">Votes needed to convict</div>
+        <div class="el-h">${T.seats.needed} of ${T.seats.eligible} senator-judges</div>
+        <div class="tr-seats" role="img" aria-label="${T.seats.needed} of ${T.seats.eligible} votes needed; ${T.seats.total - T.seats.eligible} senators not taking part">${seats}</div>
+        <div class="tr-key"><span><i style="background:#2f6db5;border-color:#2f6db5"></i>Votes needed (${T.seats.needed})</span><span><i style="background:var(--s3)"></i>Other senator-judges (${T.seats.eligible - T.seats.needed})</span><span><i style="border-style:dashed"></i>Not taking part (${T.seats.total - T.seats.eligible})</span></div>
+        <p class="el-p" style="margin-top:8px">${esc(T.seats.note)}</p>
+        <div class="el-src">${links(T.seats.src)}</div>
+      </div>
+      <div class="el-card">
+        <div class="el-lbl">If she is convicted / acquitted</div>
+        ${T.outcomes.map(d => `<p class="el-p">${esc(d)}</p>`).join('')}
+        <div class="el-src">${links(T.outcomesSrc)}</div>
+      </div>
+      ${op ? `<div class="el-card"><div class="el-lbl">What the public says</div>${op}</div>` : ''}
+      <div class="el-card"><div class="el-lbl">Timeline</div><div class="el-tl">${T.timeline.map(t =>
+        `<div class="el-tli${t.future ? ' f' : ''}"><small>${fmtD(t.date)}</small><span>${esc(t.text)}</span> <a href="${esc(t.src)}" target="_blank" rel="noopener">source ↗</a></div>`).join('')}</div></div>
+      <div class="el-note">FactsPH does not predict how individual senators will vote. Positions are shown only when a senator has stated them publicly, with a source.</div>`;
+  }
+
   const VIEWS = { overview, chances: chancesView, h2h, polls, trend, pollsters, method };
-  function render() { tabs(); $('#el-body').innerHTML = VIEWS[cur](); }
+  function render() {
+    tabs();
+    $('#el-body').innerHTML = section === 'senate' ? senateView() : section === 'trial' ? trialView() : VIEWS[cur]();
+    if (section === 'senate' && ELS.latest) store.set('factsph-sen-seen', new Date(ELS.addedOn(ELS.latest)).toISOString().slice(0, 10));
+  }
   // A survey added since this device last opened the 2028 tab (and within 14 days) counts as "new"
   function newSurvey() {
-    const p = EL.updates[0];
-    if (!p || (Date.now() - EL.addedOn(p)) / DAYMS > 14 || !isNew(p)) return null;
+    const p = EL.updates[0], h = EL.h2hUpdates[0];
+    const fresh = x => x && (Date.now() - EL.addedOn(x)) / DAYMS <= 14 && isNew(x);
+    const pick = [p, h].filter(fresh).sort((a, b) => EL.addedOn(b) - EL.addedOn(a))[0];
+    if (!pick) return null;
+    if (pick === h) return { pollster: h.pollster, dates: range(h), top: `${PLAIN(h.a)} ${pct(h.va, 0)} vs ${PLAIN(h.b)} ${pct(h.vb, 0)}, one-on-one` };
     const top = Object.entries(p.r).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k, v]) => `${C(k) ? PLAIN(k) : k} ${pct(v)}`).join(', ');
     return { pollster: p.pollster, dates: range(p), top };
   }
@@ -762,8 +984,10 @@ const EL = (() => {
       store.set('factsph-el-seen', EL.latestUpdate); if (window.onElectionsSeen) window.onElectionsSeen(); },
     newSurvey,
     swing(k) { swing = k; store.set('factsph-swing', String(k)); render(); },
+    senSwing(k) { senSwing = k; store.set('factsph-sen-swing', String(k)); render(); },
+    section(k) { section = k; store.set('factsph-el-section', k); render(); panel.scrollTop = 0; },
     close() { panel.style.display = 'none'; if (location.hash === '#2028') history.replaceState(null, '', location.pathname); },
-    go(k) { cur = k; render(); panel.scrollTop = 0; },
+    go(k) { cur = k; section = 'president'; store.set('factsph-el-section', 'president'); render(); panel.scrollTop = 0; },
     toggle(k) { hidden.has(k) ? hidden.delete(k) : hidden.add(k); render(); },
   };
   if (location.hash === '#2028' && typeof showView === 'function') showView('elections');
