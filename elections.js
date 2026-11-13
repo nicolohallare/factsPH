@@ -10,7 +10,7 @@
    to show "New survey" alerts; if left out, `released` is used.
    ============================================================ */
 
-const EL_AS_OF = '2026-11-12'; // date the data below was last checked
+const EL_AS_OF = '2026-11-13'; // date the data below was last checked
 
 // ── Candidates ────────────────────────────────────────────────
 // status: 'declared' | 'out' (publicly ruled out) | 'undeclared'
@@ -20,8 +20,10 @@ const EL_CANDS = {
            src: [['Arab News, Feb 18 2026', 'https://www.arabnews.com/node/2633452/world'],
                  ['Inquirer, trial highlights', 'https://newsinfo.inquirer.net/2312504/icymi-sara-duterte-impeachment-trial-week-12-highlights']] },
   leni:  { name: 'Leni Robredo',    color: '#5b5fc7', status: 'out',
-           note: 'Ruled out a national run on Apr 21, 2026; plans a second term as Naga mayor.',
-           src: [['Inquirer', 'https://plus.inquirer.net/news/leni-rules-out-natl-run-in-28/']] },
+           note: 'Ruled out a national run on Apr 21, 2026; plans a second term as Naga mayor. Repeated on Nov 9, 2026 that her door to a 2028 run "is already closed."',
+           src: [['Inquirer', 'https://plus.inquirer.net/news/leni-rules-out-natl-run-in-28/'],
+                 ['GMA News, Nov 9 2026', 'https://www.gmanetwork.com/news/topstories/nation/1008836/leni-robredo-won-t-run-for-president-in-2028-will-support-deserving-candidate/story'],
+                 ['Daily Tribune, Nov 9 2026', 'https://tribune.net.ph/2026/11/09/robredo-says-its-final-im-not-running-for-any-natl-post']] },
   tulfo: { name: 'Raffy Tulfo',     color: '#0f9488', status: 'out',
            note: 'Ruled out a presidential or VP run on May 5, 2026; seeking Senate re-election. Asked to be left out of 2028 polls.',
            src: [['GMA News', 'https://www.gmanetwork.com/news_duplicate/balitambayan/balita/986540/raffy-tulfo-walang-balak-tumakbong-pangulo-sa-2028-polls-na-puwede-niyang-makalaban-si-sara-duter/story/']] },
@@ -189,6 +191,7 @@ const EL_TIMELINE = [
   { date: '2026-09-23', text: 'Impeachment court sets 14 of 20 eligible senators as the votes needed to convict.', src: 'https://www.illawarramercury.com.au/story/9356262/philippine-senate-lowers-votes-to-convict-vp-duterte/' },
   { date: '2026-10-13', text: 'Impeachment court lets prosecutors drop three of four charges against Sara Duterte; only the unexplained-wealth charge remains.', src: 'https://www.philstar.com/headlines/2026/10/13/2562940/impeach-court-grants-prosecution-bid-drop-3-4-charges-vs-vp-sara' },
   { date: '2026-11-09', text: 'Sara Duterte’s defense begins presenting its case in the impeachment trial.', src: 'https://www.manilatimes.net/2026/11/09/news/vp-saras-impeachment-trial-resumes/2464835' },
+  { date: '2026-11-09', text: 'Leni Robredo again rules out a 2028 run, saying at a Naga City briefing that the door "is already closed."', src: 'https://tribune.net.ph/2026/11/09/robredo-says-its-final-im-not-running-for-any-natl-post' },
   { date: '2026-11-04', text: 'OCTA: Sara Duterte’s one-on-one lead over Leni Robredo narrows to 7 points (40–33), from 11 in March.', src: 'https://www.manilatimes.net/2026/11/04/news/dutertes-lead-over-robredo-narrows-to-7-points-in-octa-survey/2461287' },
   { date: '2027-10-01', text: 'Filing of certificates of candidacy (Oct 1–8, 2027). The field becomes official.', src: 'https://en.wikipedia.org/wiki/2028_Philippine_presidential_election', future: true },
   { date: '2028-05-08', text: 'Election day.', src: 'https://en.wikipedia.org/wiki/2028_Philippine_presidential_election', future: true },
@@ -224,15 +227,17 @@ const SEN_PEOPLE = {
 
 // ── Senate impeachment trial of Vice President Sara Duterte ──
 const EL_TRIAL = {
-  asOf: '2026-11-12',
+  asOf: '2026-11-13',
   stage: 'The defense is presenting its witnesses on the one remaining charge: unexplained wealth.',
   details: [
     'Only Article II is left: assets and business interests the prosecution says were not declared in her SALN, at least ₱817.87 million. Prosecutors dropped the other three charges (confidential funds, bribery, threats) on October 13.',
     'The defense started on November 9. Witnesses so far include local assessors, a GenCorp lawyer who said Duterte received ₱2.14 million from a Jollibee branch investment with no written records, and people explaining specific card charges. The defense dropped most of its bank witnesses on November 12.',
-    'Next hearing dates: November 13, 19, 20 and 23. December dates depend on how many more days the defense asks for. No verdict date has been set; the presiding officer, Sen. Chiz Escudero, said the trial could end within 2026.',
+    'The trial is paused for the ASEAN Summit: the November 13 hearing was cancelled and the court resumes on November 19, with November 20 and 23 also set. The defense says it will present 8 to 10 more witnesses. December dates depend on how many more days the defense asks for. No verdict date has been set; the presiding officer, Sen. Chiz Escudero, said the trial could end within 2026.',
     'Still pending at the Supreme Court: a petition by Sens. Robin Padilla and Bong Go against the 14-vote rule. The Court has asked for comments but has not stopped the trial.',
   ],
-  stageSrc: [['DZRH, Nov 12', 'https://www.dzrh.com.ph/post/day-43-of-vp-sara-duterte-impeachment-trial-or-november-12-2026'],
+  stageSrc: [['Journal News, Nov 12', 'https://journalnews.com.ph/vp-sara-trial-resumes-nov-19-defense-to-present-8-to-10-more-witnesses-sison-says/'],
+             ['Philstar (Filipino), Nov 13', 'https://www.philstar.com/pilipino-star-ngayon/bansa/2026/11/13/2569784/impeachment-itutuloy-tapos-ng-asean'],
+             ['DZRH, Nov 12', 'https://www.dzrh.com.ph/post/day-43-of-vp-sara-duterte-impeachment-trial-or-november-12-2026'],
              ['Reuters via BusinessDay, Nov 9', 'https://www.businessday.co.za/world/2026-11-09-explainer-where-does-philippine-vp-sara-dutertes-impeachment-trial-stand/'],
              ['GMA, Nov 11', 'https://gmanetwork.com/news/topstories/nation/1009172/vp-sara-impeachment-trial-future-defense-witnesses-could-fill-in-gaps-says-poa/story'],
              ['DZRH schedule', 'https://www.dzrh.com.ph/post/court-sets-november-schedule-for-vp-sara-duterte-impeachment-trial'],
@@ -273,6 +278,8 @@ const EL_TRIAL = {
     { date: '2026-10-14', text: 'Supreme Court asks for comments on the Padilla–Go petition against the 14-vote rule.', src: 'https://tribune.net.ph/2026/10/29/sc-orders-congress-to-respond-to-challenge-on-sara-impeachment-voting-rule' },
     { date: '2026-11-09', text: 'Defense begins presenting witnesses.', src: 'https://www.manilatimes.net/2026/11/09/news/vp-saras-impeachment-trial-resumes/2464835' },
     { date: '2026-11-12', text: 'Day 43: defense drops most of its bank witnesses.', src: 'https://www.dzrh.com.ph/post/day-43-of-vp-sara-duterte-impeachment-trial-or-november-12-2026' },
+    { date: '2026-11-13', text: 'Hearing cancelled for the ASEAN Summit; the Senate area is locked down.', src: 'https://journalnews.com.ph/vp-sara-trial-resumes-nov-19-defense-to-present-8-to-10-more-witnesses-sison-says/' },
+    { date: '2026-11-19', text: 'Trial resumes after the ASEAN Summit break.', src: 'https://www.philstar.com/pilipino-star-ngayon/bansa/2026/11/13/2569784/impeachment-itutuloy-tapos-ng-asean', future: true },
     { date: '2026-11-23', text: 'Last November hearing date set so far (10 a.m.–2 p.m.).', src: 'https://www.dzrh.com.ph/post/court-sets-november-schedule-for-vp-sara-duterte-impeachment-trial', future: true },
   ],
 };
