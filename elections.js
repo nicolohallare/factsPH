@@ -10,7 +10,7 @@
    to show "New survey" alerts; if left out, `released` is used.
    ============================================================ */
 
-const EL_AS_OF = '2026-11-13'; // date the data below was last checked
+const EL_AS_OF = '2026-11-14'; // date the data below was last checked
 
 // ── Candidates ────────────────────────────────────────────────
 // status: 'declared' | 'out' (publicly ruled out) | 'undeclared'
@@ -37,6 +37,15 @@ const EL_CANDS = {
 // undec = don't know + refused + none.  indep:true only when a source says it wasn't commissioned.  include:false keeps a poll
 // out of the average (reason in `exclude`) but still shows it.
 const EL_POLLS = [
+  { pollster: 'OCTA Research', start: '2026-09-28', end: '2026-10-04', released: '2026-11-10',
+    n: 1200, moe: 3, method: 'Face-to-face', sponsor: null, indep: true, q: 'Tandem match-up: Robredo–Tulfo vs. Baste Duterte–Padilla (Sara Duterte not in this question)',
+    added: '2026-11-14',
+    r: { leni: 43 }, other: 'Baste Duterte–Robin Padilla 39% (Robredo’s running mate: Raffy Tulfo)', undec: 18,
+    include: false, exclude: 'A two-tandem question (president and VP pairs) without Sara Duterte, so it is not comparable with the list surveys. Same OCTA survey as the 40–33 Sara Duterte vs. Robredo match-up.',
+    flags: ['Undecided = neither tandem or don’t know. Registered voters only: Robredo–Tulfo 43, Duterte–Padilla 40, uncommitted 17.', 'By region (Robredo–Tulfo vs. Duterte–Padilla): Balance Luzon 61–19, NCR 49–32, Visayas 41–43, Mindanao 4–81.', 'OCTA calls it its first tandem measurement, a baseline.'],
+    src: [['GMA News, Nov 10 2026', 'https://www.gmanetwork.com/news/topstories/nation/1008907/survey-shows-leni-robredo-raffy-tulfo-leading-baste-duterte-robin-padilla-in-octa-2028-hypothetical-ta/story/'],
+          ['Manila Times via Newswav, Nov 10 2026', 'https://newswav.com/article/robredo-tulfo-leads-duterte-padilla-in-octa-s-first-tandem-poll-A2611_2nWUlb']] },
+
   { pollster: 'WR Numero', start: '2026-10-07', end: '2026-10-13', released: '2026-11-04',
     n: 1225, moe: 2.6, method: 'Face-to-face', sponsor: null, q: 'List question (first choice), with a second-choice follow-up',
     added: '2026-11-12',
@@ -227,15 +236,17 @@ const SEN_PEOPLE = {
 
 // ── Senate impeachment trial of Vice President Sara Duterte ──
 const EL_TRIAL = {
-  asOf: '2026-11-13',
+  asOf: '2026-11-14',
   stage: 'The defense is presenting its witnesses on the one remaining charge: unexplained wealth.',
   details: [
     'Only Article II is left: assets and business interests the prosecution says were not declared in her SALN, at least ₱817.87 million. Prosecutors dropped the other three charges (confidential funds, bribery, threats) on October 13.',
-    'The defense started on November 9. Witnesses so far include local assessors, a GenCorp lawyer who said Duterte received ₱2.14 million from a Jollibee branch investment with no written records, and people explaining specific card charges. The defense dropped most of its bank witnesses on November 12.',
-    'The trial is paused for the ASEAN Summit: the November 13 hearing was cancelled and the court resumes on November 19, with November 20 and 23 also set. The defense says it will present 8 to 10 more witnesses. December dates depend on how many more days the defense asks for. No verdict date has been set; the presiding officer, Sen. Chiz Escudero, said the trial could end within 2026.',
+    'The defense started on November 9. Witnesses so far include local assessors, a GenCorp lawyer who said Duterte received ₱2.14 million from a Jollibee branch investment with no written records, and people explaining specific card charges. By November 12 the defense had dropped all 16 of its bank witnesses; the prosecution said it had wanted to question the last of them, a BPI official, about records suggesting dollar accounts.',
+    'The trial is paused for the ASEAN Summit: the November 13 hearing was cancelled and the court resumes on November 19, with November 20 and 23 also set. The defense says it will present 8 to 10 more witnesses. No verdict date has been set. Court spokesperson Reginald Tongol said on November 13 that a decision would come almost a month after the defense rests (10 days for the defense’s formal offer of exhibits, 10 days for the prosecution to comment, then 3 to 5 days for the court to rule), and that the trial slipping into December is “highly possible.” The presiding officer, Sen. Chiz Escudero, said there is no fixed timeline but he hopes it wraps up by December.',
     'Still pending at the Supreme Court: a petition by Sens. Robin Padilla and Bong Go against the 14-vote rule. The Court has asked for comments but has not stopped the trial.',
   ],
-  stageSrc: [['Journal News, Nov 12', 'https://journalnews.com.ph/vp-sara-trial-resumes-nov-19-defense-to-present-8-to-10-more-witnesses-sison-says/'],
+  stageSrc: [['Daily Tribune, Nov 13 (decision timeline)', 'https://tribune.net.ph/2026/11/13/saras-impeachment-fate-to-be-decided-20-25-days-after-defense-rests'],
+             ['Philstar, Nov 13 (bank witnesses)', 'https://philstar.com/headlines/2026/11/13/2569871/sara-dutertes-defense-drops-all-16-bank-witnesses-trial'],
+             ['Journal News, Nov 12', 'https://journalnews.com.ph/vp-sara-trial-resumes-nov-19-defense-to-present-8-to-10-more-witnesses-sison-says/'],
              ['Philstar (Filipino), Nov 13', 'https://www.philstar.com/pilipino-star-ngayon/bansa/2026/11/13/2569784/impeachment-itutuloy-tapos-ng-asean'],
              ['DZRH, Nov 12', 'https://www.dzrh.com.ph/post/day-43-of-vp-sara-duterte-impeachment-trial-or-november-12-2026'],
              ['Reuters via BusinessDay, Nov 9', 'https://www.businessday.co.za/world/2026-11-09-explainer-where-does-philippine-vp-sara-dutertes-impeachment-trial-stand/'],
@@ -277,8 +288,9 @@ const EL_TRIAL = {
     { date: '2026-10-13', text: 'Prosecution drops three of four charges; only unexplained wealth remains.', src: 'https://www.manilatimes.net/2026/10/13/news/prosecution-drops-3-impeachment-articles-vs-sara-duterte/2444253' },
     { date: '2026-10-14', text: 'Supreme Court asks for comments on the Padilla–Go petition against the 14-vote rule.', src: 'https://tribune.net.ph/2026/10/29/sc-orders-congress-to-respond-to-challenge-on-sara-impeachment-voting-rule' },
     { date: '2026-11-09', text: 'Defense begins presenting witnesses.', src: 'https://www.manilatimes.net/2026/11/09/news/vp-saras-impeachment-trial-resumes/2464835' },
-    { date: '2026-11-12', text: 'Day 43: defense drops most of its bank witnesses.', src: 'https://www.dzrh.com.ph/post/day-43-of-vp-sara-duterte-impeachment-trial-or-november-12-2026' },
+    { date: '2026-11-12', text: 'Day 43: defense drops the last of its 16 bank witnesses.', src: 'https://philstar.com/headlines/2026/11/13/2569871/sara-dutertes-defense-drops-all-16-bank-witnesses-trial' },
     { date: '2026-11-13', text: 'Hearing cancelled for the ASEAN Summit; the Senate area is locked down.', src: 'https://journalnews.com.ph/vp-sara-trial-resumes-nov-19-defense-to-present-8-to-10-more-witnesses-sison-says/' },
+    { date: '2026-11-13', text: 'Court spokesperson: a decision would come almost a month after the defense rests.', src: 'https://tribune.net.ph/2026/11/13/saras-impeachment-fate-to-be-decided-20-25-days-after-defense-rests' },
     { date: '2026-11-19', text: 'Trial resumes after the ASEAN Summit break.', src: 'https://www.philstar.com/pilipino-star-ngayon/bansa/2026/11/13/2569784/impeachment-itutuloy-tapos-ng-asean', future: true },
     { date: '2026-11-23', text: 'Last November hearing date set so far (10 a.m.–2 p.m.).', src: 'https://www.dzrh.com.ph/post/court-sets-november-schedule-for-vp-sara-duterte-impeachment-trial', future: true },
   ],
