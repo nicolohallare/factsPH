@@ -10,7 +10,7 @@
    to show "New survey" alerts; if left out, `released` is used.
    ============================================================ */
 
-const EL_AS_OF = '2026-11-14'; // date the data below was last checked
+const EL_AS_OF = '2026-11-15'; // date the data below was last checked
 
 // ── Candidates ────────────────────────────────────────────────
 // status: 'declared' | 'out' (publicly ruled out) | 'undeclared'
@@ -236,15 +236,18 @@ const SEN_PEOPLE = {
 
 // ── Senate impeachment trial of Vice President Sara Duterte ──
 const EL_TRIAL = {
-  asOf: '2026-11-14',
+  asOf: '2026-11-15',
   stage: 'The defense is presenting its witnesses on the one remaining charge: unexplained wealth.',
   details: [
     'Only Article II is left: assets and business interests the prosecution says were not declared in her SALN, at least ₱817.87 million. Prosecutors dropped the other three charges (confidential funds, bribery, threats) on October 13.',
     'The defense started on November 9. Witnesses so far include local assessors, a GenCorp lawyer who said Duterte received ₱2.14 million from a Jollibee branch investment with no written records, and people explaining specific card charges. By November 12 the defense had dropped all 16 of its bank witnesses; the prosecution said it had wanted to question the last of them, a BPI official, about records suggesting dollar accounts.',
-    'The trial is paused for the ASEAN Summit: the November 13 hearing was cancelled and the court resumes on November 19, with November 20 and 23 also set. The defense says it will present 8 to 10 more witnesses. No verdict date has been set. Court spokesperson Reginald Tongol said on November 13 that a decision would come almost a month after the defense rests (10 days for the defense’s formal offer of exhibits, 10 days for the prosecution to comment, then 3 to 5 days for the court to rule), and that the trial slipping into December is “highly possible.” The presiding officer, Sen. Chiz Escudero, said there is no fixed timeline but he hopes it wraps up by December.',
+    'The trial is paused for the ASEAN Summit: the November 13 hearing was cancelled and the court resumes on November 19, with November 20 and 23 also set. The defense says it will present 8 to 10 more witnesses; court spokesperson Reginald Tongol said on November 13 that at 3 to 4 witnesses a day the defense will likely finish by the end of November. GMA News reports the court then pauses for the Senate’s 2027 budget debates, with trial expected to resume on December 1. The prosecution said on November 14 it sees no need to present more evidence or rebuttal witnesses for now. No verdict date has been set; lead prosecutor Rep. Gerville Luistro and Duterte’s spokesperson Paolo Panelo both said they expect a verdict before Christmas. Tongol also said that a decision would come almost a month after the defense rests (10 days for the defense’s formal offer of exhibits, 10 days for the prosecution to comment, then 3 to 5 days for the court to rule), and that the trial slipping into December is “highly possible.” The presiding officer, Sen. Chiz Escudero, said there is no fixed timeline but he hopes it wraps up by December.',
     'Still pending at the Supreme Court: a petition by Sens. Robin Padilla and Bong Go against the 14-vote rule. The Court has asked for comments but has not stopped the trial.',
   ],
-  stageSrc: [['Daily Tribune, Nov 13 (decision timeline)', 'https://tribune.net.ph/2026/11/13/saras-impeachment-fate-to-be-decided-20-25-days-after-defense-rests'],
+  stageSrc: [['GMA, Nov 14 (prosecution)', 'https://www.gmanetwork.com/news/topstories/nation/1009474/prosecution-sees-no-need-for-more-evidence-in-sara-duterte-impeachment-trial/story/'],
+             ['GMA, Nov 13 (what’s next)', 'https://www.gmanetwork.com/news/topstories/nation/1009433/sara-duterte-defense-seen-to-end-presentation-within-november-what-next/story/'],
+             ['Daily Tribune, Nov 14', 'https://tribune.net.ph/2026/11/14/prosecution-sees-no-need-for-additional-witnesses-in-sara-duterte-impeachment-trial'],
+             ['Daily Tribune, Nov 13 (decision timeline)', 'https://tribune.net.ph/2026/11/13/saras-impeachment-fate-to-be-decided-20-25-days-after-defense-rests'],
              ['Philstar, Nov 13 (bank witnesses)', 'https://philstar.com/headlines/2026/11/13/2569871/sara-dutertes-defense-drops-all-16-bank-witnesses-trial'],
              ['Journal News, Nov 12', 'https://journalnews.com.ph/vp-sara-trial-resumes-nov-19-defense-to-present-8-to-10-more-witnesses-sison-says/'],
              ['Philstar (Filipino), Nov 13', 'https://www.philstar.com/pilipino-star-ngayon/bansa/2026/11/13/2569784/impeachment-itutuloy-tapos-ng-asean'],
@@ -291,8 +294,10 @@ const EL_TRIAL = {
     { date: '2026-11-12', text: 'Day 43: defense drops the last of its 16 bank witnesses.', src: 'https://philstar.com/headlines/2026/11/13/2569871/sara-dutertes-defense-drops-all-16-bank-witnesses-trial' },
     { date: '2026-11-13', text: 'Hearing cancelled for the ASEAN Summit; the Senate area is locked down.', src: 'https://journalnews.com.ph/vp-sara-trial-resumes-nov-19-defense-to-present-8-to-10-more-witnesses-sison-says/' },
     { date: '2026-11-13', text: 'Court spokesperson: a decision would come almost a month after the defense rests.', src: 'https://tribune.net.ph/2026/11/13/saras-impeachment-fate-to-be-decided-20-25-days-after-defense-rests' },
-    { date: '2026-11-19', text: 'Trial resumes after the ASEAN Summit break.', src: 'https://www.philstar.com/pilipino-star-ngayon/bansa/2026/11/13/2569784/impeachment-itutuloy-tapos-ng-asean', future: true },
-    { date: '2026-11-23', text: 'Last November hearing date set so far (10 a.m.–2 p.m.).', src: 'https://www.dzrh.com.ph/post/court-sets-november-schedule-for-vp-sara-duterte-impeachment-trial', future: true },
+    { date: '2026-11-14', text: 'Prosecution says it sees no need to present more evidence or rebuttal witnesses for now.', src: 'https://www.gmanetwork.com/news/topstories/nation/1009474/prosecution-sees-no-need-for-more-evidence-in-sara-duterte-impeachment-trial/story/' },
+    { date: '2026-11-19', text: 'Trial resumes after the ASEAN Summit break (November 19–20).', src: 'https://www.philstar.com/pilipino-star-ngayon/bansa/2026/11/13/2569784/impeachment-itutuloy-tapos-ng-asean', future: true },
+    { date: '2026-11-23', text: 'Short trial day on the November schedule (10 a.m.–2 p.m.); a November 13 GMA report lists only November 19–20 before the budget break.', src: 'https://www.gmanetwork.com/news/topstories/nation/1008756/impeachment-budget-senate-lays-out-november-december-2026-schedule/story', future: true },
+    { date: '2026-12-01', text: 'Trial expected to resume after the Senate’s budget debates.', src: 'https://www.gmanetwork.com/news/topstories/nation/1009433/sara-duterte-defense-seen-to-end-presentation-within-november-what-next/story/', future: true },
   ],
 };
 
