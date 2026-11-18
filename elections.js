@@ -10,7 +10,7 @@
    to show "New survey" alerts; if left out, `released` is used.
    ============================================================ */
 
-const EL_AS_OF = '2026-11-17'; // date the data below was last checked
+const EL_AS_OF = '2026-11-18'; // date the data below was last checked
 
 // ── Candidates ────────────────────────────────────────────────
 // status: 'declared' | 'out' (publicly ruled out) | 'undeclared'
@@ -236,7 +236,7 @@ const SEN_PEOPLE = {
 
 // ── Senate impeachment trial of Vice President Sara Duterte ──
 const EL_TRIAL = {
-  asOf: '2026-11-17',
+  asOf: '2026-11-18',
   stage: 'The defense is presenting its witnesses on the one remaining charge: unexplained wealth.',
   details: [
     'Only Article II is left: assets and business interests the prosecution says were not declared in her SALN, at least ₱817.87 million. Prosecutors dropped the other three charges (confidential funds, bribery, threats) on October 13.',
